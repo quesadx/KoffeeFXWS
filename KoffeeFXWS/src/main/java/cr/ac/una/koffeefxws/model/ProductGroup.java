@@ -1,0 +1,152 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package cr.ac.una.koffeefxws.model;
+
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.List;
+
+/**
+ *
+ * @author quesadx
+ */
+@Entity
+@Table(name = "PRODUCT_GROUP")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "ProductGroup.findAll", query = "SELECT p FROM ProductGroup p"),
+    @NamedQuery(name = "ProductGroup.findByProductGroupId", query = "SELECT p FROM ProductGroup p WHERE p.productGroupId = :productGroupId"),
+    @NamedQuery(name = "ProductGroup.findByName", query = "SELECT p FROM ProductGroup p WHERE p.name = :name"),
+    @NamedQuery(name = "ProductGroup.findByShortName", query = "SELECT p FROM ProductGroup p WHERE p.shortName = :shortName"),
+    @NamedQuery(name = "ProductGroup.findByIsQuickMenu", query = "SELECT p FROM ProductGroup p WHERE p.isQuickMenu = :isQuickMenu"),
+    @NamedQuery(name = "ProductGroup.findByPurchaseFrequency", query = "SELECT p FROM ProductGroup p WHERE p.purchaseFrequency = :purchaseFrequency")})
+public class ProductGroup implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "PRODUCT_GROUP_ID")
+    private BigDecimal productGroupId;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "NAME")
+    private String name;
+    @Size(max = 50)
+    @Column(name = "SHORT_NAME")
+    private String shortName;
+    @Column(name = "IS_QUICK_MENU")
+    private Character isQuickMenu;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "PURCHASE_FREQUENCY")
+    private BigInteger purchaseFrequency;
+    @OneToMany(mappedBy = "productGroupId", fetch = FetchType.LAZY)
+    private List<Product> productList;
+
+    public ProductGroup() {
+    }
+
+    public ProductGroup(BigDecimal productGroupId) {
+        this.productGroupId = productGroupId;
+    }
+
+    public ProductGroup(BigDecimal productGroupId, String name, BigInteger purchaseFrequency) {
+        this.productGroupId = productGroupId;
+        this.name = name;
+        this.purchaseFrequency = purchaseFrequency;
+    }
+
+    public BigDecimal getProductGroupId() {
+        return productGroupId;
+    }
+
+    public void setProductGroupId(BigDecimal productGroupId) {
+        this.productGroupId = productGroupId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
+    public Character getIsQuickMenu() {
+        return isQuickMenu;
+    }
+
+    public void setIsQuickMenu(Character isQuickMenu) {
+        this.isQuickMenu = isQuickMenu;
+    }
+
+    public BigInteger getPurchaseFrequency() {
+        return purchaseFrequency;
+    }
+
+    public void setPurchaseFrequency(BigInteger purchaseFrequency) {
+        this.purchaseFrequency = purchaseFrequency;
+    }
+
+    @XmlTransient
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (productGroupId != null ? productGroupId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof ProductGroup)) {
+            return false;
+        }
+        ProductGroup other = (ProductGroup) object;
+        if ((this.productGroupId == null && other.productGroupId != null) || (this.productGroupId != null && !this.productGroupId.equals(other.productGroupId))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "cr.ac.una.koffeefxws.model.ProductGroup[ productGroupId=" + productGroupId + " ]";
+    }
+    
+}
