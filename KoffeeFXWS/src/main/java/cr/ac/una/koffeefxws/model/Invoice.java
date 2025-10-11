@@ -22,7 +22,6 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  *

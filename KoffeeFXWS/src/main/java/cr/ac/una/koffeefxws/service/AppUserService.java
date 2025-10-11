@@ -28,9 +28,16 @@ public class AppUserService {
 
     public Respuesta getAppUser(Long id) {
         try {
-            Query qryEmpleado = em.createNamedQuery("AppUser.findById", AppUser.class);
-            qryEmpleado.setParameter("id", id);
-            // TODO: return new Respuesta(true, CodigoRespuesta.CORRECTO, "" "", "AppUser", new AppUserDTO
+            Query qryAppUser = em.createNamedQuery("AppUser.findById", AppUser.class);
+            qryAppUser.setParameter("id", id);
+            
+            AppUser appUser = (AppUser) qryAppUser.getSingleResult();
+            
+            // TODO: Implement AppUserDTO conversion when DTO mappers are ready
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "AppUser", appUser);
+        } catch (Exception ex) {
+            LOG.severe("Error getting AppUser by id: " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Error getting user", "getAppUser " + ex.getMessage());
         }
     }
 }

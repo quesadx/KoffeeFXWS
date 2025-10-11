@@ -23,9 +23,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -83,7 +81,7 @@ public class AppUser implements Serializable {
     @Column(name = "CREATION_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDate creationDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
     private List<CashOpening> cashOpeningList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
     private List<CustomerOrder> customerOrderList;

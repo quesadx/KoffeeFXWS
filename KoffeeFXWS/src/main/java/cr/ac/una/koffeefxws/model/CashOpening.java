@@ -23,7 +23,6 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,7 +68,7 @@ public class CashOpening implements Serializable {
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private AppUser userId;
-    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cashOpeningId", fetch = FetchType.LAZY)
     private List<Invoice> invoiceList;
 
     public CashOpening() {
