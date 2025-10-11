@@ -12,10 +12,10 @@ import org.glassfish.jersey.server.ResourceConfig;
  * @author Juneau
  */
 @ApplicationPath("ws")
-public class JakartaRestConfiguration extends Application {
-    public JakartaRestConfiguration(){
-            //super();
-            //packages("cr.ac.una.unaplanillaws.controller",
-                    //"io.swagger.v3.jaxrs2.integration.resources");
+public class JakartaRestConfiguration extends ResourceConfig {
+        public JakartaRestConfiguration(){
+            super();
+            packages("cr.ac.una.koffeefxws.controller",
+                    "io.swagger.v3.jaxrs2.integration.resources");
         }
 }

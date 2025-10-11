@@ -1,4 +1,4 @@
-package cr.ac.una.koffeefxws.resources;
+package cr.ac.una.koffeefxws.controller;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
