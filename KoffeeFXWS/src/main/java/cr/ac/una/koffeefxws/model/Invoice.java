@@ -74,7 +74,7 @@ public class Invoice implements Serializable {
     @Column(name = "CHANGE_AMOUNT")
     private Double changeAmount;
     @Column(name = "CREATED_AT")
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate createdAt;
     @Column(name = "IS_PRINTED")
     private Character isPrinted;

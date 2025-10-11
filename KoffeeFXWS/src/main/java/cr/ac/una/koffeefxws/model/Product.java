@@ -73,7 +73,7 @@ public class Product implements Serializable {
     @Column(name = "IMAGE_URL")
     private String imageUrl;
     @Column(name = "CREATED_AT")
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate createdAt;
     @Basic(optional = false)
     @NotNull
