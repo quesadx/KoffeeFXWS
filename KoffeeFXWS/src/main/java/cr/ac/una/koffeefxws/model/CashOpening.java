@@ -22,7 +22,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -50,19 +50,19 @@ public class CashOpening implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "CASH_OPENING_ID")
-    private BigDecimal id;
+    private Long id;
     @Column(name = "OPENING_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date openingDate;
+    private LocalDate openingDate;
     @Column(name = "INITIAL_AMOUNT")
-    private BigDecimal initialAmount;
+    private Long initialAmount;
     @Column(name = "IS_CLOSED")
     private Character isClosed;
     @Column(name = "CLOSING_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date closingDate;
+    private LocalDate closingDate;
     @Column(name = "CLOSING_AMOUNT")
-    private BigDecimal closingAmount;
+    private Long closingAmount;
     @Size(max = 2000)
     @Column(name = "NOTES")
     private String notes;
@@ -75,31 +75,31 @@ public class CashOpening implements Serializable {
     public CashOpening() {
     }
 
-    public CashOpening(BigDecimal id) {
+    public CashOpening(Long id) {
         this.id = id;
     }
 
-    public BigDecimal getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Date getOpeningDate() {
+    public LocalDate getOpeningDate() {
         return openingDate;
     }
 
-    public void setOpeningDate(Date openingDate) {
+    public void setOpeningDate(LocalDate openingDate) {
         this.openingDate = openingDate;
     }
 
-    public BigDecimal getInitialAmount() {
+    public Long getInitialAmount() {
         return initialAmount;
     }
 
-    public void setInitialAmount(BigDecimal initialAmount) {
+    public void setInitialAmount(Long initialAmount) {
         this.initialAmount = initialAmount;
     }
 
@@ -111,19 +111,19 @@ public class CashOpening implements Serializable {
         this.isClosed = isClosed;
     }
 
-    public Date getClosingDate() {
+    public LocalDate getClosingDate() {
         return closingDate;
     }
 
-    public void setClosingDate(Date closingDate) {
+    public void setClosingDate(LocalDate closingDate) {
         this.closingDate = closingDate;
     }
 
-    public BigDecimal getClosingAmount() {
+    public Long getClosingAmount() {
         return closingAmount;
     }
 
-    public void setClosingAmount(BigDecimal closingAmount) {
+    public void setClosingAmount(Long closingAmount) {
         this.closingAmount = closingAmount;
     }
 

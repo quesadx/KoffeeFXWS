@@ -24,7 +24,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +37,7 @@ import java.util.List;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CustomerOrder.findAll", query = "SELECT c FROM CustomerOrder c"),
-    @NamedQuery(name = "CustomerOrder.findByCustomerOrderId", query = "SELECT c FROM CustomerOrder c WHERE c.customerOrderId = :customerOrderId"),
+    @NamedQuery(name = "CustomerOrder.findById", query = "SELECT c FROM CustomerOrder c WHERE c.id = :id"),
     @NamedQuery(name = "CustomerOrder.findByStatus", query = "SELECT c FROM CustomerOrder c WHERE c.status = :status"),
     @NamedQuery(name = "CustomerOrder.findByCreatedAt", query = "SELECT c FROM CustomerOrder c WHERE c.createdAt = :createdAt"),
     @NamedQuery(name = "CustomerOrder.findByUpdatedAt", query = "SELECT c FROM CustomerOrder c WHERE c.updatedAt = :updatedAt"),
@@ -50,18 +50,18 @@ public class CustomerOrder implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "CUSTOMER_ORDER_ID")
-    private BigDecimal customerOrderId;
+    private Long id;
     @Size(max = 30)
     @Column(name = "STATUS")
     private String status;
     @Column(name = "CREATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDate createdAt;
     @Column(name = "UPDATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @Column(name = "TOTAL_AMOUNT")
-    private BigDecimal totalAmount;
+    private Long totalAmount;
     @JoinColumn(name = "CREATED_BY", referencedColumnName = "USER_ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private AppUser createdBy;
@@ -82,16 +82,16 @@ public class CustomerOrder implements Serializable {
     public CustomerOrder() {
     }
 
-    public CustomerOrder(BigDecimal customerOrderId) {
-        this.customerOrderId = customerOrderId;
+    public CustomerOrder(Long customerOrderId) {
+        this.id = customerOrderId;
     }
 
-    public BigDecimal getCustomerOrderId() {
-        return customerOrderId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCustomerOrderId(BigDecimal customerOrderId) {
-        this.customerOrderId = customerOrderId;
+    public void setId(Long customerOrderId) {
+        this.id = customerOrderId;
     }
 
     public String getStatus() {
@@ -102,11 +102,11 @@ public class CustomerOrder implements Serializable {
         this.status = status;
     }
 
-    public Date getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -118,11 +118,11 @@ public class CustomerOrder implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public BigDecimal getTotalAmount() {
+    public Long getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
+    public void setTotalAmount(Long totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -178,7 +178,7 @@ public class CustomerOrder implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (customerOrderId != null ? customerOrderId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -189,7 +189,7 @@ public class CustomerOrder implements Serializable {
             return false;
         }
         CustomerOrder other = (CustomerOrder) object;
-        if ((this.customerOrderId == null && other.customerOrderId != null) || (this.customerOrderId != null && !this.customerOrderId.equals(other.customerOrderId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -197,7 +197,7 @@ public class CustomerOrder implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.CustomerOrder[ customerOrderId=" + customerOrderId + " ]";
+        return "cr.ac.una.koffeefxws.model.CustomerOrder[ customerOrderId=" + id + " ]";
     }
     
 }

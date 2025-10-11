@@ -25,6 +25,7 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +38,7 @@ import java.util.List;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
-    @NamedQuery(name = "Product.findByProductId", query = "SELECT p FROM Product p WHERE p.productId = :productId"),
+    @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
     @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"),
     @NamedQuery(name = "Product.findByShortName", query = "SELECT p FROM Product p WHERE p.shortName = :shortName"),
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
@@ -54,7 +55,7 @@ public class Product implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "PRODUCT_ID")
-    private BigDecimal productId;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 300)
@@ -66,7 +67,7 @@ public class Product implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "PRICE")
-    private BigDecimal price;
+    private Double price;
     @Column(name = "IS_QUICK_MENU")
     private Character isQuickMenu;
     @Column(name = "IS_ACTIVE")
@@ -76,11 +77,11 @@ public class Product implements Serializable {
     private String imageUrl;
     @Column(name = "CREATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDate createdAt;
     @Basic(optional = false)
     @NotNull
     @Column(name = "PURCHASE_FREQUENCY")
-    private BigInteger purchaseFrequency;
+    private Double purchaseFrequency;
     @JoinColumn(name = "PRODUCT_GROUP_ID", referencedColumnName = "PRODUCT_GROUP_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private ProductGroup productGroupId;
@@ -90,23 +91,23 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(BigDecimal productId) {
-        this.productId = productId;
+    public Product(Long productId) {
+        this.id = productId;
     }
 
-    public Product(BigDecimal productId, String name, BigDecimal price, BigInteger purchaseFrequency) {
-        this.productId = productId;
+    public Product(Long productId, String name, Double price, Double purchaseFrequency) {
+        this.id = productId;
         this.name = name;
         this.price = price;
         this.purchaseFrequency = purchaseFrequency;
     }
 
-    public BigDecimal getProductId() {
-        return productId;
+    public Long getId() {
+        return id;
     }
 
-    public void setProductId(BigDecimal productId) {
-        this.productId = productId;
+    public void setId(Long productId) {
+        this.id = productId;
     }
 
     public String getName() {
@@ -125,11 +126,11 @@ public class Product implements Serializable {
         this.shortName = shortName;
     }
 
-    public BigDecimal getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -157,19 +158,19 @@ public class Product implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public Date getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public BigInteger getPurchaseFrequency() {
+    public Double getPurchaseFrequency() {
         return purchaseFrequency;
     }
 
-    public void setPurchaseFrequency(BigInteger purchaseFrequency) {
+    public void setPurchaseFrequency(Double purchaseFrequency) {
         this.purchaseFrequency = purchaseFrequency;
     }
 
@@ -193,7 +194,7 @@ public class Product implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (productId != null ? productId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -204,7 +205,7 @@ public class Product implements Serializable {
             return false;
         }
         Product other = (Product) object;
-        if ((this.productId == null && other.productId != null) || (this.productId != null && !this.productId.equals(other.productId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -212,7 +213,7 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.Product[ productId=" + productId + " ]";
+        return "cr.ac.una.koffeefxws.model.Product[ productId=" + id + " ]";
     }
     
 }

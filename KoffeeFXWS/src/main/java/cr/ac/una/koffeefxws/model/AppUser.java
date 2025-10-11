@@ -24,6 +24,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class AppUser implements Serializable {
     @NotNull
     @Column(name = "CREATION_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date creationDate;
+    private LocalDate creationDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.LAZY)
     private List<CashOpening> cashOpeningList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
@@ -99,7 +100,7 @@ public class AppUser implements Serializable {
         this.id = id;
     }
 
-    public AppUser(Long id, String firstName, String username, String password, Date creationDate) {
+    public AppUser(Long id, String firstName, String username, String password, LocalDate creationDate) {
         this.id = id;
         this.firstName = firstName;
         this.username = username;
@@ -163,11 +164,11 @@ public class AppUser implements Serializable {
         this.isActive = isActive;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 

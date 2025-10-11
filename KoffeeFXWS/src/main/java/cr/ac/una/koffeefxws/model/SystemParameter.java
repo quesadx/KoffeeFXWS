@@ -26,7 +26,7 @@ import java.math.BigDecimal;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "SystemParameter.findAll", query = "SELECT s FROM SystemParameter s"),
-    @NamedQuery(name = "SystemParameter.findByParamId", query = "SELECT s FROM SystemParameter s WHERE s.paramId = :paramId"),
+    @NamedQuery(name = "SystemParameter.findById", query = "SELECT s FROM SystemParameter s WHERE s.id = :id"),
     @NamedQuery(name = "SystemParameter.findByParamName", query = "SELECT s FROM SystemParameter s WHERE s.paramName = :paramName"),
     @NamedQuery(name = "SystemParameter.findByParamValue", query = "SELECT s FROM SystemParameter s WHERE s.paramValue = :paramValue"),
     @NamedQuery(name = "SystemParameter.findByDescription", query = "SELECT s FROM SystemParameter s WHERE s.description = :description")})
@@ -38,7 +38,7 @@ public class SystemParameter implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "PARAM_ID")
-    private BigDecimal paramId;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -54,21 +54,21 @@ public class SystemParameter implements Serializable {
     public SystemParameter() {
     }
 
-    public SystemParameter(BigDecimal paramId) {
-        this.paramId = paramId;
+    public SystemParameter(Long paramId) {
+        this.id = paramId;
     }
 
-    public SystemParameter(BigDecimal paramId, String paramName) {
-        this.paramId = paramId;
+    public SystemParameter(Long paramId, String paramName) {
+        this.id = paramId;
         this.paramName = paramName;
     }
 
-    public BigDecimal getParamId() {
-        return paramId;
+    public Long getId() {
+        return id;
     }
 
-    public void setParamId(BigDecimal paramId) {
-        this.paramId = paramId;
+    public void setId(Long paramId) {
+        this.id = paramId;
     }
 
     public String getParamName() {
@@ -98,7 +98,7 @@ public class SystemParameter implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (paramId != null ? paramId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -109,7 +109,7 @@ public class SystemParameter implements Serializable {
             return false;
         }
         SystemParameter other = (SystemParameter) object;
-        if ((this.paramId == null && other.paramId != null) || (this.paramId != null && !this.paramId.equals(other.paramId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -117,7 +117,7 @@ public class SystemParameter implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.SystemParameter[ paramId=" + paramId + " ]";
+        return "cr.ac.una.koffeefxws.model.SystemParameter[ paramId=" + id + " ]";
     }
     
 }

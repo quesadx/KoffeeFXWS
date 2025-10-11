@@ -31,7 +31,7 @@ import java.util.List;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
-    @NamedQuery(name = "Role.findByRoleId", query = "SELECT r FROM Role r WHERE r.roleId = :roleId"),
+    @NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.id = :id"),
     @NamedQuery(name = "Role.findByCode", query = "SELECT r FROM Role r WHERE r.code = :code"),
     @NamedQuery(name = "Role.findByName", query = "SELECT r FROM Role r WHERE r.name = :name")})
 public class Role implements Serializable {
@@ -42,7 +42,7 @@ public class Role implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ROLE_ID")
-    private BigDecimal roleId;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
@@ -59,22 +59,22 @@ public class Role implements Serializable {
     public Role() {
     }
 
-    public Role(BigDecimal roleId) {
-        this.roleId = roleId;
+    public Role(Long roleId) {
+        this.id = roleId;
     }
 
-    public Role(BigDecimal roleId, String code, String name) {
-        this.roleId = roleId;
+    public Role(Long roleId, String code, String name) {
+        this.id = roleId;
         this.code = code;
         this.name = name;
     }
 
-    public BigDecimal getRoleId() {
-        return roleId;
+    public Long getId() {
+        return id;
     }
 
-    public void setRoleId(BigDecimal roleId) {
-        this.roleId = roleId;
+    public void setId(Long roleId) {
+        this.id = roleId;
     }
 
     public String getCode() {
@@ -105,7 +105,7 @@ public class Role implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (roleId != null ? roleId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -116,7 +116,7 @@ public class Role implements Serializable {
             return false;
         }
         Role other = (Role) object;
-        if ((this.roleId == null && other.roleId != null) || (this.roleId != null && !this.roleId.equals(other.roleId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -124,7 +124,7 @@ public class Role implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.Role[ roleId=" + roleId + " ]";
+        return "cr.ac.una.koffeefxws.model.Role[ roleId=" + id + " ]";
     }
     
 }

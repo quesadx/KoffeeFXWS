@@ -20,7 +20,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +33,7 @@ import java.util.List;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c"),
-    @NamedQuery(name = "Customer.findByCustomerId", query = "SELECT c FROM Customer c WHERE c.customerId = :customerId"),
+    @NamedQuery(name = "Customer.findById", query = "SELECT c FROM Customer c WHERE c.id = :id"),
     @NamedQuery(name = "Customer.findByFirstName", query = "SELECT c FROM Customer c WHERE c.firstName = :firstName"),
     @NamedQuery(name = "Customer.findByLastName", query = "SELECT c FROM Customer c WHERE c.lastName = :lastName"),
     @NamedQuery(name = "Customer.findByEmail", query = "SELECT c FROM Customer c WHERE c.email = :email"),
@@ -47,7 +47,7 @@ public class Customer implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "CUSTOMER_ID")
-    private BigDecimal customerId;
+    private Long id;
     @Size(max = 150)
     @Column(name = "FIRST_NAME")
     private String firstName;
@@ -64,7 +64,7 @@ public class Customer implements Serializable {
     private String phone;
     @Column(name = "CREATION_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date creationDate;
+    private LocalDate creationDate;
     @OneToMany(mappedBy = "customerId", fetch = FetchType.LAZY)
     private List<CustomerOrder> customerOrderList;
     @OneToMany(mappedBy = "customerId", fetch = FetchType.LAZY)
@@ -73,16 +73,16 @@ public class Customer implements Serializable {
     public Customer() {
     }
 
-    public Customer(BigDecimal customerId) {
-        this.customerId = customerId;
+    public Customer(Long customerId) {
+        this.id = customerId;
     }
 
-    public BigDecimal getCustomerId() {
-        return customerId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCustomerId(BigDecimal customerId) {
-        this.customerId = customerId;
+    public void setId(Long customerId) {
+        this.id = customerId;
     }
 
     public String getFirstName() {
@@ -117,11 +117,11 @@ public class Customer implements Serializable {
         this.phone = phone;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -146,7 +146,7 @@ public class Customer implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (customerId != null ? customerId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -157,7 +157,7 @@ public class Customer implements Serializable {
             return false;
         }
         Customer other = (Customer) object;
-        if ((this.customerId == null && other.customerId != null) || (this.customerId != null && !this.customerId.equals(other.customerId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -165,7 +165,7 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.Customer[ customerId=" + customerId + " ]";
+        return "cr.ac.una.koffeefxws.model.Customer[ customerId=" + id + " ]";
     }
     
 }

@@ -21,7 +21,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -33,7 +33,7 @@ import java.util.Date;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Invoice.findAll", query = "SELECT i FROM Invoice i"),
-    @NamedQuery(name = "Invoice.findByInvoiceId", query = "SELECT i FROM Invoice i WHERE i.invoiceId = :invoiceId"),
+    @NamedQuery(name = "Invoice.findById", query = "SELECT i FROM Invoice i WHERE i.id = :id"),
     @NamedQuery(name = "Invoice.findByInvoiceNumber", query = "SELECT i FROM Invoice i WHERE i.invoiceNumber = :invoiceNumber"),
     @NamedQuery(name = "Invoice.findBySubtotal", query = "SELECT i FROM Invoice i WHERE i.subtotal = :subtotal"),
     @NamedQuery(name = "Invoice.findByTaxRate", query = "SELECT i FROM Invoice i WHERE i.taxRate = :taxRate"),
@@ -54,29 +54,29 @@ public class Invoice implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "INVOICE_ID")
-    private BigDecimal invoiceId;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "INVOICE_NUMBER")
     private String invoiceNumber;
     @Column(name = "SUBTOTAL")
-    private BigDecimal subtotal;
+    private Double subtotal;
     @Column(name = "TAX_RATE")
-    private BigDecimal taxRate;
+    private Double taxRate;
     @Column(name = "SERVICE_RATE")
-    private BigDecimal serviceRate;
+    private Double serviceRate;
     @Column(name = "DISCOUNT_RATE")
-    private BigDecimal discountRate;
+    private Double discountRate;
     @Column(name = "TOTAL")
-    private BigDecimal total;
+    private Double total;
     @Column(name = "AMOUNT_RECEIVED")
-    private BigDecimal amountReceived;
+    private Double amountReceived;
     @Column(name = "CHANGE_AMOUNT")
-    private BigDecimal changeAmount;
+    private Double changeAmount;
     @Column(name = "CREATED_AT")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDate createdAt;
     @Column(name = "IS_PRINTED")
     private Character isPrinted;
     @Column(name = "IS_EMAIL_SENT")
@@ -100,21 +100,21 @@ public class Invoice implements Serializable {
     public Invoice() {
     }
 
-    public Invoice(BigDecimal invoiceId) {
-        this.invoiceId = invoiceId;
+    public Invoice(Long invoiceId) {
+        this.id = invoiceId;
     }
 
-    public Invoice(BigDecimal invoiceId, String invoiceNumber) {
-        this.invoiceId = invoiceId;
+    public Invoice(Long invoiceId, String invoiceNumber) {
+        this.id = invoiceId;
         this.invoiceNumber = invoiceNumber;
     }
 
-    public BigDecimal getInvoiceId() {
-        return invoiceId;
+    public Long getId() {
+        return id;
     }
 
-    public void setInvoiceId(BigDecimal invoiceId) {
-        this.invoiceId = invoiceId;
+    public void setId(Long invoiceId) {
+        this.id = invoiceId;
     }
 
     public String getInvoiceNumber() {
@@ -125,67 +125,67 @@ public class Invoice implements Serializable {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public BigDecimal getSubtotal() {
+    public Double getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(BigDecimal subtotal) {
+    public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
     }
 
-    public BigDecimal getTaxRate() {
+    public Double getTaxRate() {
         return taxRate;
     }
 
-    public void setTaxRate(BigDecimal taxRate) {
+    public void setTaxRate(Double taxRate) {
         this.taxRate = taxRate;
     }
 
-    public BigDecimal getServiceRate() {
+    public Double getServiceRate() {
         return serviceRate;
     }
 
-    public void setServiceRate(BigDecimal serviceRate) {
+    public void setServiceRate(Double serviceRate) {
         this.serviceRate = serviceRate;
     }
 
-    public BigDecimal getDiscountRate() {
+    public Double getDiscountRate() {
         return discountRate;
     }
 
-    public void setDiscountRate(BigDecimal discountRate) {
+    public void setDiscountRate(Double discountRate) {
         this.discountRate = discountRate;
     }
 
-    public BigDecimal getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 
-    public BigDecimal getAmountReceived() {
+    public Double getAmountReceived() {
         return amountReceived;
     }
 
-    public void setAmountReceived(BigDecimal amountReceived) {
+    public void setAmountReceived(Double amountReceived) {
         this.amountReceived = amountReceived;
     }
 
-    public BigDecimal getChangeAmount() {
+    public Double getChangeAmount() {
         return changeAmount;
     }
 
-    public void setChangeAmount(BigDecimal changeAmount) {
+    public void setChangeAmount(Double changeAmount) {
         this.changeAmount = changeAmount;
     }
 
-    public Date getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -248,7 +248,7 @@ public class Invoice implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (invoiceId != null ? invoiceId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -259,7 +259,7 @@ public class Invoice implements Serializable {
             return false;
         }
         Invoice other = (Invoice) object;
-        if ((this.invoiceId == null && other.invoiceId != null) || (this.invoiceId != null && !this.invoiceId.equals(other.invoiceId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -267,7 +267,7 @@ public class Invoice implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.Invoice[ invoiceId=" + invoiceId + " ]";
+        return "cr.ac.una.koffeefxws.model.Invoice[ invoiceId=" + id + " ]";
     }
     
 }

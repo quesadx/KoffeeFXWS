@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "OrderItem.findAll", query = "SELECT o FROM OrderItem o"),
-    @NamedQuery(name = "OrderItem.findByItemId", query = "SELECT o FROM OrderItem o WHERE o.itemId = :itemId"),
+    @NamedQuery(name = "OrderItem.findById", query = "SELECT o FROM OrderItem o WHERE o.id = :id"),
     @NamedQuery(name = "OrderItem.findByQuantity", query = "SELECT o FROM OrderItem o WHERE o.quantity = :quantity"),
     @NamedQuery(name = "OrderItem.findByUnitPrice", query = "SELECT o FROM OrderItem o WHERE o.unitPrice = :unitPrice"),
     @NamedQuery(name = "OrderItem.findByStatus", query = "SELECT o FROM OrderItem o WHERE o.status = :status")})
@@ -41,13 +41,13 @@ public class OrderItem implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ITEM_ID")
-    private BigDecimal itemId;
+    private Long id;
     @Column(name = "QUANTITY")
-    private BigDecimal quantity;
+    private Integer quantity;
     @Basic(optional = false)
     @NotNull
     @Column(name = "UNIT_PRICE")
-    private BigDecimal unitPrice;
+    private Double unitPrice;
     @Size(max = 20)
     @Column(name = "STATUS")
     private String status;
@@ -61,36 +61,36 @@ public class OrderItem implements Serializable {
     public OrderItem() {
     }
 
-    public OrderItem(BigDecimal itemId) {
-        this.itemId = itemId;
+    public OrderItem(Long itemId) {
+        this.id = itemId;
     }
 
-    public OrderItem(BigDecimal itemId, BigDecimal unitPrice) {
-        this.itemId = itemId;
+    public OrderItem(Long itemId, Double unitPrice) {
+        this.id = itemId;
         this.unitPrice = unitPrice;
     }
 
-    public BigDecimal getItemId() {
-        return itemId;
+    public Long getId() {
+        return id;
     }
 
-    public void setItemId(BigDecimal itemId) {
-        this.itemId = itemId;
+    public void setId(Long itemId) {
+        this.id = itemId;
     }
 
-    public BigDecimal getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(BigDecimal quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    public BigDecimal getUnitPrice() {
+    public Double getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(BigDecimal unitPrice) {
+    public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
     }
 
@@ -121,7 +121,7 @@ public class OrderItem implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (itemId != null ? itemId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -132,7 +132,7 @@ public class OrderItem implements Serializable {
             return false;
         }
         OrderItem other = (OrderItem) object;
-        if ((this.itemId == null && other.itemId != null) || (this.itemId != null && !this.itemId.equals(other.itemId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -140,7 +140,7 @@ public class OrderItem implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.OrderItem[ itemId=" + itemId + " ]";
+        return "cr.ac.una.koffeefxws.model.OrderItem[ itemId=" + id + " ]";
     }
     
 }

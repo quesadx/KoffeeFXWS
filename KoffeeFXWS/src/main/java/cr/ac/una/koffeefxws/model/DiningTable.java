@@ -20,8 +20,6 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -33,7 +31,7 @@ import java.util.List;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DiningTable.findAll", query = "SELECT d FROM DiningTable d"),
-    @NamedQuery(name = "DiningTable.findByDiningTableId", query = "SELECT d FROM DiningTable d WHERE d.diningTableId = :diningTableId"),
+    @NamedQuery(name = "DiningTable.findById", query = "SELECT d FROM DiningTable d WHERE d.id = :id"),
     @NamedQuery(name = "DiningTable.findByName", query = "SELECT d FROM DiningTable d WHERE d.name = :name"),
     @NamedQuery(name = "DiningTable.findByImageUrl", query = "SELECT d FROM DiningTable d WHERE d.imageUrl = :imageUrl"),
     @NamedQuery(name = "DiningTable.findByXPos", query = "SELECT d FROM DiningTable d WHERE d.xPos = :xPos"),
@@ -49,7 +47,7 @@ public class DiningTable implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "DINING_TABLE_ID")
-    private BigDecimal diningTableId;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -59,13 +57,13 @@ public class DiningTable implements Serializable {
     @Column(name = "IMAGE_URL")
     private String imageUrl;
     @Column(name = "X_POS")
-    private BigInteger xPos;
+    private Integer xPos;
     @Column(name = "Y_POS")
-    private BigInteger yPos;
+    private Integer yPos;
     @Column(name = "WIDTH")
-    private BigInteger width;
+    private Integer width;
     @Column(name = "HEIGHT")
-    private BigInteger height;
+    private Integer height;
     @Size(max = 20)
     @Column(name = "STATUS")
     private String status;
@@ -78,21 +76,21 @@ public class DiningTable implements Serializable {
     public DiningTable() {
     }
 
-    public DiningTable(BigDecimal diningTableId) {
-        this.diningTableId = diningTableId;
+    public DiningTable(Long diningTableId) {
+        this.id = diningTableId;
     }
 
-    public DiningTable(BigDecimal diningTableId, String name) {
-        this.diningTableId = diningTableId;
+    public DiningTable(Long diningTableId, String name) {
+        this.id = diningTableId;
         this.name = name;
     }
 
-    public BigDecimal getDiningTableId() {
-        return diningTableId;
+    public Long getId() {
+        return id;
     }
 
-    public void setDiningTableId(BigDecimal diningTableId) {
-        this.diningTableId = diningTableId;
+    public void setId(Long diningTableId) {
+        this.id = diningTableId;
     }
 
     public String getName() {
@@ -111,35 +109,35 @@ public class DiningTable implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public BigInteger getXPos() {
+    public Integer getXPos() {
         return xPos;
     }
 
-    public void setXPos(BigInteger xPos) {
+    public void setXPos(Integer xPos) {
         this.xPos = xPos;
     }
 
-    public BigInteger getYPos() {
+    public Integer getYPos() {
         return yPos;
     }
 
-    public void setYPos(BigInteger yPos) {
+    public void setYPos(Integer yPos) {
         this.yPos = yPos;
     }
 
-    public BigInteger getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
-    public void setWidth(BigInteger width) {
+    public void setWidth(Integer width) {
         this.width = width;
     }
 
-    public BigInteger getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
-    public void setHeight(BigInteger height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 
@@ -171,7 +169,7 @@ public class DiningTable implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (diningTableId != null ? diningTableId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -182,7 +180,7 @@ public class DiningTable implements Serializable {
             return false;
         }
         DiningTable other = (DiningTable) object;
-        if ((this.diningTableId == null && other.diningTableId != null) || (this.diningTableId != null && !this.diningTableId.equals(other.diningTableId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -190,7 +188,7 @@ public class DiningTable implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.DiningTable[ diningTableId=" + diningTableId + " ]";
+        return "cr.ac.una.koffeefxws.model.DiningTable[ diningTableId=" + id + " ]";
     }
     
 }

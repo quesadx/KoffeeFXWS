@@ -19,7 +19,6 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ import java.util.List;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DiningArea.findAll", query = "SELECT d FROM DiningArea d"),
-    @NamedQuery(name = "DiningArea.findByDiningAreaId", query = "SELECT d FROM DiningArea d WHERE d.diningAreaId = :diningAreaId"),
+    @NamedQuery(name = "DiningArea.findById", query = "SELECT d FROM DiningArea d WHERE d.id = :id"),
     @NamedQuery(name = "DiningArea.findByName", query = "SELECT d FROM DiningArea d WHERE d.name = :name"),
     @NamedQuery(name = "DiningArea.findByIsBar", query = "SELECT d FROM DiningArea d WHERE d.isBar = :isBar"),
     @NamedQuery(name = "DiningArea.findByIsServiceCharged", query = "SELECT d FROM DiningArea d WHERE d.isServiceCharged = :isServiceCharged"),
@@ -44,7 +43,7 @@ public class DiningArea implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "DINING_AREA_ID")
-    private BigDecimal diningAreaId;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
@@ -64,21 +63,21 @@ public class DiningArea implements Serializable {
     public DiningArea() {
     }
 
-    public DiningArea(BigDecimal diningAreaId) {
-        this.diningAreaId = diningAreaId;
+    public DiningArea(Long diningAreaId) {
+        this.id = diningAreaId;
     }
 
-    public DiningArea(BigDecimal diningAreaId, String name) {
-        this.diningAreaId = diningAreaId;
+    public DiningArea(Long diningAreaId, String name) {
+        this.id = diningAreaId;
         this.name = name;
     }
 
-    public BigDecimal getDiningAreaId() {
-        return diningAreaId;
+    public Long getId() {
+        return id;
     }
 
-    public void setDiningAreaId(BigDecimal diningAreaId) {
-        this.diningAreaId = diningAreaId;
+    public void setId(Long diningAreaId) {
+        this.id = diningAreaId;
     }
 
     public String getName() {
@@ -134,7 +133,7 @@ public class DiningArea implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (diningAreaId != null ? diningAreaId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -145,7 +144,7 @@ public class DiningArea implements Serializable {
             return false;
         }
         DiningArea other = (DiningArea) object;
-        if ((this.diningAreaId == null && other.diningAreaId != null) || (this.diningAreaId != null && !this.diningAreaId.equals(other.diningAreaId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -153,7 +152,7 @@ public class DiningArea implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.DiningArea[ diningAreaId=" + diningAreaId + " ]";
+        return "cr.ac.una.koffeefxws.model.DiningArea[ diningAreaId=" + id + " ]";
     }
     
 }

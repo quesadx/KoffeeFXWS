@@ -31,7 +31,7 @@ import java.util.List;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ProductGroup.findAll", query = "SELECT p FROM ProductGroup p"),
-    @NamedQuery(name = "ProductGroup.findByProductGroupId", query = "SELECT p FROM ProductGroup p WHERE p.productGroupId = :productGroupId"),
+    @NamedQuery(name = "ProductGroup.findById", query = "SELECT p FROM ProductGroup p WHERE p.id = :id"),
     @NamedQuery(name = "ProductGroup.findByName", query = "SELECT p FROM ProductGroup p WHERE p.name = :name"),
     @NamedQuery(name = "ProductGroup.findByShortName", query = "SELECT p FROM ProductGroup p WHERE p.shortName = :shortName"),
     @NamedQuery(name = "ProductGroup.findByIsQuickMenu", query = "SELECT p FROM ProductGroup p WHERE p.isQuickMenu = :isQuickMenu"),
@@ -44,7 +44,7 @@ public class ProductGroup implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "PRODUCT_GROUP_ID")
-    private BigDecimal productGroupId;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
@@ -58,29 +58,29 @@ public class ProductGroup implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "PURCHASE_FREQUENCY")
-    private BigInteger purchaseFrequency;
+    private Double purchaseFrequency;
     @OneToMany(mappedBy = "productGroupId", fetch = FetchType.LAZY)
     private List<Product> productList;
 
     public ProductGroup() {
     }
 
-    public ProductGroup(BigDecimal productGroupId) {
-        this.productGroupId = productGroupId;
+    public ProductGroup(Long productGroupId) {
+        this.id = productGroupId;
     }
 
-    public ProductGroup(BigDecimal productGroupId, String name, BigInteger purchaseFrequency) {
-        this.productGroupId = productGroupId;
+    public ProductGroup(Long productGroupId, String name, Double purchaseFrequency) {
+        this.id = productGroupId;
         this.name = name;
         this.purchaseFrequency = purchaseFrequency;
     }
 
-    public BigDecimal getProductGroupId() {
-        return productGroupId;
+    public Long getId() {
+        return id;
     }
 
-    public void setProductGroupId(BigDecimal productGroupId) {
-        this.productGroupId = productGroupId;
+    public void setId(Long productGroupId) {
+        this.id = productGroupId;
     }
 
     public String getName() {
@@ -107,11 +107,11 @@ public class ProductGroup implements Serializable {
         this.isQuickMenu = isQuickMenu;
     }
 
-    public BigInteger getPurchaseFrequency() {
+    public Double getPurchaseFrequency() {
         return purchaseFrequency;
     }
 
-    public void setPurchaseFrequency(BigInteger purchaseFrequency) {
+    public void setPurchaseFrequency(Double purchaseFrequency) {
         this.purchaseFrequency = purchaseFrequency;
     }
 
@@ -127,7 +127,7 @@ public class ProductGroup implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (productGroupId != null ? productGroupId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -138,7 +138,7 @@ public class ProductGroup implements Serializable {
             return false;
         }
         ProductGroup other = (ProductGroup) object;
-        if ((this.productGroupId == null && other.productGroupId != null) || (this.productGroupId != null && !this.productGroupId.equals(other.productGroupId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -146,7 +146,7 @@ public class ProductGroup implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.ProductGroup[ productGroupId=" + productGroupId + " ]";
+        return "cr.ac.una.koffeefxws.model.ProductGroup[ productGroupId=" + id + " ]";
     }
     
 }
