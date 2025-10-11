@@ -55,10 +55,10 @@ public class CustomerOrder implements Serializable {
     @Column(name = "STATUS")
     private String status;
     @Column(name = "CREATED_AT")
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate createdAt;
     @Column(name = "UPDATED_AT")
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @Column(name = "TOTAL_AMOUNT")
     private Long totalAmount;

@@ -62,7 +62,7 @@ public class Customer implements Serializable {
     @Column(name = "PHONE")
     private String phone;
     @Column(name = "CREATION_DATE")
-    @Temporal(TemporalType.TIMESTAMP)
+    // @Temporal(TemporalType.TIMESTAMP)
     private LocalDate creationDate;
     @OneToMany(mappedBy = "customerId", fetch = FetchType.LAZY)
     private List<CustomerOrder> customerOrderList;

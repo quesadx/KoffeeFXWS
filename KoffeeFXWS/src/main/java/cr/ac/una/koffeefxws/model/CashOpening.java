@@ -51,14 +51,12 @@ public class CashOpening implements Serializable {
     @Column(name = "CASH_OPENING_ID")
     private Long id;
     @Column(name = "OPENING_DATE")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDate openingDate;
     @Column(name = "INITIAL_AMOUNT")
     private Long initialAmount;
     @Column(name = "IS_CLOSED")
     private Character isClosed;
     @Column(name = "CLOSING_DATE")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDate closingDate;
     @Column(name = "CLOSING_AMOUNT")
     private Long closingAmount;
