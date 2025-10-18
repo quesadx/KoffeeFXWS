@@ -29,6 +29,7 @@ public class AppUserDTO implements Serializable {
     private LocalDate creationDate;
     private Long roleId;
     private String roleName;
+    private String token;
     private Boolean modified;
     private List<CashOpeningDTO> cashOpenings;
     private List<CustomerOrderDTO> customerOrders;
@@ -136,6 +137,14 @@ public class AppUserDTO implements Serializable {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Boolean getModified() {

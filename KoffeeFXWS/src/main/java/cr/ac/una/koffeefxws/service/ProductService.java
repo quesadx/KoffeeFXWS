@@ -119,7 +119,7 @@ public class ProductService {
                 product = em.merge(product);
             } else {
                 product = new Product();
-                product.setId(productDto.getId());
+                // ID is auto-generated
                 product.setName(productDto.getName());
                 product.setShortName(productDto.getShortName());
                 product.setPrice(productDto.getPrice());

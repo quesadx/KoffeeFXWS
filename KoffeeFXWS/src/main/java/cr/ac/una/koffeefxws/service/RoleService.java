@@ -102,7 +102,7 @@ public class RoleService {
                 role = em.merge(role);
             } else {
                 role = new Role();
-                role.setId(roleDto.getId());
+                // ID is auto-generated, don't set it manually
                 role.setCode(roleDto.getCode());
                 role.setName(roleDto.getName());
                 em.persist(role);

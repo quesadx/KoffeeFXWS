@@ -105,7 +105,7 @@ public class CustomerService {
                 customer = em.merge(customer);
             } else {
                 customer = new Customer();
-                customer.setId(customerDto.getId());
+                // ID is auto-generated
                 customer.setFirstName(customerDto.getFirstName());
                 customer.setLastName(customerDto.getLastName());
                 customer.setEmail(customerDto.getEmail());

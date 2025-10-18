@@ -98,7 +98,7 @@ public class DiningTableService {
                 diningTable = em.merge(diningTable);
             } else {
                 diningTable = new DiningTable();
-                diningTable.setId(diningTableDto.getId());
+                // ID is auto-generated
                 diningTable.setName(diningTableDto.getName());
                 diningTable.setImageUrl(diningTableDto.getImageUrl());
                 diningTable.setXPos(diningTableDto.getXPos());

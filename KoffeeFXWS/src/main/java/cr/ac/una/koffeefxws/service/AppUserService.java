@@ -140,7 +140,7 @@ public class AppUserService {
                 user = em.merge(user);
             } else {
                 user = new AppUser();
-                user.setId(userDto.getId());
+                // ID is auto-generated, don't set it manually
                 user.setFirstName(userDto.getFirstName());
                 user.setLastName(userDto.getLastName());
                 user.setUsername(userDto.getUsername());

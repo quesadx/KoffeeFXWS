@@ -86,7 +86,7 @@ public class ProductGroupService {
                 productGroup = em.merge(productGroup);
             } else {
                 productGroup = new ProductGroup();
-                productGroup.setId(productGroupDto.getId());
+                // ID is auto-generated
                 productGroup.setName(productGroupDto.getName());
                 productGroup.setShortName(productGroupDto.getShortName());
                 productGroup.setIsQuickMenu(productGroupDto.getIsQuickMenu() != null && productGroupDto.getIsQuickMenu() ? 'Y' : 'N');

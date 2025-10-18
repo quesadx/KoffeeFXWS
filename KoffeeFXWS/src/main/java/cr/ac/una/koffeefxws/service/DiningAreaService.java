@@ -106,7 +106,7 @@ public class DiningAreaService {
                 diningArea = em.merge(diningArea);
             } else {
                 diningArea = new DiningArea();
-                diningArea.setId(diningAreaDto.getId());
+                // ID is auto-generated
                 diningArea.setName(diningAreaDto.getName());
                 diningArea.setIsBar(diningAreaDto.getIsBar() != null && diningAreaDto.getIsBar() ? 'Y' : 'N');
                 diningArea.setIsServiceCharged(diningAreaDto.getIsServiceCharged() != null && diningAreaDto.getIsServiceCharged() ? 'Y' : 'N');
