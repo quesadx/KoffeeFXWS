@@ -77,6 +77,18 @@ public class ProductGroup implements Serializable {
         this.purchaseFrequency = purchaseFrequency;
     }
 
+    public ProductGroup(ProductGroupDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(ProductGroupDTO dto) {
+        this.name = dto.getName();
+        this.shortName = dto.getShortName();
+        this.isQuickMenu = dto.getIsQuickMenu() != null && dto.getIsQuickMenu() ? 'Y' : 'N';
+        this.purchaseFrequency = dto.getPurchaseFrequency();
+    }
+
     public Long getId() {
         return id;
     }

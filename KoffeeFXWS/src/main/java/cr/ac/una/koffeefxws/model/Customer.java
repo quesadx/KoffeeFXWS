@@ -80,6 +80,18 @@ public class Customer implements Serializable {
         this.id = customerId;
     }
 
+    public Customer(CustomerDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(CustomerDTO dto) {
+        this.firstName = dto.getFirstName();
+        this.lastName = dto.getLastName();
+        this.email = dto.getEmail();
+        this.phone = dto.getPhone();
+    }
+
     public Long getId() {
         return id;
     }

@@ -99,18 +99,10 @@ public class DiningAreaService {
                 if (diningArea == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el área de comedor a modificar.", "guardarDiningArea NoResultException");
                 }
-                diningArea.setName(diningAreaDto.getName());
-                diningArea.setIsBar(diningAreaDto.getIsBar() ? 'Y' : 'N');
-                diningArea.setIsServiceCharged(diningAreaDto.getIsServiceCharged() ? 'Y' : 'N');
-                diningArea.setIsActive(diningAreaDto.getIsActive() ? 'Y' : 'N');
+                diningArea.actualizar(diningAreaDto);
                 diningArea = em.merge(diningArea);
             } else {
-                diningArea = new DiningArea();
-                // ID is auto-generated
-                diningArea.setName(diningAreaDto.getName());
-                diningArea.setIsBar(diningAreaDto.getIsBar() != null && diningAreaDto.getIsBar() ? 'Y' : 'N');
-                diningArea.setIsServiceCharged(diningAreaDto.getIsServiceCharged() != null && diningAreaDto.getIsServiceCharged() ? 'Y' : 'N');
-                diningArea.setIsActive(diningAreaDto.getIsActive() != null && diningAreaDto.getIsActive() ? 'Y' : 'N');
+                diningArea = new DiningArea(diningAreaDto);
                 em.persist(diningArea);
             }
             em.flush();

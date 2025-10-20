@@ -91,6 +91,18 @@ public class CustomerOrder implements Serializable {
         this.id = customerOrderId;
     }
 
+    public CustomerOrder(CustomerOrderDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(CustomerOrderDTO dto) {
+        this.status = dto.getStatus();
+        this.createdAt = dto.getCreatedAt();
+        this.updatedAt = dto.getUpdatedAt();
+        this.totalAmount = dto.getTotalAmount();
+    }
+
     public Long getId() {
         return id;
     }

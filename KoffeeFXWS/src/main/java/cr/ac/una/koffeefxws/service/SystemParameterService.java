@@ -96,16 +96,10 @@ public class SystemParameterService {
                 if (parameter == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el parámetro del sistema a modificar.", "guardarSystemParameter NoResultException");
                 }
-                parameter.setParamName(parameterDto.getParamName());
-                parameter.setParamValue(parameterDto.getParamValue());
-                parameter.setDescription(parameterDto.getDescription());
+                parameter.actualizar(parameterDto);
                 parameter = em.merge(parameter);
             } else {
-                parameter = new SystemParameter();
-                parameter.setId(parameterDto.getId());
-                parameter.setParamName(parameterDto.getParamName());
-                parameter.setParamValue(parameterDto.getParamValue());
-                parameter.setDescription(parameterDto.getDescription());
+                parameter = new SystemParameter(parameterDto);
                 em.persist(parameter);
             }
             em.flush();

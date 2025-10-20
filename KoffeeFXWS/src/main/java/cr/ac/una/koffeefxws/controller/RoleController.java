@@ -33,9 +33,10 @@ import java.util.logging.Logger;
  *
  * @author quesadx
  */
+@Deprecated
 @Secure
-@Path("/RoleController")
-@Tag(name = "Roles", description = "Operaciones sobre roles")
+@Path("/DEPRECATED_RoleController")
+@Tag(name = "Roles (DEPRECATED)", description = "Controlador de roles en desuso; utilice USER_ROLE en AppUser")
 @SecurityRequirement(name = "jwt-auth")
 public class RoleController {
 

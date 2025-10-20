@@ -16,7 +16,6 @@ import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -93,25 +92,15 @@ public class CustomerService {
     public Respuesta guardarCustomer(CustomerDTO customerDto) {
         try {
             Customer customer;
-            if (customerDto.getId() != null && customerDto.getId() > 0) {
+            if (customerDto.getId() == null || customerDto.getId() == 0) {
+                customer = new Customer(customerDto);
+                em.persist(customer);
+            } else {
                 customer = em.find(Customer.class, customerDto.getId());
                 if (customer == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el cliente a modificar.", "guardarCustomer NoResultException");
                 }
-                customer.setFirstName(customerDto.getFirstName());
-                customer.setLastName(customerDto.getLastName());
-                customer.setEmail(customerDto.getEmail());
-                customer.setPhone(customerDto.getPhone());
-                customer = em.merge(customer);
-            } else {
-                customer = new Customer();
-                // ID is auto-generated
-                customer.setFirstName(customerDto.getFirstName());
-                customer.setLastName(customerDto.getLastName());
-                customer.setEmail(customerDto.getEmail());
-                customer.setPhone(customerDto.getPhone());
-                customer.setCreationDate(LocalDate.now());
-                em.persist(customer);
+                customer.actualizar(customerDto);
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Customer", new CustomerDTO(customer));

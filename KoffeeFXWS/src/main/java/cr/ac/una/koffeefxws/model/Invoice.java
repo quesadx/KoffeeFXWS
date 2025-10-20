@@ -113,6 +113,26 @@ public class Invoice implements Serializable {
         this.invoiceNumber = invoiceNumber;
     }
 
+    public Invoice(InvoiceDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(InvoiceDTO dto) {
+        this.invoiceNumber = dto.getInvoiceNumber();
+        this.subtotal = dto.getSubtotal();
+        this.taxRate = dto.getTaxRate();
+        this.serviceRate = dto.getServiceRate();
+        this.discountRate = dto.getDiscountRate();
+        this.total = dto.getTotal();
+        this.amountReceived = dto.getAmountReceived();
+        this.changeAmount = dto.getChangeAmount();
+        this.createdAt = dto.getCreatedAt();
+        this.isPrinted = dto.getIsPrinted() != null && dto.getIsPrinted() ? 'Y' : 'N';
+        this.isEmailSent = dto.getIsEmailSent() != null && dto.getIsEmailSent() ? 'Y' : 'N';
+        this.paymentMethod = dto.getPaymentMethod();
+    }
+
     public Long getId() {
         return id;
     }

@@ -67,6 +67,17 @@ public class SystemParameter implements Serializable {
         this.paramName = paramName;
     }
 
+    public SystemParameter(SystemParameterDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(SystemParameterDTO dto) {
+        this.paramName = dto.getParamName();
+        this.paramValue = dto.getParamValue();
+        this.description = dto.getDescription();
+    }
+
     public Long getId() {
         return id;
     }

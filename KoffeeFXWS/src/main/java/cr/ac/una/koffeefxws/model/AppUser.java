@@ -109,6 +109,22 @@ public class AppUser implements Serializable {
         this.creationDate = creationDate;
     }
 
+    public AppUser(AppUserDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(AppUserDTO dto) {
+        this.firstName = dto.getFirstName();
+        this.lastName = dto.getLastName();
+        this.username = dto.getUsername();
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            this.password = dto.getPassword();
+        }
+        this.email = dto.getEmail();
+        this.isActive = dto.getIsActive() != null && dto.getIsActive() ? 'Y' : 'N';
+    }
+
     public Long getId() {
         return id;
     }

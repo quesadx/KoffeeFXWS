@@ -74,6 +74,17 @@ public class OrderItem implements Serializable {
         this.unitPrice = unitPrice;
     }
 
+    public OrderItem(OrderItemDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(OrderItemDTO dto) {
+        this.quantity = dto.getQuantity();
+        this.unitPrice = dto.getUnitPrice();
+        this.status = dto.getStatus();
+    }
+
     public Long getId() {
         return id;
     }

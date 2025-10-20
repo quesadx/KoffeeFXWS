@@ -90,30 +90,15 @@ public class DiningTableService {
                 if (diningTable == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró la mesa a modificar.", "guardarDiningTable NoResultException");
                 }
-                diningTable.setName(diningTableDto.getName());
-                diningTable.setImageUrl(diningTableDto.getImageUrl());
-                diningTable.setXPos(diningTableDto.getXPos());
-                diningTable.setYPos(diningTableDto.getYPos());
-                diningTable.setWidth(diningTableDto.getWidth());
-                diningTable.setHeight(diningTableDto.getHeight());
-                diningTable.setStatus(diningTableDto.getStatus());
-                // diningArea validated above
+                diningTable.actualizar(diningTableDto);
                 diningTable.setDiningAreaId(diningArea);
-                
                 diningTable = em.merge(diningTable);
             } else {
-                diningTable = new DiningTable();
-                // ID is auto-generated
-                diningTable.setName(diningTableDto.getName());
-                diningTable.setImageUrl(diningTableDto.getImageUrl());
-                diningTable.setXPos(diningTableDto.getXPos());
-                diningTable.setYPos(diningTableDto.getYPos());
-                diningTable.setWidth(diningTableDto.getWidth());
-                diningTable.setHeight(diningTableDto.getHeight());
-                diningTable.setStatus(diningTableDto.getStatus() != null ? diningTableDto.getStatus() : "FREE");
-                // diningArea validated above
+                diningTable = new DiningTable(diningTableDto);
+                if (diningTable.getStatus() == null) {
+                    diningTable.setStatus("FREE");
+                }
                 diningTable.setDiningAreaId(diningArea);
-                
                 em.persist(diningTable);
             }
             em.flush();

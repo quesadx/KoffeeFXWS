@@ -80,6 +80,20 @@ public class CashOpening implements Serializable {
         this.id = id;
     }
 
+    public CashOpening(CashOpeningDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(CashOpeningDTO dto) {
+        this.openingDate = dto.getOpeningDate();
+        this.initialAmount = dto.getInitialAmount();
+        this.isClosed = dto.getIsClosed() != null && dto.getIsClosed() ? 'Y' : 'N';
+        this.closingDate = dto.getClosingDate();
+        this.closingAmount = dto.getClosingAmount();
+        this.notes = dto.getNotes();
+    }
+
     public Long getId() {
         return id;
     }

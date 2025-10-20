@@ -101,13 +101,7 @@ public class ProductService {
                 if (product == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el producto a modificar.", "guardarProduct NoResultException");
                 }
-                product.setName(productDto.getName());
-                product.setShortName(productDto.getShortName());
-                product.setPrice(productDto.getPrice());
-                product.setIsQuickMenu(productDto.getIsQuickMenu() ? 'Y' : 'N');
-                product.setIsActive(productDto.getIsActive() ? 'Y' : 'N');
-                product.setImageUrl(productDto.getImageUrl());
-                product.setPurchaseFrequency(productDto.getPurchaseFrequency());
+                product.actualizar(productDto);
                 
                 if (productDto.getProductGroupId() != null) {
                     ProductGroup productGroup = em.find(ProductGroup.class, productDto.getProductGroupId());
@@ -118,16 +112,8 @@ public class ProductService {
                 
                 product = em.merge(product);
             } else {
-                product = new Product();
-                // ID is auto-generated
-                product.setName(productDto.getName());
-                product.setShortName(productDto.getShortName());
-                product.setPrice(productDto.getPrice());
-                product.setIsQuickMenu(productDto.getIsQuickMenu() != null && productDto.getIsQuickMenu() ? 'Y' : 'N');
-                product.setIsActive(productDto.getIsActive() != null && productDto.getIsActive() ? 'Y' : 'N');
-                product.setImageUrl(productDto.getImageUrl());
+                product = new Product(productDto);
                 product.setCreatedAt(LocalDate.now());
-                product.setPurchaseFrequency(productDto.getPurchaseFrequency() != null ? productDto.getPurchaseFrequency() : 0.0);
                 
                 if (productDto.getProductGroupId() != null) {
                     ProductGroup productGroup = em.find(ProductGroup.class, productDto.getProductGroupId());

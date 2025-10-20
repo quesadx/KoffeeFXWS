@@ -143,30 +143,13 @@ public class AppUserService {
                 if (user == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el usuario a modificar.", "guardarAppUser NoResultException");
                 }
-                user.setFirstName(userDto.getFirstName());
-                user.setLastName(userDto.getLastName());
-                user.setUsername(userDto.getUsername());
-                user.setEmail(userDto.getEmail());
-                user.setIsActive(userDto.getIsActive() ? 'Y' : 'N');
-                // TODO: Implement proper password hashing
-                if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
-                    user.setPassword(userDto.getPassword());
-                }
-                
+                user.actualizar(userDto);
                 user.setUserRole(resolveUserRole(userDto));
                 
                 user = em.merge(user);
             } else {
-                user = new AppUser();
-                // ID is auto-generated, don't set it manually
-                user.setFirstName(userDto.getFirstName());
-                user.setLastName(userDto.getLastName());
-                user.setUsername(userDto.getUsername());
-                user.setPassword(userDto.getPassword()); // TODO: Hash password
-                user.setEmail(userDto.getEmail());
-                user.setIsActive(userDto.getIsActive() != null && userDto.getIsActive() ? 'Y' : 'N');
+                user = new AppUser(userDto);
                 user.setCreationDate(LocalDate.now());
-                
                 user.setUserRole(resolveUserRole(userDto));
                 
                 em.persist(user);

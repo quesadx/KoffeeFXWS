@@ -79,18 +79,10 @@ public class ProductGroupService {
                 if (productGroup == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el grupo de productos a modificar.", "guardarProductGroup NoResultException");
                 }
-                productGroup.setName(productGroupDto.getName());
-                productGroup.setShortName(productGroupDto.getShortName());
-                productGroup.setIsQuickMenu(productGroupDto.getIsQuickMenu() ? 'Y' : 'N');
-                productGroup.setPurchaseFrequency(productGroupDto.getPurchaseFrequency());
+                productGroup.actualizar(productGroupDto);
                 productGroup = em.merge(productGroup);
             } else {
-                productGroup = new ProductGroup();
-                // ID is auto-generated
-                productGroup.setName(productGroupDto.getName());
-                productGroup.setShortName(productGroupDto.getShortName());
-                productGroup.setIsQuickMenu(productGroupDto.getIsQuickMenu() != null && productGroupDto.getIsQuickMenu() ? 'Y' : 'N');
-                productGroup.setPurchaseFrequency(productGroupDto.getPurchaseFrequency() != null ? productGroupDto.getPurchaseFrequency() : 0.0);
+                productGroup = new ProductGroup(productGroupDto);
                 em.persist(productGroup);
             }
             em.flush();

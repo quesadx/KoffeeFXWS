@@ -97,14 +97,10 @@ public class RoleService {
                 if (role == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el rol a modificar.", "guardarRole NoResultException");
                 }
-                role.setCode(roleDto.getCode());
-                role.setName(roleDto.getName());
+                role.actualizar(roleDto);
                 role = em.merge(role);
             } else {
-                role = new Role();
-                // ID is auto-generated, don't set it manually
-                role.setCode(roleDto.getCode());
-                role.setName(roleDto.getName());
+                role = new Role(roleDto);
                 em.persist(role);
             }
             em.flush();

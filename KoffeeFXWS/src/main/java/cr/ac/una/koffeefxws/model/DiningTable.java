@@ -89,6 +89,21 @@ public class DiningTable implements Serializable {
         this.name = name;
     }
 
+    public DiningTable(DiningTableDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(DiningTableDTO dto) {
+        this.name = dto.getName();
+        this.imageUrl = dto.getImageUrl();
+        this.xPos = dto.getXPos();
+        this.yPos = dto.getYPos();
+        this.width = dto.getWidth();
+        this.height = dto.getHeight();
+        this.status = dto.getStatus();
+    }
+
     public Long getId() {
         return id;
     }

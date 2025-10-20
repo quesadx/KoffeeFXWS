@@ -103,6 +103,21 @@ public class Product implements Serializable {
         this.purchaseFrequency = purchaseFrequency;
     }
 
+    public Product(ProductDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(ProductDTO dto) {
+        this.name = dto.getName();
+        this.shortName = dto.getShortName();
+        this.price = dto.getPrice();
+        this.isQuickMenu = dto.getIsQuickMenu() != null && dto.getIsQuickMenu() ? 'Y' : 'N';
+        this.isActive = dto.getIsActive() != null && dto.getIsActive() ? 'Y' : 'N';
+        this.imageUrl = dto.getImageUrl();
+        this.purchaseFrequency = dto.getPurchaseFrequency();
+    }
+
     public Long getId() {
         return id;
     }

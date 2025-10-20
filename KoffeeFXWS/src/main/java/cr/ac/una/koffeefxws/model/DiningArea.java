@@ -79,6 +79,18 @@ public class DiningArea implements Serializable {
         this.name = name;
     }
 
+    public DiningArea(DiningAreaDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(DiningAreaDTO dto) {
+        this.name = dto.getName();
+        this.isBar = dto.getIsBar() != null && dto.getIsBar() ? 'Y' : 'N';
+        this.isServiceCharged = dto.getIsServiceCharged() != null && dto.getIsServiceCharged() ? 'Y' : 'N';
+        this.isActive = dto.getIsActive() != null && dto.getIsActive() ? 'Y' : 'N';
+    }
+
     public Long getId() {
         return id;
     }

@@ -66,6 +66,16 @@ public class Role implements Serializable {
         this.name = name;
     }
 
+    public Role(RoleDTO dto) {
+        this.id = dto.getId();
+        actualizar(dto);
+    }
+
+    public void actualizar(RoleDTO dto) {
+        this.code = dto.getCode();
+        this.name = dto.getName();
+    }
+
     public Long getId() {
         return id;
     }
