@@ -2,7 +2,6 @@ package cr.ac.una.koffeefxws.service;
 
 import cr.ac.una.koffeefxws.model.AppUser;
 import cr.ac.una.koffeefxws.model.AppUserDTO;
-import cr.ac.una.koffeefxws.model.Role;
 import cr.ac.una.koffeefxws.util.CodigoRespuesta;
 import cr.ac.una.koffeefxws.util.Respuesta;
 import jakarta.ejb.LocalBean;
@@ -55,6 +54,30 @@ public class AppUserService {
             LOG.log(Level.SEVERE, "Ocurrió un error al consultar el usuario.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar el usuario.", "validateUser " + ex.getMessage());
         }
+    }
+
+    private Character resolveUserRole(AppUserDTO dto) {
+        if (dto == null) return 'C';
+        String name = dto.getRoleName();
+        if (name != null) {
+            return switch (name.toUpperCase()) {
+                case "ADMIN", "A" -> 'A';
+                case "SERVER", "S" -> 'S';
+                case "CASHIER", "C" -> 'C';
+                default -> 'C';
+            };
+        }
+        // Fallback by id if provided (optional; defaults to CASHIER)
+        Long id = dto.getRoleId();
+        if (id != null) {
+            return switch (id.intValue()) {
+                case 1 -> 'A';
+                case 2 -> 'C';
+                case 3 -> 'S';
+                default -> 'C';
+            };
+        }
+        return 'C';
     }
 
     public Respuesta getAppUser(Long id) {
@@ -130,12 +153,7 @@ public class AppUserService {
                     user.setPassword(userDto.getPassword());
                 }
                 
-                if (userDto.getRoleId() != null) {
-                    Role role = em.find(Role.class, userDto.getRoleId());
-                    if (role != null) {
-                        user.setRoleId(role);
-                    }
-                }
+                user.setUserRole(resolveUserRole(userDto));
                 
                 user = em.merge(user);
             } else {
@@ -149,12 +167,7 @@ public class AppUserService {
                 user.setIsActive(userDto.getIsActive() != null && userDto.getIsActive() ? 'Y' : 'N');
                 user.setCreationDate(LocalDate.now());
                 
-                if (userDto.getRoleId() != null) {
-                    Role role = em.find(Role.class, userDto.getRoleId());
-                    if (role != null) {
-                        user.setRoleId(role);
-                    }
-                }
+                user.setUserRole(resolveUserRole(userDto));
                 
                 em.persist(user);
             }

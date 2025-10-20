@@ -5,23 +5,19 @@
 package cr.ac.una.koffeefxws.model;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  *
@@ -40,7 +36,8 @@ public class Role implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
+    @SequenceGenerator(name = "role_seq", sequenceName = "seq_role_id", allocationSize = 1)
     @Basic(optional = false)
     @Column(name = "ROLE_ID")
     private Long id;
@@ -54,8 +51,7 @@ public class Role implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "NAME")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roleId", fetch = FetchType.LAZY)
-    private List<AppUser> appUserList;
+    // Relationship to AppUser was removed; APP_USER now stores role as a char code (USER_ROLE)
 
     public Role() {
     }
@@ -94,14 +90,7 @@ public class Role implements Serializable {
         this.name = name;
     }
 
-    @XmlTransient
-    public List<AppUser> getAppUserList() {
-        return appUserList;
-    }
-
-    public void setAppUserList(List<AppUser> appUserList) {
-        this.appUserList = appUserList;
-    }
+    // No AppUser relationship mapping; users reference roles via USER_ROLE code
 
     @Override
     public int hashCode() {

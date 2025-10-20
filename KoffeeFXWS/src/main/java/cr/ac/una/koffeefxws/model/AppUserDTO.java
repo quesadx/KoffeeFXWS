@@ -56,6 +56,14 @@ public class AppUserDTO implements Serializable {
         if (appUser.getRoleId() != null) {
             this.roleId = appUser.getRoleId().getId();
             this.roleName = appUser.getRoleId().getName();
+        } else if (appUser.getUserRole() != null) {
+            // Map single-character USER_ROLE to a friendly name
+            switch (Character.toUpperCase(appUser.getUserRole())) {
+                case 'A' -> this.roleName = "ADMIN";
+                case 'C' -> this.roleName = "CASHIER";
+                case 'S' -> this.roleName = "SERVER";
+                default -> this.roleName = String.valueOf(appUser.getUserRole());
+            }
         }
     }
 

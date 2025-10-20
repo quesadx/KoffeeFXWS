@@ -12,14 +12,12 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Transient;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -50,7 +48,8 @@ public class AppUser implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_seq")
+    @SequenceGenerator(name = "app_user_seq", sequenceName = "seq_app_user_id", allocationSize = 1)
     @Basic(optional = false)
     @Column(name = "USER_ID")
     private Long id;
@@ -86,8 +85,11 @@ public class AppUser implements Serializable {
     private List<CashOpening> cashOpeningList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
     private List<CustomerOrder> customerOrderList;
-    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    // KOFFEEFX DB uses a simple USER_ROLE (CHAR(1)) column instead of a FK to ROLE table
+    @Column(name = "USER_ROLE")
+    private Character userRole;
+    // Keep legacy field transient to avoid breaking DTO constructors; no DB column exists
+    @Transient
     private Role roleId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
     private List<Invoice> invoiceList;
@@ -189,13 +191,11 @@ public class AppUser implements Serializable {
         this.customerOrderList = customerOrderList;
     }
 
-    public Role getRoleId() {
-        return roleId;
-    }
+    public Role getRoleId() { return roleId; }
+    public void setRoleId(Role roleId) { this.roleId = roleId; }
 
-    public void setRoleId(Role roleId) {
-        this.roleId = roleId;
-    }
+    public Character getUserRole() { return userRole; }
+    public void setUserRole(Character userRole) { this.userRole = userRole; }
 
     @XmlTransient
     public List<Invoice> getInvoiceList() {

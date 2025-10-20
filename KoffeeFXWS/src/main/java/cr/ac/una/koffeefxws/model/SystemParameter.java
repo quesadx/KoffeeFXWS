@@ -7,7 +7,10 @@ package cr.ac.una.koffeefxws.model;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
@@ -34,6 +37,8 @@ public class SystemParameter implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "system_parameter_seq")
+    @SequenceGenerator(name = "system_parameter_seq", sequenceName = "seq_system_parameter_id", allocationSize = 1)
     @Basic(optional = false)
     @NotNull
     @Column(name = "PARAM_ID")

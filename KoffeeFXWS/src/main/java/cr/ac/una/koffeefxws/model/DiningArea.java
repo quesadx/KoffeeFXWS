@@ -12,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -42,10 +43,14 @@ public class DiningArea implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dining_area_seq")
+    @SequenceGenerator(name = "dining_area_seq", sequenceName = "seq_dining_area_id", allocationSize = 1)
     @Basic(optional = false)
     @Column(name = "DINING_AREA_ID")
     private Long id;
+    
+        // Additional fields and methods...
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
