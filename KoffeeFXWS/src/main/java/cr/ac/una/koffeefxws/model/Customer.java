@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -90,6 +91,16 @@ public class Customer implements Serializable {
         this.lastName = dto.getLastName();
         this.email = dto.getEmail();
         this.phone = dto.getPhone();
+    }
+
+    /**
+     * Lifecycle hook: Automatically sets creation date before persisting
+     */
+    @PrePersist
+    protected void onCreate() {
+        if (creationDate == null) {
+            creationDate = LocalDate.now();
+        }
     }
 
     public Long getId() {

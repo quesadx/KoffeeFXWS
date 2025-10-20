@@ -17,6 +17,7 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -88,7 +89,7 @@ public class AppUser implements Serializable {
     // KOFFEEFX DB uses a simple USER_ROLE (CHAR(1)) column instead of a FK to ROLE table
     @Column(name = "USER_ROLE")
     private Character userRole;
-    // Keep legacy field transient to avoid breaking DTO constructors; no DB column exists
+    // Por mientrasssss
     @Transient
     private Role roleId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
@@ -123,6 +124,19 @@ public class AppUser implements Serializable {
         }
         this.email = dto.getEmail();
         this.isActive = dto.getIsActive() != null && dto.getIsActive() ? 'Y' : 'N';
+    }
+
+    /**
+     * Lifecycle hook: Automatically sets creation date before persisting
+     */
+    @PrePersist
+    protected void onCreate() {
+        if (creationDate == null) {
+            creationDate = LocalDate.now();
+        }
+        if (isActive == null) {
+            isActive = 'Y';
+        }
     }
 
     public Long getId() {
