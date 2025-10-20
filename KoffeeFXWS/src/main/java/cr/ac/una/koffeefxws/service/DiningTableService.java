@@ -74,6 +74,16 @@ public class DiningTableService {
 
     public Respuesta guardarDiningTable(DiningTableDTO diningTableDto) {
         try {
+            // Validate required FK before touching the DB to avoid ORA-01400
+            if (diningTableDto.getDiningAreaId() == null) {
+                return new Respuesta(false, CodigoRespuesta.ERROR_CLIENTE, "El ID del salón (diningAreaId) es obligatorio.", "guardarDiningTable Validation");
+            }
+
+            DiningArea diningArea = em.find(DiningArea.class, diningTableDto.getDiningAreaId());
+            if (diningArea == null) {
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un salón con el ID indicado.", "guardarDiningTable Validation");
+            }
+
             DiningTable diningTable;
             if (diningTableDto.getId() != null && diningTableDto.getId() > 0) {
                 diningTable = em.find(DiningTable.class, diningTableDto.getId());
@@ -87,13 +97,8 @@ public class DiningTableService {
                 diningTable.setWidth(diningTableDto.getWidth());
                 diningTable.setHeight(diningTableDto.getHeight());
                 diningTable.setStatus(diningTableDto.getStatus());
-                
-                if (diningTableDto.getDiningAreaId() != null) {
-                    DiningArea diningArea = em.find(DiningArea.class, diningTableDto.getDiningAreaId());
-                    if (diningArea != null) {
-                        diningTable.setDiningAreaId(diningArea);
-                    }
-                }
+                // diningArea validated above
+                diningTable.setDiningAreaId(diningArea);
                 
                 diningTable = em.merge(diningTable);
             } else {
@@ -105,14 +110,9 @@ public class DiningTableService {
                 diningTable.setYPos(diningTableDto.getYPos());
                 diningTable.setWidth(diningTableDto.getWidth());
                 diningTable.setHeight(diningTableDto.getHeight());
-                diningTable.setStatus(diningTableDto.getStatus() != null ? diningTableDto.getStatus() : "AVAILABLE");
-                
-                if (diningTableDto.getDiningAreaId() != null) {
-                    DiningArea diningArea = em.find(DiningArea.class, diningTableDto.getDiningAreaId());
-                    if (diningArea != null) {
-                        diningTable.setDiningAreaId(diningArea);
-                    }
-                }
+                diningTable.setStatus(diningTableDto.getStatus() != null ? diningTableDto.getStatus() : "FREE");
+                // diningArea validated above
+                diningTable.setDiningAreaId(diningArea);
                 
                 em.persist(diningTable);
             }

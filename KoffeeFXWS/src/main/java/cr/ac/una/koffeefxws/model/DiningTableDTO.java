@@ -34,7 +34,8 @@ public class DiningTableDTO implements Serializable {
     public DiningTableDTO() {
         this.customerOrders = new ArrayList<>();
         this.modified = false;
-        this.status = "AVAILABLE";
+        // DB constraint allows FREE/OCCUPIED/RESERVED; use FREE as default
+        this.status = "FREE";
     }
 
     public DiningTableDTO(DiningTable diningTable) {
