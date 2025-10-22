@@ -56,30 +56,6 @@ public class AppUserService {
         }
     }
 
-    private Character resolveUserRole(AppUserDTO dto) {
-        if (dto == null) return 'C';
-        String name = dto.getRoleName();
-        if (name != null) {
-            return switch (name.toUpperCase()) {
-                case "ADMIN", "A" -> 'A';
-                case "SERVER", "S" -> 'S';
-                case "CASHIER", "C" -> 'C';
-                default -> 'C';
-            };
-        }
-        // Fallback by id if provided (optional; defaults to CASHIER)
-        Long id = dto.getRoleId();
-        if (id != null) {
-            return switch (id.intValue()) {
-                case 1 -> 'A';
-                case 2 -> 'C';
-                case 3 -> 'S';
-                default -> 'C';
-            };
-        }
-        return 'C';
-    }
-
     public Respuesta getAppUser(Long id) {
         try {
             Query qryAppUser = em.createNamedQuery("AppUser.findById", AppUser.class);
@@ -144,14 +120,13 @@ public class AppUserService {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el usuario a modificar.", "guardarAppUser NoResultException");
                 }
                 user.actualizar(userDto);
-                user.setUserRole(resolveUserRole(userDto));
+                user.setUserRole(userDto.getUserRole());
                 
                 user = em.merge(user);
             } else {
                 user = new AppUser(userDto);
                 user.setCreationDate(LocalDate.now());
-                user.setUserRole(resolveUserRole(userDto));
-                
+
                 em.persist(user);
             }
             em.flush();

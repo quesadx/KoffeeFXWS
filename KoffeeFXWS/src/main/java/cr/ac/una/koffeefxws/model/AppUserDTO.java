@@ -27,8 +27,7 @@ public class AppUserDTO implements Serializable {
     private String email;
     private Boolean isActive;
     private LocalDate creationDate;
-    private Long roleId;
-    private String roleName;
+    private Character userRole;
     private String token;
     private Boolean modified;
     private List<CashOpeningDTO> cashOpenings;
@@ -52,19 +51,7 @@ public class AppUserDTO implements Serializable {
         this.email = appUser.getEmail();
         this.isActive = appUser.getIsActive() != null && appUser.getIsActive().equals('Y');
         this.creationDate = appUser.getCreationDate();
-        
-        if (appUser.getRoleId() != null) {
-            this.roleId = appUser.getRoleId().getId();
-            this.roleName = appUser.getRoleId().getName();
-        } else if (appUser.getUserRole() != null) {
-            // Map single-character USER_ROLE to a friendly name
-            switch (Character.toUpperCase(appUser.getUserRole())) {
-                case 'A' -> this.roleName = "ADMIN";
-                case 'C' -> this.roleName = "CASHIER";
-                case 'S' -> this.roleName = "SERVER";
-                default -> this.roleName = String.valueOf(appUser.getUserRole());
-            }
-        }
+        this.userRole = appUser.getUserRole();
     }
 
     public Long getId() {
@@ -131,20 +118,12 @@ public class AppUserDTO implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public Long getRoleId() {
-        return roleId;
+    public Character getUserRole() {
+        return userRole;
     }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setUserRole(Character userRole) {
+        this.userRole = userRole;
     }
 
     public String getToken() {

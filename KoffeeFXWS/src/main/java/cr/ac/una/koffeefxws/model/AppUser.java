@@ -86,12 +86,8 @@ public class AppUser implements Serializable {
     private List<CashOpening> cashOpeningList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
     private List<CustomerOrder> customerOrderList;
-    // KOFFEEFX DB uses a simple USER_ROLE (CHAR(1)) column instead of a FK to ROLE table
     @Column(name = "USER_ROLE")
     private Character userRole;
-    // Por mientrasssss
-    @Transient
-    private Role roleId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
     private List<Invoice> invoiceList;
 
@@ -124,6 +120,7 @@ public class AppUser implements Serializable {
         }
         this.email = dto.getEmail();
         this.isActive = dto.getIsActive() != null && dto.getIsActive() ? 'Y' : 'N';
+        this.userRole = dto.getUserRole();
     }
 
     /**
@@ -203,6 +200,15 @@ public class AppUser implements Serializable {
         this.creationDate = creationDate;
     }
 
+
+    public Character getUserRole() { 
+        return userRole; 
+    }
+    
+    public void setUserRole(Character userRole) { 
+        this.userRole = userRole; 
+    }
+
     @XmlTransient
     public List<CashOpening> getCashOpeningList() {
         return cashOpeningList;
@@ -220,12 +226,6 @@ public class AppUser implements Serializable {
     public void setCustomerOrderList(List<CustomerOrder> customerOrderList) {
         this.customerOrderList = customerOrderList;
     }
-
-    public Role getRoleId() { return roleId; }
-    public void setRoleId(Role roleId) { this.roleId = roleId; }
-
-    public Character getUserRole() { return userRole; }
-    public void setUserRole(Character userRole) { this.userRole = userRole; }
 
     @XmlTransient
     public List<Invoice> getInvoiceList() {
