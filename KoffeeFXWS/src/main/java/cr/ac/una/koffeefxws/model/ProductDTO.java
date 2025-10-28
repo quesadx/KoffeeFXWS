@@ -25,9 +25,9 @@ public class ProductDTO implements Serializable {
     private Double price;
     private Boolean isQuickMenu;
     private Boolean isActive;
-    private String imageUrl;
     private LocalDate createdAt;
     private Double purchaseFrequency;
+    private Long version;
     private Long productGroupId;
     private String productGroupName;
     private Boolean modified;
@@ -49,9 +49,9 @@ public class ProductDTO implements Serializable {
         this.price = product.getPrice();
         this.isQuickMenu = product.getIsQuickMenu() != null && product.getIsQuickMenu().equals('Y');
         this.isActive = product.getIsActive() != null && product.getIsActive().equals('Y');
-        this.imageUrl = product.getImageUrl();
         this.createdAt = product.getCreatedAt();
         this.purchaseFrequency = product.getPurchaseFrequency();
+        this.version = product.getVersion();
         
         if (product.getProductGroupId() != null) {
             this.productGroupId = product.getProductGroupId().getId();
@@ -107,14 +107,6 @@ public class ProductDTO implements Serializable {
         this.isActive = isActive;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public LocalDate getCreatedAt() {
         return createdAt;
     }
@@ -129,6 +121,14 @@ public class ProductDTO implements Serializable {
 
     public void setPurchaseFrequency(Double purchaseFrequency) {
         this.purchaseFrequency = purchaseFrequency;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Long getProductGroupId() {

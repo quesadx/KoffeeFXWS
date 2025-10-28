@@ -20,6 +20,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -67,6 +68,9 @@ public class CashOpening implements Serializable {
     @Size(max = 2000)
     @Column(name = "NOTES")
     private String notes;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private AppUser userId;
@@ -148,6 +152,14 @@ public class CashOpening implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public AppUser getUserId() {

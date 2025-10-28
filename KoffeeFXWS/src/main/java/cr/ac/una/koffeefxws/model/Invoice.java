@@ -20,6 +20,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -88,6 +89,9 @@ public class Invoice implements Serializable {
     @Size(max = 20)
     @Column(name = "PAYMENT_METHOD")
     private String paymentMethod;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
     @JoinColumn(name = "CREATED_BY", referencedColumnName = "USER_ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private AppUser createdBy;
@@ -235,6 +239,14 @@ public class Invoice implements Serializable {
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public AppUser getCreatedBy() {

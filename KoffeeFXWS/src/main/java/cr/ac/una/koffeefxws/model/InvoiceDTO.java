@@ -30,6 +30,7 @@ public class InvoiceDTO implements Serializable {
     private Boolean isPrinted;
     private Boolean isEmailSent;
     private String paymentMethod;
+    private Long version;
     private Long createdBy;
     private String createdByName;
     private Long cashOpeningId;
@@ -63,6 +64,7 @@ public class InvoiceDTO implements Serializable {
         this.isPrinted = invoice.getIsPrinted() != null && invoice.getIsPrinted().equals('Y');
         this.isEmailSent = invoice.getIsEmailSent() != null && invoice.getIsEmailSent().equals('Y');
         this.paymentMethod = invoice.getPaymentMethod();
+        this.version = invoice.getVersion();
         
         if (invoice.getCreatedBy() != null) {
             this.createdBy = invoice.getCreatedBy().getId();
@@ -186,6 +188,14 @@ public class InvoiceDTO implements Serializable {
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Long getCreatedBy() {

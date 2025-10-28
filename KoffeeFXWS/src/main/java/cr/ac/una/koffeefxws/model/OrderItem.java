@@ -17,6 +17,7 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -55,6 +56,9 @@ public class OrderItem implements Serializable {
     @Size(max = 20)
     @Column(name = "STATUS")
     private String status;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
     @JoinColumn(name = "CUSTOMER_ORDER_ID", referencedColumnName = "CUSTOMER_ORDER_ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private CustomerOrder customerOrderId;
@@ -115,6 +119,14 @@ public class OrderItem implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public CustomerOrder getCustomerOrderId() {

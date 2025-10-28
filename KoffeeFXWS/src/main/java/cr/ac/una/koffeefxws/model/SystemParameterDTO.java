@@ -20,6 +20,7 @@ public class SystemParameterDTO implements Serializable {
     private String paramName;
     private String paramValue;
     private String description;
+    private Long version;
     private Boolean modified;
 
     public SystemParameterDTO() {
@@ -32,6 +33,7 @@ public class SystemParameterDTO implements Serializable {
         this.paramName = systemParameter.getParamName();
         this.paramValue = systemParameter.getParamValue();
         this.description = systemParameter.getDescription();
+        this.version = systemParameter.getVersion();
     }
 
     public Long getId() {
@@ -64,6 +66,14 @@ public class SystemParameterDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Boolean getModified() {

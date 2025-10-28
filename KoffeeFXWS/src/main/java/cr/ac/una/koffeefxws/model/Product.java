@@ -12,15 +12,16 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -44,7 +45,6 @@ import java.util.List;
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
     @NamedQuery(name = "Product.findByIsQuickMenu", query = "SELECT p FROM Product p WHERE p.isQuickMenu = :isQuickMenu"),
     @NamedQuery(name = "Product.findByIsActive", query = "SELECT p FROM Product p WHERE p.isActive = :isActive"),
-    @NamedQuery(name = "Product.findByImageUrl", query = "SELECT p FROM Product p WHERE p.imageUrl = :imageUrl"),
     @NamedQuery(name = "Product.findByCreatedAt", query = "SELECT p FROM Product p WHERE p.createdAt = :createdAt"),
     @NamedQuery(name = "Product.findByPurchaseFrequency", query = "SELECT p FROM Product p WHERE p.purchaseFrequency = :purchaseFrequency")})
 public class Product implements Serializable {
@@ -73,9 +73,6 @@ public class Product implements Serializable {
     private Character isQuickMenu;
     @Column(name = "IS_ACTIVE")
     private Character isActive;
-    @Size(max = 1000)
-    @Column(name = "IMAGE_URL")
-    private String imageUrl;
     @Column(name = "CREATED_AT")
     //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate createdAt;
@@ -83,6 +80,9 @@ public class Product implements Serializable {
     @NotNull
     @Column(name = "PURCHASE_FREQUENCY")
     private Double purchaseFrequency;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
     @JoinColumn(name = "PRODUCT_GROUP_ID", referencedColumnName = "PRODUCT_GROUP_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private ProductGroup productGroupId;
@@ -114,7 +114,6 @@ public class Product implements Serializable {
         this.price = dto.getPrice();
         this.isQuickMenu = dto.getIsQuickMenu() != null && dto.getIsQuickMenu() ? 'Y' : 'N';
         this.isActive = dto.getIsActive() != null && dto.getIsActive() ? 'Y' : 'N';
-        this.imageUrl = dto.getImageUrl();
         this.purchaseFrequency = dto.getPurchaseFrequency();
     }
 
@@ -166,14 +165,6 @@ public class Product implements Serializable {
         this.isActive = isActive;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public LocalDate getCreatedAt() {
         return createdAt;
     }
@@ -188,6 +179,14 @@ public class Product implements Serializable {
 
     public void setPurchaseFrequency(Double purchaseFrequency) {
         this.purchaseFrequency = purchaseFrequency;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+    
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public ProductGroup getProductGroupId() {

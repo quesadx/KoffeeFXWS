@@ -24,6 +24,7 @@ public class DiningAreaDTO implements Serializable {
     private Boolean isBar;
     private Boolean isServiceCharged;
     private Boolean isActive;
+    private Long version;
     private Boolean modified;
     private List<DiningTableDTO> diningTables;
     private List<DiningTableDTO> deletedDiningTables;
@@ -46,6 +47,7 @@ public class DiningAreaDTO implements Serializable {
         this.isBar = diningArea.getIsBar() != null && diningArea.getIsBar().equals('Y');
         this.isServiceCharged = diningArea.getIsServiceCharged() != null && diningArea.getIsServiceCharged().equals('Y');
         this.isActive = diningArea.getIsActive() != null && diningArea.getIsActive().equals('Y');
+        this.version = diningArea.getVersion();
     }
 
     public Long getId() {
@@ -86,6 +88,14 @@ public class DiningAreaDTO implements Serializable {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Boolean getModified() {

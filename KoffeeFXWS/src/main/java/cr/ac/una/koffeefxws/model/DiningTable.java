@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,6 +19,7 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -36,7 +38,6 @@ import java.util.List;
     @NamedQuery(name = "DiningTable.findAll", query = "SELECT d FROM DiningTable d"),
     @NamedQuery(name = "DiningTable.findById", query = "SELECT d FROM DiningTable d WHERE d.id = :id"),
     @NamedQuery(name = "DiningTable.findByName", query = "SELECT d FROM DiningTable d WHERE d.name = :name"),
-    @NamedQuery(name = "DiningTable.findByImageUrl", query = "SELECT d FROM DiningTable d WHERE d.imageUrl = :imageUrl"),
     @NamedQuery(name = "DiningTable.findByXPos", query = "SELECT d FROM DiningTable d WHERE d.xPos = :xPos"),
     @NamedQuery(name = "DiningTable.findByYPos", query = "SELECT d FROM DiningTable d WHERE d.yPos = :yPos"),
     @NamedQuery(name = "DiningTable.findByWidth", query = "SELECT d FROM DiningTable d WHERE d.width = :width"),
@@ -57,9 +58,9 @@ public class DiningTable implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "NAME")
     private String name;
-    @Size(max = 1000)
-    @Column(name = "IMAGE_URL")
-    private String imageUrl;
+    @Lob
+    @Column(name = "IMAGE")
+    private byte[] image;
     @Column(name = "X_POS")
     private Integer xPos;
     @Column(name = "Y_POS")
@@ -71,6 +72,9 @@ public class DiningTable implements Serializable {
     @Size(max = 20)
     @Column(name = "STATUS")
     private String status;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
     @JoinColumn(name = "DINING_AREA_ID", referencedColumnName = "DINING_AREA_ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private DiningArea diningAreaId;
@@ -96,7 +100,7 @@ public class DiningTable implements Serializable {
 
     public void actualizar(DiningTableDTO dto) {
         this.name = dto.getName();
-        this.imageUrl = dto.getImageUrl();
+        this.image = dto.getImage();
         this.xPos = dto.getXPos();
         this.yPos = dto.getYPos();
         this.width = dto.getWidth();
@@ -120,12 +124,12 @@ public class DiningTable implements Serializable {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public Integer getXPos() {
@@ -166,6 +170,14 @@ public class DiningTable implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public DiningArea getDiningAreaId() {

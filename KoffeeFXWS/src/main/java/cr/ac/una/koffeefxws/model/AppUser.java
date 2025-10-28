@@ -19,6 +19,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -82,6 +83,9 @@ public class AppUser implements Serializable {
     @NotNull
     @Column(name = "CREATION_DATE")
     private LocalDate creationDate;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
     private List<CashOpening> cashOpeningList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
@@ -200,6 +204,13 @@ public class AppUser implements Serializable {
         this.creationDate = creationDate;
     }
 
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
 
     public Character getUserRole() { 
         return userRole; 

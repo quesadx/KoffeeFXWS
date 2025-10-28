@@ -17,6 +17,7 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -62,6 +63,9 @@ public class DiningArea implements Serializable {
     private Character isServiceCharged;
     @Column(name = "IS_ACTIVE")
     private Character isActive;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "diningAreaId", fetch = FetchType.LAZY)
     private List<DiningTable> diningTableList;
     @OneToMany(mappedBy = "diningAreaId", fetch = FetchType.LAZY)
@@ -129,6 +133,14 @@ public class DiningArea implements Serializable {
 
     public void setIsActive(Character isActive) {
         this.isActive = isActive;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     @XmlTransient

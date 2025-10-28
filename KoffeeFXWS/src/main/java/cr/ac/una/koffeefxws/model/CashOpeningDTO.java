@@ -26,6 +26,7 @@ public class CashOpeningDTO implements Serializable {
     private LocalDate closingDate;
     private Long closingAmount;
     private String notes;
+    private Long version;
     private Long userId;
     private String userName;
     private Boolean modified;
@@ -46,6 +47,7 @@ public class CashOpeningDTO implements Serializable {
         this.closingDate = cashOpening.getClosingDate();
         this.closingAmount = cashOpening.getClosingAmount();
         this.notes = cashOpening.getNotes();
+        this.version = cashOpening.getVersion();
         
         if (cashOpening.getUserId() != null) {
             this.userId = cashOpening.getUserId().getId();
@@ -107,6 +109,14 @@ public class CashOpeningDTO implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Long getUserId() {

@@ -27,6 +27,7 @@ public class AppUserDTO implements Serializable {
     private String email;
     private Boolean isActive;
     private LocalDate creationDate;
+    private Long version;
     private Character userRole;
     private String token;
     private Boolean modified;
@@ -51,6 +52,7 @@ public class AppUserDTO implements Serializable {
         this.email = appUser.getEmail();
         this.isActive = appUser.getIsActive() != null && appUser.getIsActive().equals('Y');
         this.creationDate = appUser.getCreationDate();
+        this.version = appUser.getVersion();
         this.userRole = appUser.getUserRole();
     }
 
@@ -116,6 +118,14 @@ public class AppUserDTO implements Serializable {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Character getUserRole() {

@@ -16,6 +16,7 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -61,6 +62,9 @@ public class ProductGroup implements Serializable {
     @NotNull
     @Column(name = "PURCHASE_FREQUENCY")
     private Double purchaseFrequency;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
     @OneToMany(mappedBy = "productGroupId", fetch = FetchType.LAZY)
     private List<Product> productList;
 
@@ -127,6 +131,14 @@ public class ProductGroup implements Serializable {
 
     public void setPurchaseFrequency(Double purchaseFrequency) {
         this.purchaseFrequency = purchaseFrequency;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     @XmlTransient

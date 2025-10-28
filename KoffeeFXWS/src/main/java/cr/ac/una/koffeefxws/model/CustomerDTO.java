@@ -25,6 +25,7 @@ public class CustomerDTO implements Serializable {
     private String email;
     private String phone;
     private LocalDate creationDate;
+    private Long version;
     private Boolean modified;
     private List<CustomerOrderDTO> customerOrders;
     private List<InvoiceDTO> invoices;
@@ -43,6 +44,7 @@ public class CustomerDTO implements Serializable {
         this.email = customer.getEmail();
         this.phone = customer.getPhone();
         this.creationDate = customer.getCreationDate();
+        this.version = customer.getVersion();
     }
 
     public Long getId() {
@@ -91,6 +93,14 @@ public class CustomerDTO implements Serializable {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Boolean getModified() {

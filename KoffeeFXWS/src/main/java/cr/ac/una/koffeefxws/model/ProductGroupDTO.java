@@ -23,6 +23,7 @@ public class ProductGroupDTO implements Serializable {
     private String shortName;
     private Boolean isQuickMenu;
     private Double purchaseFrequency;
+    private Long version;
     private Boolean modified;
     private List<ProductDTO> products;
     private List<ProductDTO> deletedProducts;
@@ -42,6 +43,7 @@ public class ProductGroupDTO implements Serializable {
         this.shortName = productGroup.getShortName();
         this.isQuickMenu = productGroup.getIsQuickMenu() != null && productGroup.getIsQuickMenu().equals('Y');
         this.purchaseFrequency = productGroup.getPurchaseFrequency();
+        this.version = productGroup.getVersion();
     }
 
     public Long getId() {
@@ -82,6 +84,14 @@ public class ProductGroupDTO implements Serializable {
 
     public void setPurchaseFrequency(Double purchaseFrequency) {
         this.purchaseFrequency = purchaseFrequency;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Boolean getModified() {

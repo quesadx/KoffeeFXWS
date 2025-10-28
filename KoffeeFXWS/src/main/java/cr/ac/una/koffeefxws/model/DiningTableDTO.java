@@ -20,12 +20,13 @@ public class DiningTableDTO implements Serializable {
     
     private Long id;
     private String name;
-    private String imageUrl;
+    private byte[] image;
     private Integer xPos;
     private Integer yPos;
     private Integer width;
     private Integer height;
     private String status;
+    private Long version;
     private Long diningAreaId;
     private String diningAreaName;
     private Boolean modified;
@@ -42,12 +43,13 @@ public class DiningTableDTO implements Serializable {
         this();
         this.id = diningTable.getId();
         this.name = diningTable.getName();
-        this.imageUrl = diningTable.getImageUrl();
+        this.image = diningTable.getImage();
         this.xPos = diningTable.getXPos();
         this.yPos = diningTable.getYPos();
         this.width = diningTable.getWidth();
         this.height = diningTable.getHeight();
         this.status = diningTable.getStatus();
+        this.version = diningTable.getVersion();
         
         if (diningTable.getDiningAreaId() != null) {
             this.diningAreaId = diningTable.getDiningAreaId().getId();
@@ -71,12 +73,12 @@ public class DiningTableDTO implements Serializable {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public Integer getXPos() {
@@ -117,6 +119,14 @@ public class DiningTableDTO implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Long getDiningAreaId() {

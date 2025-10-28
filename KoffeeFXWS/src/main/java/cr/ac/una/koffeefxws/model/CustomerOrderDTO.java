@@ -25,6 +25,7 @@ public class CustomerOrderDTO implements Serializable {
     private LocalDate createdAt;
     private Date updatedAt;
     private Long totalAmount;
+    private Long version;
     private Long createdBy;
     private String createdByName;
     private Long customerId;
@@ -52,6 +53,7 @@ public class CustomerOrderDTO implements Serializable {
         this.createdAt = customerOrder.getCreatedAt();
         this.updatedAt = customerOrder.getUpdatedAt();
         this.totalAmount = customerOrder.getTotalAmount();
+        this.version = customerOrder.getVersion();
         
         if (customerOrder.getCreatedBy() != null) {
             this.createdBy = customerOrder.getCreatedBy().getId();
@@ -113,6 +115,14 @@ public class CustomerOrderDTO implements Serializable {
 
     public void setTotalAmount(Long totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Long getCreatedBy() {

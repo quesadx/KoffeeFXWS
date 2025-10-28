@@ -20,6 +20,7 @@ public class OrderItemDTO implements Serializable {
     private Integer quantity;
     private Double unitPrice;
     private String status;
+    private Long version;
     private Long customerOrderId;
     private Long productId;
     private String productName;
@@ -38,6 +39,7 @@ public class OrderItemDTO implements Serializable {
         this.quantity = orderItem.getQuantity();
         this.unitPrice = orderItem.getUnitPrice();
         this.status = orderItem.getStatus();
+        this.version = orderItem.getVersion();
         
         if (orderItem.getCustomerOrderId() != null) {
             this.customerOrderId = orderItem.getCustomerOrderId().getId();
@@ -80,6 +82,14 @@ public class OrderItemDTO implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Long getCustomerOrderId() {

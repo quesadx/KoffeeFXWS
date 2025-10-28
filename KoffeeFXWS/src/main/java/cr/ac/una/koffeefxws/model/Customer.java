@@ -19,6 +19,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -69,6 +70,9 @@ public class Customer implements Serializable {
     @Column(name = "CREATION_DATE")
     // @Temporal(TemporalType.TIMESTAMP)
     private LocalDate creationDate;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
     @OneToMany(mappedBy = "customerId", fetch = FetchType.LAZY)
     private List<CustomerOrder> customerOrderList;
     @OneToMany(mappedBy = "customerId", fetch = FetchType.LAZY)
@@ -149,6 +153,14 @@ public class Customer implements Serializable {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     @XmlTransient

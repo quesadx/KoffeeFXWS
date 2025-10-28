@@ -14,6 +14,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -54,6 +55,9 @@ public class SystemParameter implements Serializable {
     @Size(max = 1000)
     @Column(name = "DESCRIPTION")
     private String description;
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
 
     public SystemParameter() {
     }
@@ -108,6 +112,14 @@ public class SystemParameter implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     @Override
