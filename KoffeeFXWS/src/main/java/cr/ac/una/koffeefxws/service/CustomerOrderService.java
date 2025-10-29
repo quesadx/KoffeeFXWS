@@ -149,13 +149,25 @@ public class CustomerOrderService {
                         continue; // Skip invalid products
                     }
 
-                    OrderItem item = new OrderItem(itemDto);
-                    item.setCustomerOrderId(order);
-                    item.setProductId(product);
-                    if (item.getStatus() == null) {
-                        item.setStatus("PENDING");
+                    OrderItem item;
+                    if (itemDto.getId() != null && itemDto.getId() > 0) {
+                        // Update existing item
+                        item = em.find(OrderItem.class, itemDto.getId());
+                        if (item != null) {
+                            item.actualizar(itemDto);
+                            item.setProductId(product);
+                            item = em.merge(item);
+                        }
+                    } else {
+                        // Create new item
+                        item = new OrderItem(itemDto);
+                        item.setCustomerOrderId(order);
+                        item.setProductId(product);
+                        if (item.getStatus() == null) {
+                            item.setStatus("PENDING");
+                        }
+                        em.persist(item);
                     }
-                    em.persist(item);
                 }
             }
 
