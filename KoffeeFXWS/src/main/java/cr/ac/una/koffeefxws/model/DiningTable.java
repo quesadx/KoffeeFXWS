@@ -11,13 +11,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
@@ -34,55 +34,102 @@ import java.util.List;
 @Entity
 @Table(name = "DINING_TABLE")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "DiningTable.findAll", query = "SELECT d FROM DiningTable d"),
-    @NamedQuery(name = "DiningTable.findById", query = "SELECT d FROM DiningTable d WHERE d.id = :id"),
-    @NamedQuery(name = "DiningTable.findByName", query = "SELECT d FROM DiningTable d WHERE d.name = :name"),
-    @NamedQuery(name = "DiningTable.findByXPos", query = "SELECT d FROM DiningTable d WHERE d.xPos = :xPos"),
-    @NamedQuery(name = "DiningTable.findByYPos", query = "SELECT d FROM DiningTable d WHERE d.yPos = :yPos"),
-    @NamedQuery(name = "DiningTable.findByWidth", query = "SELECT d FROM DiningTable d WHERE d.width = :width"),
-    @NamedQuery(name = "DiningTable.findByHeight", query = "SELECT d FROM DiningTable d WHERE d.height = :height"),
-    @NamedQuery(name = "DiningTable.findByStatus", query = "SELECT d FROM DiningTable d WHERE d.status = :status")})
+@NamedQueries(
+    {
+        @NamedQuery(
+            name = "DiningTable.findAll",
+            query = "SELECT d FROM DiningTable d"
+        ),
+        @NamedQuery(
+            name = "DiningTable.findById",
+            query = "SELECT d FROM DiningTable d WHERE d.id = :id"
+        ),
+        @NamedQuery(
+            name = "DiningTable.findByName",
+            query = "SELECT d FROM DiningTable d WHERE d.name = :name"
+        ),
+        @NamedQuery(
+            name = "DiningTable.findByXPos",
+            query = "SELECT d FROM DiningTable d WHERE d.xPos = :xPos"
+        ),
+        @NamedQuery(
+            name = "DiningTable.findByYPos",
+            query = "SELECT d FROM DiningTable d WHERE d.yPos = :yPos"
+        ),
+        @NamedQuery(
+            name = "DiningTable.findByWidth",
+            query = "SELECT d FROM DiningTable d WHERE d.width = :width"
+        ),
+        @NamedQuery(
+            name = "DiningTable.findByHeight",
+            query = "SELECT d FROM DiningTable d WHERE d.height = :height"
+        ),
+        @NamedQuery(
+            name = "DiningTable.findByStatus",
+            query = "SELECT d FROM DiningTable d WHERE d.status = :status"
+        ),
+    }
+)
 public class DiningTable implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dining_table_seq")
-    @SequenceGenerator(name = "dining_table_seq", sequenceName = "seq_dining_table_id", allocationSize = 1)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "dining_table_seq"
+    )
+    @SequenceGenerator(
+        name = "dining_table_seq",
+        sequenceName = "seq_dining_table_id",
+        allocationSize = 1
+    )
     @Basic(optional = false)
     @Column(name = "DINING_TABLE_ID")
     private Long id;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "NAME")
     private String name;
+
     @Lob
     @Column(name = "IMAGE")
     private byte[] image;
+
     @Column(name = "X_POS")
     private Integer xPos;
+
     @Column(name = "Y_POS")
     private Integer yPos;
+
     @Column(name = "WIDTH")
     private Integer width;
+
     @Column(name = "HEIGHT")
     private Integer height;
+
     @Size(max = 20)
     @Column(name = "STATUS")
     private String status;
+
     @Version
     @Column(name = "VERSION")
     private Long version;
-    @JoinColumn(name = "DINING_AREA_ID", referencedColumnName = "DINING_AREA_ID")
+
+    @JoinColumn(
+        name = "DINING_AREA_ID",
+        referencedColumnName = "DINING_AREA_ID"
+    )
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private DiningArea diningAreaId;
+
     @OneToMany(mappedBy = "diningTableId", fetch = FetchType.LAZY)
     private List<CustomerOrder> customerOrderList;
 
-    public DiningTable() {
-    }
+    public DiningTable() {}
 
     public DiningTable(Long diningTableId) {
         this.id = diningTableId;
@@ -211,7 +258,10 @@ public class DiningTable implements Serializable {
             return false;
         }
         DiningTable other = (DiningTable) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (
+            (this.id == null && other.id != null) ||
+            (this.id != null && !this.id.equals(other.id))
+        ) {
             return false;
         }
         return true;
@@ -219,7 +269,8 @@ public class DiningTable implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.DiningTable[ diningTableId=" + id + " ]";
+        return (
+            "cr.ac.una.koffeefxws.model.DiningTable[ diningTableId=" + id + " ]"
+        );
     }
-    
 }

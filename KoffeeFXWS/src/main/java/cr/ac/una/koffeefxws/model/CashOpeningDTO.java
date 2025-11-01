@@ -11,14 +11,13 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Data Transfer Object for CashOpening entity
- * 
+ *
  * @author quesadx
  */
 public class CashOpeningDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private LocalDate openingDate;
     private Long initialAmount;
@@ -43,12 +42,14 @@ public class CashOpeningDTO implements Serializable {
         this.id = cashOpening.getId();
         this.openingDate = cashOpening.getOpeningDate();
         this.initialAmount = cashOpening.getInitialAmount();
-        this.isClosed = cashOpening.getIsClosed() != null && cashOpening.getIsClosed().equals('Y');
+        this.isClosed =
+            cashOpening.getIsClosed() != null &&
+            cashOpening.getIsClosed().equals('Y');
         this.closingDate = cashOpening.getClosingDate();
         this.closingAmount = cashOpening.getClosingAmount();
         this.notes = cashOpening.getNotes();
         this.version = cashOpening.getVersion();
-        
+
         if (cashOpening.getUserId() != null) {
             this.userId = cashOpening.getUserId().getId();
             this.userName = cashOpening.getUserId().getUsername();
@@ -170,6 +171,13 @@ public class CashOpeningDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "CashOpeningDTO{" + "openingDate=" + openingDate + ", isClosed=" + isClosed + '}';
+        return (
+            "CashOpeningDTO{" +
+            "openingDate=" +
+            openingDate +
+            ", isClosed=" +
+            isClosed +
+            '}'
+        );
     }
 }

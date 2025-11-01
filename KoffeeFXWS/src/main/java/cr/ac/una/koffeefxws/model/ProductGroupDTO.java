@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Data Transfer Object for ProductGroup entity
- * 
+ *
  * @author quesadx
  */
 public class ProductGroupDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private String name;
     private String shortName;
@@ -41,7 +40,9 @@ public class ProductGroupDTO implements Serializable {
         this.id = productGroup.getId();
         this.name = productGroup.getName();
         this.shortName = productGroup.getShortName();
-        this.isQuickMenu = productGroup.getIsQuickMenu() != null && productGroup.getIsQuickMenu().equals('Y');
+        this.isQuickMenu =
+            productGroup.getIsQuickMenu() != null &&
+            productGroup.getIsQuickMenu().equals('Y');
         this.purchaseFrequency = productGroup.getPurchaseFrequency();
         this.version = productGroup.getVersion();
     }
@@ -137,6 +138,13 @@ public class ProductGroupDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductGroupDTO{" + "name=" + name + ", shortName=" + shortName + '}';
+        return (
+            "ProductGroupDTO{" +
+            "name=" +
+            name +
+            ", shortName=" +
+            shortName +
+            '}'
+        );
     }
 }

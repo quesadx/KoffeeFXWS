@@ -9,16 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
 /**
- * Data Transfer Object for DiningArea entity
- * 
+ *
  * @author quesadx
  */
 public class DiningAreaDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private String name;
     private Boolean isBar;
@@ -44,9 +42,14 @@ public class DiningAreaDTO implements Serializable {
         this();
         this.id = diningArea.getId();
         this.name = diningArea.getName();
-        this.isBar = diningArea.getIsBar() != null && diningArea.getIsBar().equals('Y');
-        this.isServiceCharged = diningArea.getIsServiceCharged() != null && diningArea.getIsServiceCharged().equals('Y');
-        this.isActive = diningArea.getIsActive() != null && diningArea.getIsActive().equals('Y');
+        this.isBar =
+            diningArea.getIsBar() != null && diningArea.getIsBar().equals('Y');
+        this.isServiceCharged =
+            diningArea.getIsServiceCharged() != null &&
+            diningArea.getIsServiceCharged().equals('Y');
+        this.isActive =
+            diningArea.getIsActive() != null &&
+            diningArea.getIsActive().equals('Y');
         this.version = diningArea.getVersion();
     }
 
@@ -118,7 +121,9 @@ public class DiningAreaDTO implements Serializable {
         return deletedDiningTables;
     }
 
-    public void setDeletedDiningTables(List<DiningTableDTO> deletedDiningTables) {
+    public void setDeletedDiningTables(
+        List<DiningTableDTO> deletedDiningTables
+    ) {
         this.deletedDiningTables = deletedDiningTables;
     }
 
@@ -149,6 +154,15 @@ public class DiningAreaDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "DiningAreaDTO{" + "name=" + name + ", isBar=" + isBar + ", isActive=" + isActive + '}';
+        return (
+            "DiningAreaDTO{" +
+            "name=" +
+            name +
+            ", isBar=" +
+            isBar +
+            ", isActive=" +
+            isActive +
+            '}'
+        );
     }
 }

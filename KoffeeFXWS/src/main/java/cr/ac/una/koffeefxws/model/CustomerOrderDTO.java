@@ -13,13 +13,13 @@ import java.util.Objects;
 
 /**
  * Data Transfer Object for CustomerOrder entity
- * 
+ *
  * @author quesadx
  */
 public class CustomerOrderDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private String status;
     private LocalDate createdAt;
@@ -54,23 +54,25 @@ public class CustomerOrderDTO implements Serializable {
         this.updatedAt = customerOrder.getUpdatedAt();
         this.totalAmount = customerOrder.getTotalAmount();
         this.version = customerOrder.getVersion();
-        
+
         if (customerOrder.getCreatedBy() != null) {
             this.createdBy = customerOrder.getCreatedBy().getId();
             this.createdByName = customerOrder.getCreatedBy().getUsername();
         }
-        
+
         if (customerOrder.getCustomerId() != null) {
             this.customerId = customerOrder.getCustomerId().getId();
-            this.customerName = customerOrder.getCustomerId().getFirstName() + " " + 
-                            customerOrder.getCustomerId().getLastName();
+            this.customerName =
+                customerOrder.getCustomerId().getFirstName() +
+                " " +
+                customerOrder.getCustomerId().getLastName();
         }
-        
+
         if (customerOrder.getDiningAreaId() != null) {
             this.diningAreaId = customerOrder.getDiningAreaId().getId();
             this.diningAreaName = customerOrder.getDiningAreaId().getName();
         }
-        
+
         if (customerOrder.getDiningTableId() != null) {
             this.diningTableId = customerOrder.getDiningTableId().getId();
             this.diningTableName = customerOrder.getDiningTableId().getName();
@@ -240,6 +242,15 @@ public class CustomerOrderDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "CustomerOrderDTO{" + "id=" + id + ", status=" + status + ", totalAmount=" + totalAmount + '}';
+        return (
+            "CustomerOrderDTO{" +
+            "id=" +
+            id +
+            ", status=" +
+            status +
+            ", totalAmount=" +
+            totalAmount +
+            '}'
+        );
     }
 }

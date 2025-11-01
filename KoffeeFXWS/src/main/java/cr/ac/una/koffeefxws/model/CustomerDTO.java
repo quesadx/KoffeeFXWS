@@ -11,14 +11,13 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Data Transfer Object for Customer entity
- * 
+ *
  * @author quesadx
  */
 public class CustomerDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private String firstName;
     private String lastName;
@@ -157,6 +156,15 @@ public class CustomerDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "CustomerDTO{" + "firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + '}';
+        return (
+            "CustomerDTO{" +
+            "firstName=" +
+            firstName +
+            ", lastName=" +
+            lastName +
+            ", email=" +
+            email +
+            '}'
+        );
     }
 }

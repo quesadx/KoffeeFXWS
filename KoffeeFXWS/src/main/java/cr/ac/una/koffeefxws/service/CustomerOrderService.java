@@ -37,23 +37,32 @@ import java.util.logging.Logger;
 @Stateless
 @LocalBean
 public class CustomerOrderService {
-    
-    private static final Logger LOG = Logger.getLogger(CustomerOrderService.class.getName());
-    
+
+    private static final Logger LOG = Logger.getLogger(
+        CustomerOrderService.class.getName()
+    );
+
     @PersistenceContext(unitName = "KoffeeFXWSPU")
     private EntityManager em;
-    
+
     public Respuesta getCustomerOrder(Long id) {
         try {
-            Query qryOrder = em.createNamedQuery("CustomerOrder.findById", CustomerOrder.class);
+            Query qryOrder = em.createNamedQuery(
+                "CustomerOrder.findById",
+                CustomerOrder.class
+            );
             qryOrder.setParameter("id", id);
 
             CustomerOrder order = (CustomerOrder) qryOrder.getSingleResult();
             CustomerOrderDTO dto = new CustomerOrderDTO(order);
-            
+
             // Attach invoice if exists
             if (order.getInvoice() != null) {
-                dto.setInvoice(new cr.ac.una.koffeefxws.model.InvoiceDTO(order.getInvoice()));
+                dto.setInvoice(
+                    new cr.ac.una.koffeefxws.model.InvoiceDTO(
+                        order.getInvoice()
+                    )
+                );
             }
 
             // Load order items
@@ -63,47 +72,111 @@ public class CustomerOrderService {
                 }
             }
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "CustomerOrder", dto);
-
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "CustomerOrder",
+                dto
+            );
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un pedido con el código ingresado.", "getCustomerOrder NoResultException");
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_NOENCONTRADO,
+                "No existe un pedido con el código ingresado.",
+                "getCustomerOrder NoResultException"
+            );
         } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrió un error al consultar el pedido.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar el pedido.", "getCustomerOrder NonUniqueResultException");
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al consultar el pedido.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar el pedido.",
+                "getCustomerOrder NonUniqueResultException"
+            );
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrió un error al consultar el pedido.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar el pedido.", "getCustomerOrder " + ex.getMessage());
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al consultar el pedido.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar el pedido.",
+                "getCustomerOrder " + ex.getMessage()
+            );
         }
     }
 
     public Respuesta getCustomerOrders() {
         try {
-            Query query = em.createNamedQuery("CustomerOrder.findAll", CustomerOrder.class);
-            List<CustomerOrder> orders = (List<CustomerOrder>) query.getResultList();
+            Query query = em.createNamedQuery(
+                "CustomerOrder.findAll",
+                CustomerOrder.class
+            );
+            List<CustomerOrder> orders = (List<
+                CustomerOrder
+            >) query.getResultList();
             List<CustomerOrderDTO> ordersDto = new ArrayList<>();
             for (CustomerOrder order : orders) {
                 ordersDto.add(new CustomerOrderDTO(order));
             }
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "CustomerOrders", ordersDto);
-
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "CustomerOrders",
+                ordersDto
+            );
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen pedidos registrados.", "getCustomerOrders NoResultException");
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_NOENCONTRADO,
+                "No existen pedidos registrados.",
+                "getCustomerOrders NoResultException"
+            );
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrió un error al consultar los pedidos.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar los pedidos.", "getCustomerOrders " + ex.getMessage());
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al consultar los pedidos.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar los pedidos.",
+                "getCustomerOrders " + ex.getMessage()
+            );
         }
     }
 
     public Respuesta guardarCustomerOrder(CustomerOrderDTO orderDto) {
         try {
             if (orderDto.getCreatedBy() == null) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_CLIENTE, "El ID del usuario creador es obligatorio.", "guardarCustomerOrder Validation");
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_CLIENTE,
+                    "El ID del usuario creador es obligatorio.",
+                    "guardarCustomerOrder Validation"
+                );
             }
 
             AppUser user = em.find(AppUser.class, orderDto.getCreatedBy());
             if (user == null) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un usuario con el ID indicado.", "guardarCustomerOrder Validation");
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No existe un usuario con el ID indicado.",
+                    "guardarCustomerOrder Validation"
+                );
             }
 
             Customer customer = null;
@@ -113,19 +186,30 @@ public class CustomerOrderService {
 
             DiningArea diningArea = null;
             if (orderDto.getDiningAreaId() != null) {
-                diningArea = em.find(DiningArea.class, orderDto.getDiningAreaId());
+                diningArea = em.find(
+                    DiningArea.class,
+                    orderDto.getDiningAreaId()
+                );
             }
 
             DiningTable diningTable = null;
             if (orderDto.getDiningTableId() != null) {
-                diningTable = em.find(DiningTable.class, orderDto.getDiningTableId());
+                diningTable = em.find(
+                    DiningTable.class,
+                    orderDto.getDiningTableId()
+                );
             }
 
             CustomerOrder order;
             if (orderDto.getId() != null && orderDto.getId() > 0) {
                 order = em.find(CustomerOrder.class, orderDto.getId());
                 if (order == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el pedido a modificar.", "guardarCustomerOrder NoResultException");
+                    return new Respuesta(
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No se encontró el pedido a modificar.",
+                        "guardarCustomerOrder NoResultException"
+                    );
                 }
                 order.actualizar(orderDto);
                 order.setUpdatedAt(new Date());
@@ -144,12 +228,21 @@ public class CustomerOrderService {
             }
 
             // Handle invoice relationship if present in DTO
-            if (orderDto.getInvoice() != null && orderDto.getInvoice().getId() != null) {
-                Invoice invoice = em.find(Invoice.class, orderDto.getInvoice().getId());
+            if (
+                orderDto.getInvoice() != null &&
+                orderDto.getInvoice().getId() != null
+            ) {
+                Invoice invoice = em.find(
+                    Invoice.class,
+                    orderDto.getInvoice().getId()
+                );
                 if (invoice != null) {
                     order.setInvoice(invoice);
-                    LOG.log(Level.INFO, "Asociada factura {0} a orden {1}", 
-                        new Object[]{invoice.getId(), order.getId()});
+                    LOG.log(
+                        Level.INFO,
+                        "Asociada factura {0} a orden {1}",
+                        new Object[] { invoice.getId(), order.getId() }
+                    );
                 }
             }
 
@@ -157,13 +250,19 @@ public class CustomerOrderService {
             order = em.merge(order);
 
             // Handle order items (only for new orders or if items list is provided)
-            if (orderDto.getOrderItems() != null && !orderDto.getOrderItems().isEmpty()) {
+            if (
+                orderDto.getOrderItems() != null &&
+                !orderDto.getOrderItems().isEmpty()
+            ) {
                 for (OrderItemDTO itemDto : orderDto.getOrderItems()) {
                     if (itemDto.getProductId() == null) {
                         continue; // Skip items without product
                     }
 
-                    Product product = em.find(Product.class, itemDto.getProductId());
+                    Product product = em.find(
+                        Product.class,
+                        itemDto.getProductId()
+                    );
                     if (product == null) {
                         continue; // Skip invalid products
                     }
@@ -191,10 +290,22 @@ public class CustomerOrderService {
             }
 
             em.flush();
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "CustomerOrder", new CustomerOrderDTO(order));
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "CustomerOrder",
+                new CustomerOrderDTO(order)
+            );
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrió un error al guardar el pedido.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al guardar el pedido.", "guardarCustomerOrder " + ex.getMessage());
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al guardar el pedido.",
+                "guardarCustomerOrder " + ex.getMessage()
+            );
         }
     }
 
@@ -204,17 +315,36 @@ public class CustomerOrderService {
             if (id != null && id > 0) {
                 order = em.find(CustomerOrder.class, id);
                 if (order == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el pedido a eliminar.", "eliminarCustomerOrder NoResultException");
+                    return new Respuesta(
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No se encontró el pedido a eliminar.",
+                        "eliminarCustomerOrder NoResultException"
+                    );
                 }
                 em.remove(order);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el pedido a eliminar.", "eliminarCustomerOrder NoResultException");
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "Debe cargar el pedido a eliminar.",
+                    "eliminarCustomerOrder NoResultException"
+                );
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el pedido.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al eliminar el pedido.", "eliminarCustomerOrder " + ex.getMessage());
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al eliminar el pedido.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al eliminar el pedido.",
+                "eliminarCustomerOrder " + ex.getMessage()
+            );
         }
     }
 }

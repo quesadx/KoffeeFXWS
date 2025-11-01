@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Data Transfer Object for DiningTable entity
- * 
+ *
  * @author quesadx
  */
 public class DiningTableDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private String name;
     private byte[] image;
@@ -50,7 +49,7 @@ public class DiningTableDTO implements Serializable {
         this.height = diningTable.getHeight();
         this.status = diningTable.getStatus();
         this.version = diningTable.getVersion();
-        
+
         if (diningTable.getDiningAreaId() != null) {
             this.diningAreaId = diningTable.getDiningAreaId().getId();
             this.diningAreaName = diningTable.getDiningAreaId().getName();

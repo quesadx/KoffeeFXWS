@@ -24,6 +24,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author quesadx
+ */
 @Secure
 @Path("/InvoiceController")
 @Tag(name = "Invoices", description = "Operaciones sobre facturas")
@@ -38,17 +42,27 @@ public class InvoiceController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(description = "Obtiene una factura por ID")
-    public Response getInvoice(@Parameter(description = "ID de la factura") @PathParam("id") Long id) {
+    public Response getInvoice(
+        @Parameter(description = "ID de la factura") @PathParam("id") Long id
+    ) {
         try {
             Respuesta r = invoiceService.getInvoice(id);
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
             InvoiceDTO dto = (InvoiceDTO) r.getResultado("Invoice");
             return Response.ok(dto).build();
         } catch (Exception ex) {
-            Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la factura.").build();
+            Logger.getLogger(InvoiceController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error obteniendo la factura.")
+                .build();
         }
     }
 
@@ -57,17 +71,29 @@ public class InvoiceController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(description = "Obtiene una factura por número")
-    public Response getInvoiceByNumber(@Parameter(description = "Número de factura") @PathParam("num") String num) {
+    public Response getInvoiceByNumber(
+        @Parameter(description = "Número de factura") @PathParam(
+            "num"
+        ) String num
+    ) {
         try {
             Respuesta r = invoiceService.getInvoiceByNumber(num);
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
             InvoiceDTO dto = (InvoiceDTO) r.getResultado("Invoice");
             return Response.ok(dto).build();
         } catch (Exception ex) {
-            Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la factura.").build();
+            Logger.getLogger(InvoiceController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error obteniendo la factura.")
+                .build();
         }
     }
 
@@ -76,17 +102,29 @@ public class InvoiceController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(description = "Obtiene una factura por ID de orden")
-    public Response getInvoiceByOrder(@Parameter(description = "ID de la orden") @PathParam("orderId") Long orderId) {
+    public Response getInvoiceByOrder(
+        @Parameter(description = "ID de la orden") @PathParam(
+            "orderId"
+        ) Long orderId
+    ) {
         try {
             Respuesta r = invoiceService.getInvoiceByOrderId(orderId);
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
             InvoiceDTO dto = (InvoiceDTO) r.getResultado("Invoice");
             return Response.ok(dto).build();
         } catch (Exception ex) {
-            Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la factura por orden.").build();
+            Logger.getLogger(InvoiceController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error obteniendo la factura por orden.")
+                .build();
         }
     }
 
@@ -99,12 +137,24 @@ public class InvoiceController {
         try {
             Respuesta r = invoiceService.getInvoices();
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
-            return Response.ok(new GenericEntity<List<InvoiceDTO>>((List<InvoiceDTO>) r.getResultado("Invoices")) {}).build();
+            return Response.ok(
+                new GenericEntity<List<InvoiceDTO>>(
+                    (List<InvoiceDTO>) r.getResultado("Invoices")
+                ) {}
+            ).build();
         } catch (Exception ex) {
-            Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo las facturas").build();
+            Logger.getLogger(InvoiceController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error obteniendo las facturas")
+                .build();
         }
     }
 
@@ -117,13 +167,21 @@ public class InvoiceController {
         try {
             Respuesta r = invoiceService.guardarInvoice(dto);
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
             InvoiceDTO saved = (InvoiceDTO) r.getResultado("Invoice");
             return Response.ok(saved).build();
         } catch (Exception ex) {
-            Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando la factura.").build();
+            Logger.getLogger(InvoiceController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error guardando la factura.")
+                .build();
         }
     }
 
@@ -132,16 +190,26 @@ public class InvoiceController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(description = "Elimina una factura")
-    public Response eliminarInvoice(@Parameter(description = "ID de la factura") @PathParam("id") Long id) {
+    public Response eliminarInvoice(
+        @Parameter(description = "ID de la factura") @PathParam("id") Long id
+    ) {
         try {
             Respuesta r = invoiceService.eliminarInvoice(id);
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
             return Response.ok().build();
         } catch (Exception ex) {
-            Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error eliminando la factura.").build();
+            Logger.getLogger(InvoiceController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error eliminando la factura.")
+                .build();
         }
     }
 }

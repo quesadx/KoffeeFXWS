@@ -42,24 +42,49 @@ public class CashOpeningController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(description = "Obtiene una apertura de caja por ID")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Apertura de caja encontrada", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = CashOpeningDTO.class))),
-        @ApiResponse(responseCode = "404", description = "Apertura de caja no encontrada", content = @Content(mediaType = MediaType.TEXT_PLAIN)),
-        @ApiResponse(responseCode = "500", description = "Error interno", content = @Content(mediaType = MediaType.TEXT_PLAIN))
-    })
+    @ApiResponses(
+        {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Apertura de caja encontrada",
+                content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = CashOpeningDTO.class)
+                )
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "Apertura de caja no encontrada",
+                content = @Content(mediaType = MediaType.TEXT_PLAIN)
+            ),
+            @ApiResponse(
+                responseCode = "500",
+                description = "Error interno",
+                content = @Content(mediaType = MediaType.TEXT_PLAIN)
+            ),
+        }
+    )
     public Response getCashOpening(
-            @Parameter(description = "ID de la apertura")
-            @PathParam("id") Long id) {
+        @Parameter(description = "ID de la apertura") @PathParam("id") Long id
+    ) {
         try {
             Respuesta r = cashOpeningService.getCashOpening(id);
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
             CashOpeningDTO dto = (CashOpeningDTO) r.getResultado("CashOpening");
             return Response.ok(dto).build();
         } catch (Exception ex) {
-            Logger.getLogger(CashOpeningController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la apertura de caja.").build();
+            Logger.getLogger(CashOpeningController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error obteniendo la apertura de caja.")
+                .build();
         }
     }
 
@@ -72,12 +97,24 @@ public class CashOpeningController {
         try {
             Respuesta r = cashOpeningService.getCashOpenings();
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
-            return Response.ok(new GenericEntity<List<CashOpeningDTO>>((List<CashOpeningDTO>) r.getResultado("CashOpenings")) {}).build();
+            return Response.ok(
+                new GenericEntity<List<CashOpeningDTO>>(
+                    (List<CashOpeningDTO>) r.getResultado("CashOpenings")
+                ) {}
+            ).build();
         } catch (Exception ex) {
-            Logger.getLogger(CashOpeningController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo las aperturas de caja").build();
+            Logger.getLogger(CashOpeningController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error obteniendo las aperturas de caja")
+                .build();
         }
     }
 
@@ -87,18 +124,28 @@ public class CashOpeningController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(description = "Obtiene la apertura de caja activa de un usuario")
     public Response getActiveCashOpening(
-            @Parameter(description = "ID del usuario")
-            @PathParam("userId") Long userId) {
+        @Parameter(description = "ID del usuario") @PathParam(
+            "userId"
+        ) Long userId
+    ) {
         try {
             Respuesta r = cashOpeningService.getActiveCashOpening(userId);
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
             CashOpeningDTO dto = (CashOpeningDTO) r.getResultado("CashOpening");
             return Response.ok(dto).build();
         } catch (Exception ex) {
-            Logger.getLogger(CashOpeningController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la caja activa").build();
+            Logger.getLogger(CashOpeningController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error obteniendo la caja activa")
+                .build();
         }
     }
 
@@ -111,13 +158,23 @@ public class CashOpeningController {
         try {
             Respuesta r = cashOpeningService.guardarCashOpening(dto);
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
-            CashOpeningDTO saved = (CashOpeningDTO) r.getResultado("CashOpening");
+            CashOpeningDTO saved = (CashOpeningDTO) r.getResultado(
+                "CashOpening"
+            );
             return Response.ok(saved).build();
         } catch (Exception ex) {
-            Logger.getLogger(CashOpeningController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando la apertura de caja.").build();
+            Logger.getLogger(CashOpeningController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error guardando la apertura de caja.")
+                .build();
         }
     }
 
@@ -127,21 +184,37 @@ public class CashOpeningController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(description = "Cierra una apertura de caja")
     public Response closeCashOpening(
-            @Parameter(description = "ID de la apertura")
-            @PathParam("id") Long id,
-            CashOpeningDTO dto) {
+        @Parameter(description = "ID de la apertura") @PathParam("id") Long id,
+        CashOpeningDTO dto
+    ) {
         try {
-            Long closingAmount = dto.getClosingAmount() != null ? dto.getClosingAmount().longValue() : null;
+            Long closingAmount = dto.getClosingAmount() != null
+                ? dto.getClosingAmount().longValue()
+                : null;
             String notes = dto.getNotes();
-            Respuesta r = cashOpeningService.closeCashOpening(id, closingAmount, notes);
+            Respuesta r = cashOpeningService.closeCashOpening(
+                id,
+                closingAmount,
+                notes
+            );
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
-            CashOpeningDTO closed = (CashOpeningDTO) r.getResultado("CashOpening");
+            CashOpeningDTO closed = (CashOpeningDTO) r.getResultado(
+                "CashOpening"
+            );
             return Response.ok(closed).build();
         } catch (Exception ex) {
-            Logger.getLogger(CashOpeningController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error cerrando la apertura de caja.").build();
+            Logger.getLogger(CashOpeningController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error cerrando la apertura de caja.")
+                .build();
         }
     }
 }

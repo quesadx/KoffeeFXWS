@@ -28,27 +28,50 @@ import java.util.logging.Logger;
 @Stateless
 @LocalBean
 public class RoleService {
-    
-    private static final Logger LOG = Logger.getLogger(RoleService.class.getName());
-    
+
+    private static final Logger LOG = Logger.getLogger(
+        RoleService.class.getName()
+    );
+
     @PersistenceContext(unitName = "KoffeeFXWSPU")
     private EntityManager em;
-    
+
     public Respuesta getRole(Long id) {
         try {
             Query qryRole = em.createNamedQuery("Role.findById", Role.class);
             qryRole.setParameter("id", id);
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Role", new RoleDTO((Role) qryRole.getSingleResult()));
-
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "Role",
+                new RoleDTO((Role) qryRole.getSingleResult())
+            );
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un rol con el código ingresado.", "getRole NoResultException");
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_NOENCONTRADO,
+                "No existe un rol con el código ingresado.",
+                "getRole NoResultException"
+            );
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrió un error al consultar el rol.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar el rol.", "getRole NonUniqueResultException");
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar el rol.",
+                "getRole NonUniqueResultException"
+            );
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrió un error al consultar el rol.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar el rol.", "getRole " + ex.getMessage());
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar el rol.",
+                "getRole " + ex.getMessage()
+            );
         }
     }
 
@@ -57,16 +80,37 @@ public class RoleService {
             Query qryRole = em.createNamedQuery("Role.findByCode", Role.class);
             qryRole.setParameter("code", code);
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Role", new RoleDTO((Role) qryRole.getSingleResult()));
-
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "Role",
+                new RoleDTO((Role) qryRole.getSingleResult())
+            );
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un rol con el código ingresado.", "getRoleByCode NoResultException");
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_NOENCONTRADO,
+                "No existe un rol con el código ingresado.",
+                "getRoleByCode NoResultException"
+            );
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrió un error al consultar el rol.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar el rol.", "getRoleByCode NonUniqueResultException");
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar el rol.",
+                "getRoleByCode NonUniqueResultException"
+            );
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrió un error al consultar el rol.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar el rol.", "getRoleByCode " + ex.getMessage());
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar el rol.",
+                "getRoleByCode " + ex.getMessage()
+            );
         }
     }
 
@@ -79,13 +123,33 @@ public class RoleService {
                 rolesDto.add(new RoleDTO(role));
             }
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Roles", rolesDto);
-
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "Roles",
+                rolesDto
+            );
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen roles registrados.", "getRoles NoResultException");
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_NOENCONTRADO,
+                "No existen roles registrados.",
+                "getRoles NoResultException"
+            );
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrió un error al consultar los roles.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar los roles.", "getRoles " + ex.getMessage());
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al consultar los roles.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar los roles.",
+                "getRoles " + ex.getMessage()
+            );
         }
     }
 
@@ -95,7 +159,12 @@ public class RoleService {
             if (roleDto.getId() != null && roleDto.getId() > 0) {
                 role = em.find(Role.class, roleDto.getId());
                 if (role == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el rol a modificar.", "guardarRole NoResultException");
+                    return new Respuesta(
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No se encontró el rol a modificar.",
+                        "guardarRole NoResultException"
+                    );
                 }
                 role.actualizar(roleDto);
                 role = em.merge(role);
@@ -104,10 +173,22 @@ public class RoleService {
                 em.persist(role);
             }
             em.flush();
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Role", new RoleDTO(role));
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "Role",
+                new RoleDTO(role)
+            );
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrió un error al guardar el rol.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al guardar el rol.", "guardarRole " + ex.getMessage());
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al guardar el rol.",
+                "guardarRole " + ex.getMessage()
+            );
         }
     }
 
@@ -117,20 +198,44 @@ public class RoleService {
             if (id != null && id > 0) {
                 role = em.find(Role.class, id);
                 if (role == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el rol a eliminar.", "eliminarRole NoResultException");
+                    return new Respuesta(
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No se encontró el rol a eliminar.",
+                        "eliminarRole NoResultException"
+                    );
                 }
                 em.remove(role);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el rol a eliminar.", "eliminarRole NoResultException");
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "Debe cargar el rol a eliminar.",
+                    "eliminarRole NoResultException"
+                );
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
-            if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el rol porque tiene relaciones con otros registros.", "eliminarRole " + ex.getMessage());
+            if (
+                ex.getCause() != null &&
+                ex.getCause().getCause().getClass() ==
+                SQLIntegrityConstraintViolationException.class
+            ) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "No se puede eliminar el rol porque tiene relaciones con otros registros.",
+                    "eliminarRole " + ex.getMessage()
+                );
             }
             LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el rol.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al eliminar el rol.", "eliminarRole " + ex.getMessage());
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al eliminar el rol.",
+                "eliminarRole " + ex.getMessage()
+            );
         }
     }
 }

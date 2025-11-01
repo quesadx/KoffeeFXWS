@@ -24,6 +24,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author quesadx
+ */
 @Secure
 @Path("/OrderItemController")
 @Tag(name = "OrderItems", description = "Operaciones sobre items de pedido")
@@ -38,17 +42,27 @@ public class OrderItemController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(description = "Obtiene un item por ID")
-    public Response getOrderItem(@Parameter(description = "ID del item") @PathParam("id") Long id) {
+    public Response getOrderItem(
+        @Parameter(description = "ID del item") @PathParam("id") Long id
+    ) {
         try {
             Respuesta r = orderItemService.getOrderItem(id);
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
             OrderItemDTO dto = (OrderItemDTO) r.getResultado("OrderItem");
             return Response.ok(dto).build();
         } catch (Exception ex) {
-            Logger.getLogger(OrderItemController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el item.").build();
+            Logger.getLogger(OrderItemController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error obteniendo el item.")
+                .build();
         }
     }
 
@@ -61,12 +75,24 @@ public class OrderItemController {
         try {
             Respuesta r = orderItemService.getOrderItems();
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
-            return Response.ok(new GenericEntity<List<OrderItemDTO>>((List<OrderItemDTO>) r.getResultado("OrderItems")) {}).build();
+            return Response.ok(
+                new GenericEntity<List<OrderItemDTO>>(
+                    (List<OrderItemDTO>) r.getResultado("OrderItems")
+                ) {}
+            ).build();
         } catch (Exception ex) {
-            Logger.getLogger(OrderItemController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo los items").build();
+            Logger.getLogger(OrderItemController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error obteniendo los items")
+                .build();
         }
     }
 
@@ -79,13 +105,21 @@ public class OrderItemController {
         try {
             Respuesta r = orderItemService.guardarOrderItem(dto);
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
             OrderItemDTO saved = (OrderItemDTO) r.getResultado("OrderItem");
             return Response.ok(saved).build();
         } catch (Exception ex) {
-            Logger.getLogger(OrderItemController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el item.").build();
+            Logger.getLogger(OrderItemController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error guardando el item.")
+                .build();
         }
     }
 
@@ -94,16 +128,26 @@ public class OrderItemController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(description = "Elimina un item")
-    public Response eliminarOrderItem(@Parameter(description = "ID del item") @PathParam("id") Long id) {
+    public Response eliminarOrderItem(
+        @Parameter(description = "ID del item") @PathParam("id") Long id
+    ) {
         try {
             Respuesta r = orderItemService.eliminarOrderItem(id);
             if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+                return Response.status(r.getCodigoRespuesta().getValue())
+                    .entity(r.getMensaje())
+                    .build();
             }
             return Response.ok().build();
         } catch (Exception ex) {
-            Logger.getLogger(OrderItemController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error eliminando el item.").build();
+            Logger.getLogger(OrderItemController.class.getName()).log(
+                Level.SEVERE,
+                null,
+                ex
+            );
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+                .entity("Error eliminando el item.")
+                .build();
         }
     }
 }

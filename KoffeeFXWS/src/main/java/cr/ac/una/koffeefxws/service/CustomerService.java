@@ -28,64 +28,153 @@ import java.util.logging.Logger;
 @Stateless
 @LocalBean
 public class CustomerService {
-    
-    private static final Logger LOG = Logger.getLogger(CustomerService.class.getName());
-    
+
+    private static final Logger LOG = Logger.getLogger(
+        CustomerService.class.getName()
+    );
+
     @PersistenceContext(unitName = "KoffeeFXWSPU")
     private EntityManager em;
-    
+
     public Respuesta getCustomer(Long id) {
         try {
-            Query qryCustomer = em.createNamedQuery("Customer.findById", Customer.class);
+            Query qryCustomer = em.createNamedQuery(
+                "Customer.findById",
+                Customer.class
+            );
             qryCustomer.setParameter("id", id);
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Customer", new CustomerDTO((Customer) qryCustomer.getSingleResult()));
-
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "Customer",
+                new CustomerDTO((Customer) qryCustomer.getSingleResult())
+            );
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un cliente con el código ingresado.", "getCustomer NoResultException");
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_NOENCONTRADO,
+                "No existe un cliente con el código ingresado.",
+                "getCustomer NoResultException"
+            );
         } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrió un error al consultar el cliente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar el cliente.", "getCustomer NonUniqueResultException");
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al consultar el cliente.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar el cliente.",
+                "getCustomer NonUniqueResultException"
+            );
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrió un error al consultar el cliente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar el cliente.", "getCustomer " + ex.getMessage());
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al consultar el cliente.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar el cliente.",
+                "getCustomer " + ex.getMessage()
+            );
         }
     }
 
     public Respuesta getCustomerByEmail(String email) {
         try {
-            Query qryCustomer = em.createNamedQuery("Customer.findByEmail", Customer.class);
+            Query qryCustomer = em.createNamedQuery(
+                "Customer.findByEmail",
+                Customer.class
+            );
             qryCustomer.setParameter("email", email);
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Customer", new CustomerDTO((Customer) qryCustomer.getSingleResult()));
-
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "Customer",
+                new CustomerDTO((Customer) qryCustomer.getSingleResult())
+            );
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un cliente con el email ingresado.", "getCustomerByEmail NoResultException");
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_NOENCONTRADO,
+                "No existe un cliente con el email ingresado.",
+                "getCustomerByEmail NoResultException"
+            );
         } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrió un error al consultar el cliente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar el cliente.", "getCustomerByEmail NonUniqueResultException");
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al consultar el cliente.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar el cliente.",
+                "getCustomerByEmail NonUniqueResultException"
+            );
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrió un error al consultar el cliente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar el cliente.", "getCustomerByEmail " + ex.getMessage());
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al consultar el cliente.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar el cliente.",
+                "getCustomerByEmail " + ex.getMessage()
+            );
         }
     }
 
     public Respuesta getCustomers() {
         try {
-            Query query = em.createNamedQuery("Customer.findAll", Customer.class);
+            Query query = em.createNamedQuery(
+                "Customer.findAll",
+                Customer.class
+            );
             List<Customer> customers = (List<Customer>) query.getResultList();
             List<CustomerDTO> customersDto = new ArrayList<>();
             for (Customer customer : customers) {
                 customersDto.add(new CustomerDTO(customer));
             }
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Customers", customersDto);
-
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "Customers",
+                customersDto
+            );
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen clientes registrados.", "getCustomers NoResultException");
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_NOENCONTRADO,
+                "No existen clientes registrados.",
+                "getCustomers NoResultException"
+            );
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrió un error al consultar los clientes.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar los clientes.", "getCustomers " + ex.getMessage());
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al consultar los clientes.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al consultar los clientes.",
+                "getCustomers " + ex.getMessage()
+            );
         }
     }
 
@@ -98,15 +187,36 @@ public class CustomerService {
             } else {
                 customer = em.find(Customer.class, customerDto.getId());
                 if (customer == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el cliente a modificar.", "guardarCustomer NoResultException");
+                    return new Respuesta(
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No se encontró el cliente a modificar.",
+                        "guardarCustomer NoResultException"
+                    );
                 }
                 customer.actualizar(customerDto);
             }
             em.flush();
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Customer", new CustomerDTO(customer));
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "Customer",
+                new CustomerDTO(customer)
+            );
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrió un error al guardar el cliente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al guardar el cliente.", "guardarCustomer " + ex.getMessage());
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al guardar el cliente.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al guardar el cliente.",
+                "guardarCustomer " + ex.getMessage()
+            );
         }
     }
 
@@ -116,20 +226,48 @@ public class CustomerService {
             if (id != null && id > 0) {
                 customer = em.find(Customer.class, id);
                 if (customer == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encontró el cliente a eliminar.", "eliminarCustomer NoResultException");
+                    return new Respuesta(
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No se encontró el cliente a eliminar.",
+                        "eliminarCustomer NoResultException"
+                    );
                 }
                 em.remove(customer);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el cliente a eliminar.", "eliminarCustomer NoResultException");
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "Debe cargar el cliente a eliminar.",
+                    "eliminarCustomer NoResultException"
+                );
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
-            if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el cliente porque tiene relaciones con otros registros.", "eliminarCustomer " + ex.getMessage());
+            if (
+                ex.getCause() != null &&
+                ex.getCause().getCause().getClass() ==
+                SQLIntegrityConstraintViolationException.class
+            ) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "No se puede eliminar el cliente porque tiene relaciones con otros registros.",
+                    "eliminarCustomer " + ex.getMessage()
+                );
             }
-            LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el cliente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al eliminar el cliente.", "eliminarCustomer " + ex.getMessage());
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al eliminar el cliente.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al eliminar el cliente.",
+                "eliminarCustomer " + ex.getMessage()
+            );
         }
     }
 }

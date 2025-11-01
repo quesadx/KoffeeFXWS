@@ -8,14 +8,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Data Transfer Object for SystemParameter entity
- * 
+ *
  * @author quesadx
  */
 public class SystemParameterDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private String paramName;
     private String paramValue;
@@ -103,6 +102,13 @@ public class SystemParameterDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "SystemParameterDTO{" + "paramName=" + paramName + ", paramValue=" + paramValue + '}';
+        return (
+            "SystemParameterDTO{" +
+            "paramName=" +
+            paramName +
+            ", paramValue=" +
+            paramValue +
+            '}'
+        );
     }
 }

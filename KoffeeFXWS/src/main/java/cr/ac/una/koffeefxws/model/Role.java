@@ -10,9 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,35 +26,54 @@ import java.io.Serializable;
 @Entity
 @Table(name = "ROLE")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
-    @NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.id = :id"),
-    @NamedQuery(name = "Role.findByCode", query = "SELECT r FROM Role r WHERE r.code = :code"),
-    @NamedQuery(name = "Role.findByName", query = "SELECT r FROM Role r WHERE r.name = :name")})
+@NamedQueries(
+    {
+        @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
+        @NamedQuery(
+            name = "Role.findById",
+            query = "SELECT r FROM Role r WHERE r.id = :id"
+        ),
+        @NamedQuery(
+            name = "Role.findByCode",
+            query = "SELECT r FROM Role r WHERE r.code = :code"
+        ),
+        @NamedQuery(
+            name = "Role.findByName",
+            query = "SELECT r FROM Role r WHERE r.name = :name"
+        ),
+    }
+)
 public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
-    @SequenceGenerator(name = "role_seq", sequenceName = "seq_role_id", allocationSize = 1)
+    @SequenceGenerator(
+        name = "role_seq",
+        sequenceName = "seq_role_id",
+        allocationSize = 1
+    )
     @Basic(optional = false)
     @Column(name = "ROLE_ID")
     private Long id;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
     @Column(name = "CODE")
     private String code;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "NAME")
     private String name;
+
     // Relationship to AppUser was removed; APP_USER now stores role as a char code (USER_ROLE)
 
-    public Role() {
-    }
+    public Role() {}
 
     public Role(Long roleId) {
         this.id = roleId;
@@ -116,7 +135,10 @@ public class Role implements Serializable {
             return false;
         }
         Role other = (Role) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (
+            (this.id == null && other.id != null) ||
+            (this.id != null && !this.id.equals(other.id))
+        ) {
             return false;
         }
         return true;
@@ -126,5 +148,4 @@ public class Role implements Serializable {
     public String toString() {
         return "cr.ac.una.koffeefxws.model.Role[ roleId=" + id + " ]";
     }
-    
 }

@@ -8,14 +8,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Data Transfer Object for OrderItem entity
- * 
+ *
  * @author quesadx
  */
 public class OrderItemDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private Integer quantity;
     private Double unitPrice;
@@ -40,11 +39,11 @@ public class OrderItemDTO implements Serializable {
         this.unitPrice = orderItem.getUnitPrice();
         this.status = orderItem.getStatus();
         this.version = orderItem.getVersion();
-        
+
         if (orderItem.getCustomerOrderId() != null) {
             this.customerOrderId = orderItem.getCustomerOrderId().getId();
         }
-        
+
         if (orderItem.getProductId() != null) {
             this.productId = orderItem.getProductId().getId();
             this.productName = orderItem.getProductId().getName();
@@ -158,6 +157,15 @@ public class OrderItemDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "OrderItemDTO{" + "productName=" + productName + ", quantity=" + quantity + ", unitPrice=" + unitPrice + '}';
+        return (
+            "OrderItemDTO{" +
+            "productName=" +
+            productName +
+            ", quantity=" +
+            quantity +
+            ", unitPrice=" +
+            unitPrice +
+            '}'
+        );
     }
 }

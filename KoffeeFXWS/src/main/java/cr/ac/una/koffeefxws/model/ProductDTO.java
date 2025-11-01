@@ -11,14 +11,13 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Data Transfer Object for Product entity
- * 
+ *
  * @author quesadx
  */
 public class ProductDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private String name;
     private String shortName;
@@ -47,12 +46,15 @@ public class ProductDTO implements Serializable {
         this.name = product.getName();
         this.shortName = product.getShortName();
         this.price = product.getPrice();
-        this.isQuickMenu = product.getIsQuickMenu() != null && product.getIsQuickMenu().equals('Y');
-        this.isActive = product.getIsActive() != null && product.getIsActive().equals('Y');
+        this.isQuickMenu =
+            product.getIsQuickMenu() != null &&
+            product.getIsQuickMenu().equals('Y');
+        this.isActive =
+            product.getIsActive() != null && product.getIsActive().equals('Y');
         this.createdAt = product.getCreatedAt();
         this.purchaseFrequency = product.getPurchaseFrequency();
         this.version = product.getVersion();
-        
+
         if (product.getProductGroupId() != null) {
             this.productGroupId = product.getProductGroupId().getId();
             this.productGroupName = product.getProductGroupId().getName();

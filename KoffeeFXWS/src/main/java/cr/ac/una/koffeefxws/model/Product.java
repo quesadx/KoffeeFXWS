@@ -37,66 +37,125 @@ import java.util.List;
 @Entity
 @Table(name = "PRODUCT")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
-    @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
-    @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"),
-    @NamedQuery(name = "Product.findByShortName", query = "SELECT p FROM Product p WHERE p.shortName = :shortName"),
-    @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
-    @NamedQuery(name = "Product.findByIsQuickMenu", query = "SELECT p FROM Product p WHERE p.isQuickMenu = :isQuickMenu"),
-    @NamedQuery(name = "Product.findByIsActive", query = "SELECT p FROM Product p WHERE p.isActive = :isActive"),
-    @NamedQuery(name = "Product.findByCreatedAt", query = "SELECT p FROM Product p WHERE p.createdAt = :createdAt"),
-    @NamedQuery(name = "Product.findByPurchaseFrequency", query = "SELECT p FROM Product p WHERE p.purchaseFrequency = :purchaseFrequency")})
+@NamedQueries(
+    {
+        @NamedQuery(
+            name = "Product.findAll",
+            query = "SELECT p FROM Product p"
+        ),
+        @NamedQuery(
+            name = "Product.findById",
+            query = "SELECT p FROM Product p WHERE p.id = :id"
+        ),
+        @NamedQuery(
+            name = "Product.findByName",
+            query = "SELECT p FROM Product p WHERE p.name = :name"
+        ),
+        @NamedQuery(
+            name = "Product.findByShortName",
+            query = "SELECT p FROM Product p WHERE p.shortName = :shortName"
+        ),
+        @NamedQuery(
+            name = "Product.findByPrice",
+            query = "SELECT p FROM Product p WHERE p.price = :price"
+        ),
+        @NamedQuery(
+            name = "Product.findByIsQuickMenu",
+            query = "SELECT p FROM Product p WHERE p.isQuickMenu = :isQuickMenu"
+        ),
+        @NamedQuery(
+            name = "Product.findByIsActive",
+            query = "SELECT p FROM Product p WHERE p.isActive = :isActive"
+        ),
+        @NamedQuery(
+            name = "Product.findByCreatedAt",
+            query = "SELECT p FROM Product p WHERE p.createdAt = :createdAt"
+        ),
+        @NamedQuery(
+            name = "Product.findByPurchaseFrequency",
+            query = "SELECT p FROM Product p WHERE p.purchaseFrequency = :purchaseFrequency"
+        ),
+    }
+)
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
-    @SequenceGenerator(name = "product_seq", sequenceName = "seq_product_id", allocationSize = 1)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "product_seq"
+    )
+    @SequenceGenerator(
+        name = "product_seq",
+        sequenceName = "seq_product_id",
+        allocationSize = 1
+    )
     @Basic(optional = false)
     @Column(name = "PRODUCT_ID")
     private Long id;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 300)
     @Column(name = "NAME")
     private String name;
+
     @Size(max = 100)
     @Column(name = "SHORT_NAME")
     private String shortName;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "PRICE")
     private Double price;
+
     @Column(name = "IS_QUICK_MENU")
     private Character isQuickMenu;
+
     @Column(name = "IS_ACTIVE")
     private Character isActive;
+
     @Column(name = "CREATED_AT")
     //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate createdAt;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "PURCHASE_FREQUENCY")
     private Double purchaseFrequency;
+
     @Version
     @Column(name = "VERSION")
     private Long version;
-    @JoinColumn(name = "PRODUCT_GROUP_ID", referencedColumnName = "PRODUCT_GROUP_ID")
+
+    @JoinColumn(
+        name = "PRODUCT_GROUP_ID",
+        referencedColumnName = "PRODUCT_GROUP_ID"
+    )
     @ManyToOne(fetch = FetchType.LAZY)
     private ProductGroup productGroupId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId", fetch = FetchType.LAZY)
+
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        mappedBy = "productId",
+        fetch = FetchType.LAZY
+    )
     private List<OrderItem> orderItemList;
 
-    public Product() {
-    }
+    public Product() {}
 
     public Product(Long productId) {
         this.id = productId;
     }
 
-    public Product(Long productId, String name, Double price, Double purchaseFrequency) {
+    public Product(
+        Long productId,
+        String name,
+        Double price,
+        Double purchaseFrequency
+    ) {
         this.id = productId;
         this.name = name;
         this.price = price;
@@ -112,8 +171,12 @@ public class Product implements Serializable {
         this.name = dto.getName();
         this.shortName = dto.getShortName();
         this.price = dto.getPrice();
-        this.isQuickMenu = dto.getIsQuickMenu() != null && dto.getIsQuickMenu() ? 'Y' : 'N';
-        this.isActive = dto.getIsActive() != null && dto.getIsActive() ? 'Y' : 'N';
+        this.isQuickMenu = dto.getIsQuickMenu() != null && dto.getIsQuickMenu()
+            ? 'Y'
+            : 'N';
+        this.isActive = dto.getIsActive() != null && dto.getIsActive()
+            ? 'Y'
+            : 'N';
         this.purchaseFrequency = dto.getPurchaseFrequency();
     }
 
@@ -184,7 +247,7 @@ public class Product implements Serializable {
     public Long getVersion() {
         return version;
     }
-    
+
     public void setVersion(Long version) {
         this.version = version;
     }
@@ -220,7 +283,10 @@ public class Product implements Serializable {
             return false;
         }
         Product other = (Product) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (
+            (this.id == null && other.id != null) ||
+            (this.id != null && !this.id.equals(other.id))
+        ) {
             return false;
         }
         return true;
@@ -230,5 +296,4 @@ public class Product implements Serializable {
     public String toString() {
         return "cr.ac.una.koffeefxws.model.Product[ productId=" + id + " ]";
     }
-    
 }

@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Data Transfer Object for Role entity
- * 
+ *
  * @author quesadx
  */
 public class RoleDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private String code;
     private String name;

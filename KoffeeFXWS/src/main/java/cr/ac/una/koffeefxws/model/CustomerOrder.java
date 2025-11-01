@@ -39,57 +39,110 @@ import java.util.List;
 @Entity
 @Table(name = "CUSTOMER_ORDER")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "CustomerOrder.findAll", query = "SELECT c FROM CustomerOrder c"),
-    @NamedQuery(name = "CustomerOrder.findById", query = "SELECT c FROM CustomerOrder c WHERE c.id = :id"),
-    @NamedQuery(name = "CustomerOrder.findByStatus", query = "SELECT c FROM CustomerOrder c WHERE c.status = :status"),
-    @NamedQuery(name = "CustomerOrder.findByCreatedAt", query = "SELECT c FROM CustomerOrder c WHERE c.createdAt = :createdAt"),
-    @NamedQuery(name = "CustomerOrder.findByUpdatedAt", query = "SELECT c FROM CustomerOrder c WHERE c.updatedAt = :updatedAt"),
-    @NamedQuery(name = "CustomerOrder.findByTotalAmount", query = "SELECT c FROM CustomerOrder c WHERE c.totalAmount = :totalAmount")})
+@NamedQueries(
+    {
+        @NamedQuery(
+            name = "CustomerOrder.findAll",
+            query = "SELECT c FROM CustomerOrder c"
+        ),
+        @NamedQuery(
+            name = "CustomerOrder.findById",
+            query = "SELECT c FROM CustomerOrder c WHERE c.id = :id"
+        ),
+        @NamedQuery(
+            name = "CustomerOrder.findByStatus",
+            query = "SELECT c FROM CustomerOrder c WHERE c.status = :status"
+        ),
+        @NamedQuery(
+            name = "CustomerOrder.findByCreatedAt",
+            query = "SELECT c FROM CustomerOrder c WHERE c.createdAt = :createdAt"
+        ),
+        @NamedQuery(
+            name = "CustomerOrder.findByUpdatedAt",
+            query = "SELECT c FROM CustomerOrder c WHERE c.updatedAt = :updatedAt"
+        ),
+        @NamedQuery(
+            name = "CustomerOrder.findByTotalAmount",
+            query = "SELECT c FROM CustomerOrder c WHERE c.totalAmount = :totalAmount"
+        ),
+    }
+)
 public class CustomerOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_order_seq")
-    @SequenceGenerator(name = "customer_order_seq", sequenceName = "seq_customer_order_id", allocationSize = 1)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "customer_order_seq"
+    )
+    @SequenceGenerator(
+        name = "customer_order_seq",
+        sequenceName = "seq_customer_order_id",
+        allocationSize = 1
+    )
     @Basic(optional = false)
     @NotNull
     @Column(name = "CUSTOMER_ORDER_ID")
     private Long id;
+
     @Size(max = 30)
     @Column(name = "STATUS")
     private String status;
+
     @Column(name = "CREATED_AT")
     //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate createdAt;
+
     @Column(name = "UPDATED_AT")
     //@Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
     @Column(name = "TOTAL_AMOUNT")
     private Long totalAmount;
+
     @Version
     @Column(name = "VERSION")
     private Long version;
+
     @JoinColumn(name = "CREATED_BY", referencedColumnName = "USER_ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private AppUser createdBy;
+
     @JoinColumn(name = "CUSTOMER_ID", referencedColumnName = "CUSTOMER_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customerId;
-    @JoinColumn(name = "DINING_AREA_ID", referencedColumnName = "DINING_AREA_ID")
+
+    @JoinColumn(
+        name = "DINING_AREA_ID",
+        referencedColumnName = "DINING_AREA_ID"
+    )
     @ManyToOne(fetch = FetchType.LAZY)
     private DiningArea diningAreaId;
-    @JoinColumn(name = "DINING_TABLE_ID", referencedColumnName = "DINING_TABLE_ID")
+
+    @JoinColumn(
+        name = "DINING_TABLE_ID",
+        referencedColumnName = "DINING_TABLE_ID"
+    )
     @ManyToOne(fetch = FetchType.LAZY)
     private DiningTable diningTableId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerOrderId", fetch = FetchType.LAZY)
+
+    @OneToMany(
+        cascade = CascadeType.ALL,
+        mappedBy = "customerOrderId",
+        fetch = FetchType.LAZY
+    )
     private List<OrderItem> orderItemList;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "customerOrderId", fetch = FetchType.LAZY)
+
+    @OneToOne(
+        cascade = CascadeType.ALL,
+        mappedBy = "customerOrderId",
+        fetch = FetchType.LAZY
+    )
     private Invoice invoice;
 
-    public CustomerOrder() {
-    }
+    public CustomerOrder() {}
 
     public CustomerOrder(Long customerOrderId) {
         this.id = customerOrderId;
@@ -218,7 +271,10 @@ public class CustomerOrder implements Serializable {
             return false;
         }
         CustomerOrder other = (CustomerOrder) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (
+            (this.id == null && other.id != null) ||
+            (this.id != null && !this.id.equals(other.id))
+        ) {
             return false;
         }
         return true;
@@ -226,7 +282,10 @@ public class CustomerOrder implements Serializable {
 
     @Override
     public String toString() {
-        return "cr.ac.una.koffeefxws.model.CustomerOrder[ customerOrderId=" + id + " ]";
+        return (
+            "cr.ac.una.koffeefxws.model.CustomerOrder[ customerOrderId=" +
+            id +
+            " ]"
+        );
     }
-    
 }

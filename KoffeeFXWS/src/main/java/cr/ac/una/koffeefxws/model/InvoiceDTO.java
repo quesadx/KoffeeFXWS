@@ -9,14 +9,13 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * Data Transfer Object for Invoice entity
- * 
+ *
  * @author quesadx
  */
 public class InvoiceDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private String invoiceNumber;
     private Double subtotal;
@@ -61,26 +60,32 @@ public class InvoiceDTO implements Serializable {
         this.amountReceived = invoice.getAmountReceived();
         this.changeAmount = invoice.getChangeAmount();
         this.createdAt = invoice.getCreatedAt();
-        this.isPrinted = invoice.getIsPrinted() != null && invoice.getIsPrinted().equals('Y');
-        this.isEmailSent = invoice.getIsEmailSent() != null && invoice.getIsEmailSent().equals('Y');
+        this.isPrinted =
+            invoice.getIsPrinted() != null &&
+            invoice.getIsPrinted().equals('Y');
+        this.isEmailSent =
+            invoice.getIsEmailSent() != null &&
+            invoice.getIsEmailSent().equals('Y');
         this.paymentMethod = invoice.getPaymentMethod();
         this.version = invoice.getVersion();
-        
+
         if (invoice.getCreatedBy() != null) {
             this.createdBy = invoice.getCreatedBy().getId();
             this.createdByName = invoice.getCreatedBy().getUsername();
         }
-        
+
         if (invoice.getCashOpeningId() != null) {
             this.cashOpeningId = invoice.getCashOpeningId().getId();
         }
-        
+
         if (invoice.getCustomerId() != null) {
             this.customerId = invoice.getCustomerId().getId();
-            this.customerName = invoice.getCustomerId().getFirstName() + " " + 
-                            invoice.getCustomerId().getLastName();
+            this.customerName =
+                invoice.getCustomerId().getFirstName() +
+                " " +
+                invoice.getCustomerId().getLastName();
         }
-        
+
         if (invoice.getCustomerOrderId() != null) {
             this.customerOrderId = invoice.getCustomerOrderId().getId();
         }
@@ -294,6 +299,15 @@ public class InvoiceDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "InvoiceDTO{" + "invoiceNumber=" + invoiceNumber + ", total=" + total + ", paymentMethod=" + paymentMethod + '}';
+        return (
+            "InvoiceDTO{" +
+            "invoiceNumber=" +
+            invoiceNumber +
+            ", total=" +
+            total +
+            ", paymentMethod=" +
+            paymentMethod +
+            '}'
+        );
     }
 }
