@@ -72,6 +72,25 @@ public class InvoiceController {
     }
 
     @GET
+    @Path("/invoice/order/{orderId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(description = "Obtiene una factura por ID de orden")
+    public Response getInvoiceByOrder(@Parameter(description = "ID de la orden") @PathParam("orderId") Long orderId) {
+        try {
+            Respuesta r = invoiceService.getInvoiceByOrderId(orderId);
+            if (!r.getEstado()) {
+                return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+            }
+            InvoiceDTO dto = (InvoiceDTO) r.getResultado("Invoice");
+            return Response.ok(dto).build();
+        } catch (Exception ex) {
+            Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la factura por orden.").build();
+        }
+    }
+
+    @GET
     @Path("/invoices")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

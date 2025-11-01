@@ -55,7 +55,7 @@
 		<field name="$F{lastName}" class="java.lang.String"/>
 	</dataset>
 	<parameter name="companyName" class="java.lang.String"/>
-	<parameter name="companyAdress" class="java.lang.String"/>
+	<parameter name="companyAddress" class="java.lang.String"/>
 	<parameter name="companyPhoneNumber" class="java.lang.String"/>
 	<parameter name="paymentMethod" class="java.lang.String"/>
 	<parameter name="subtotal" class="java.lang.Double"/>
@@ -66,11 +66,11 @@
 	<parameter name="serviceRate" class="java.lang.Double"/>
 	<parameter name="amountReceived" class="java.lang.Double"/>
 	<parameter name="changeAmount" class="java.lang.Double"/>
+	<parameter name="invoiceNumber" class="java.lang.String"/>
+	<parameter name="invoiceDate" class="java.time.LocalDate"/>
+	<parameter name="companyEmail" class="java.lang.String"/>
 	<query language="sql"><![CDATA[]]></query>
-	<field name="email" class="java.lang.String"/>
-	<field name="phone" class="java.lang.String"/>
-	<field name="invoiceNumber" class="java.lang.String"/>
-	<field name="createdAt" class="java.time.LocalDate"/>
+	<!-- Header fields replaced by parameters -->
 	<field name="productName" class="java.lang.String"/>
 	<field name="quantity" class="java.lang.Integer"/>
 	<field name="unitPrice" class="java.lang.Double"/>
@@ -83,11 +83,11 @@
 		</element>
 		<element kind="frame" uuid="20a0519a-f06e-4fb4-a4e6-41a5f650a2d3" x="10" y="125" width="100" height="45">
 			<element kind="textField" uuid="9862f927-ab34-49ac-86bf-9f0ecdb1e229" x="0" y="15" width="100" height="15">
-				<expression><![CDATA[$F{email}]]></expression>
+				<expression><![CDATA[$P{companyEmail}]]></expression>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			</element>
 			<element kind="textField" uuid="50bd33ae-b0a2-4768-9de2-d38056282c4f" x="0" y="30" width="100" height="15">
-				<expression><![CDATA[$F{phone}]]></expression>
+				<expression><![CDATA[$P{companyPhoneNumber}]]></expression>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			</element>
 			<element kind="textField" uuid="5ad8c872-c0d6-43d7-a60e-77ac06efc0d1" x="0" y="0" width="100" height="15">
@@ -97,7 +97,7 @@
 		</element>
 		<element kind="frame" uuid="43082c12-edfc-4637-905f-2280d4f4c6d4" positionType="FixRelativeToBottom" mode="Opaque" x="-20" y="-20" width="595" height="100" backcolor="#E1E1E1">
 			<element kind="textField" uuid="f2a327ef-e48f-47bb-8094-79553deed2ce" x="100" y="40" width="185" height="30">
-				<expression><![CDATA[$P{companyAdress}]]></expression>
+				<expression><![CDATA[$P{companyAddress}]]></expression>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			</element>
 			<element kind="textField" uuid="eb543f67-0236-45cc-9425-5ea260c53f09" x="100" y="10" width="185" height="30" fontSize="19.0" bold="true">
@@ -116,19 +116,19 @@
 				<box rightPadding="4"/>
 			</element>
 			<element kind="textField" uuid="ce4573e8-bda0-43f6-ae7c-5863b86bf333" x="470" y="51" width="90" height="20">
-				<expression><![CDATA[$F{invoiceNumber}]]></expression>
+				<expression><![CDATA[$P{invoiceNumber}]]></expression>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
 			<element kind="textField" uuid="3fd76419-06af-4f34-be25-d7f178f80ac2" x="470" y="30" width="90" height="20" pattern="MMMM d, yyyy">
-				<expression><![CDATA[$F{createdAt}]]></expression>
+				<expression><![CDATA[$P{invoiceDate}]]></expression>
 				<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			</element>
 			<element kind="image" uuid="27183d78-9464-44fd-9a79-df8f1144b62a" x="30" y="20" width="50" height="50">
-				<expression><![CDATA[getClass().getResourceAsStream("/icons/pixelarticons--mood-happy.png")]]></expression>
+				<expression><![CDATA["/icons/pixelarticons--mood-happy.png"]]></expression>
 			</element>
 		</element>
 		<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>

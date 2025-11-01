@@ -18,8 +18,6 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -38,6 +36,7 @@ import java.time.LocalDate;
     @NamedQuery(name = "Invoice.findAll", query = "SELECT i FROM Invoice i"),
     @NamedQuery(name = "Invoice.findById", query = "SELECT i FROM Invoice i WHERE i.id = :id"),
     @NamedQuery(name = "Invoice.findByInvoiceNumber", query = "SELECT i FROM Invoice i WHERE i.invoiceNumber = :invoiceNumber"),
+    @NamedQuery(name = "Invoice.findByOrderId", query = "SELECT i FROM Invoice i WHERE i.customerOrderId.id = :orderId"),
     @NamedQuery(name = "Invoice.findBySubtotal", query = "SELECT i FROM Invoice i WHERE i.subtotal = :subtotal"),
     @NamedQuery(name = "Invoice.findByTaxRate", query = "SELECT i FROM Invoice i WHERE i.taxRate = :taxRate"),
     @NamedQuery(name = "Invoice.findByServiceRate", query = "SELECT i FROM Invoice i WHERE i.serviceRate = :serviceRate"),

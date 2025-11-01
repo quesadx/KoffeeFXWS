@@ -10,6 +10,7 @@ import cr.ac.una.koffeefxws.model.CustomerOrder;
 import cr.ac.una.koffeefxws.model.CustomerOrderDTO;
 import cr.ac.una.koffeefxws.model.DiningArea;
 import cr.ac.una.koffeefxws.model.DiningTable;
+import cr.ac.una.koffeefxws.model.Invoice;
 import cr.ac.una.koffeefxws.model.OrderItem;
 import cr.ac.una.koffeefxws.model.OrderItemDTO;
 import cr.ac.una.koffeefxws.model.Product;
@@ -50,6 +51,11 @@ public class CustomerOrderService {
             CustomerOrder order = (CustomerOrder) qryOrder.getSingleResult();
             CustomerOrderDTO dto = new CustomerOrderDTO(order);
             
+            // Attach invoice if exists
+            if (order.getInvoice() != null) {
+                dto.setInvoice(new cr.ac.una.koffeefxws.model.InvoiceDTO(order.getInvoice()));
+            }
+
             // Load order items
             if (order.getOrderItemList() != null) {
                 for (OrderItem item : order.getOrderItemList()) {
@@ -136,6 +142,19 @@ public class CustomerOrderService {
                 }
                 em.persist(order);
             }
+
+            // Handle invoice relationship if present in DTO
+            if (orderDto.getInvoice() != null && orderDto.getInvoice().getId() != null) {
+                Invoice invoice = em.find(Invoice.class, orderDto.getInvoice().getId());
+                if (invoice != null) {
+                    order.setInvoice(invoice);
+                    LOG.log(Level.INFO, "Asociada factura {0} a orden {1}", 
+                        new Object[]{invoice.getId(), order.getId()});
+                }
+            }
+
+            // Merge the order to persist all changes including invoice relationship
+            order = em.merge(order);
 
             // Handle order items (only for new orders or if items list is provided)
             if (orderDto.getOrderItems() != null && !orderDto.getOrderItems().isEmpty()) {

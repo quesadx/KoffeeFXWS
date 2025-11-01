@@ -130,6 +130,7 @@ public class ReportService {
                     "prepararReporte FileNotFound");
             }
 
+            LOG.log(Level.INFO, "Compilando reporte Invoice.jrxml con lenguaje Java (JDT compiler)");
             JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
 
             // 7. Llenar el reporte con los parámetros y el dataSource
