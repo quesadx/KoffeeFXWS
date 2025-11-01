@@ -78,7 +78,7 @@ public class InvoiceDTO implements Serializable {
         if (invoice.getCustomerId() != null) {
             this.customerId = invoice.getCustomerId().getId();
             this.customerName = invoice.getCustomerId().getFirstName() + " " + 
-                               invoice.getCustomerId().getLastName();
+                            invoice.getCustomerId().getLastName();
         }
         
         if (invoice.getCustomerOrderId() != null) {
