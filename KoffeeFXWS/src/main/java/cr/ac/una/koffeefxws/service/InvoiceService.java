@@ -82,6 +82,23 @@ public class InvoiceService {
         }
     }
 
+    public Respuesta getInvoiceByOrderId(Long orderId) {
+        try {
+            Query qryInvoice = em.createNamedQuery("Invoice.findByOrderId", Invoice.class);
+            qryInvoice.setParameter("orderId", orderId);
+            Invoice invoice = (Invoice) qryInvoice.getSingleResult();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Invoice", new InvoiceDTO(invoice));
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe una factura asociada a la orden indicada.", "getInvoiceByOrderId NoResultException");
+        } catch (NonUniqueResultException ex) {
+            LOG.log(Level.SEVERE, "Ocurrió un error al consultar la factura por orden.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar la factura por orden.", "getInvoiceByOrderId NonUniqueResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrió un error al consultar la factura por orden.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrió un error al consultar la factura por orden.", "getInvoiceByOrderId " + ex.getMessage());
+        }
+    }
+
     public Respuesta guardarInvoice(InvoiceDTO invoiceDto) {
         try {
             Invoice invoice;
@@ -123,7 +140,24 @@ public class InvoiceService {
                 
                 invoice = em.merge(invoice);
             } else {
-                invoice = new Invoice(invoiceDto);
+                // Idempotencia por orden: si existe factura para la orden indicada, actualizarla
+                Invoice existing = null;
+                if (invoiceDto.getCustomerOrderId() != null) {
+                    try {
+                        Query qryExisting = em.createNamedQuery("Invoice.findByOrderId", Invoice.class);
+                        qryExisting.setParameter("orderId", invoiceDto.getCustomerOrderId());
+                        existing = (Invoice) qryExisting.getSingleResult();
+                    } catch (NoResultException ignore) {
+                        existing = null;
+                    }
+                }
+
+                if (existing != null) {
+                    invoice = existing;
+                    invoice.actualizar(invoiceDto);
+                } else {
+                    invoice = new Invoice(invoiceDto);
+                }
                 
                 // Handle FK relationships
                 if (invoiceDto.getCustomerId() != null) {
@@ -144,6 +178,9 @@ public class InvoiceService {
                     CustomerOrder order = em.find(CustomerOrder.class, invoiceDto.getCustomerOrderId());
                     if (order != null) {
                         invoice.setCustomerOrderId(order);
+                        // Mantener relación bidireccional
+                        order.setInvoice(invoice);
+                        em.merge(order);
                     }
                 }
                 
@@ -154,7 +191,11 @@ public class InvoiceService {
                     }
                 }
                 
-                em.persist(invoice);
+                if (existing == null) {
+                    em.persist(invoice);
+                } else {
+                    invoice = em.merge(invoice);
+                }
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Invoice", new InvoiceDTO(invoice));
