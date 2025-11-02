@@ -9,13 +9,14 @@ import cr.ac.una.koffeefxws.model.CashOpeningDTO;
 import cr.ac.una.koffeefxws.model.CustomerOrderDTO;
 import cr.ac.una.koffeefxws.model.InvoiceDTO;
 import cr.ac.una.koffeefxws.model.OrderItemDTO;
+import cr.ac.una.koffeefxws.model.ProductDTO;
+import cr.ac.una.koffeefxws.model.ProductSalesDTO;
 import cr.ac.una.koffeefxws.model.SystemParameterDTO;
 import cr.ac.una.koffeefxws.util.CodigoRespuesta;
 import cr.ac.una.koffeefxws.util.Respuesta;
 import jakarta.ejb.EJB;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
-import cr.ac.una.koffeefxws.model.ProductSalesDTO;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -58,6 +59,9 @@ public class ReportService {
 
     @EJB
     AppUserService appUserService;
+
+    @EJB
+    ProductService productService;
 
     /**
      * Prepara los parámetros y el datasource para generar el reporte
@@ -951,11 +955,39 @@ public class ReportService {
                         for (OrderItemDTO item : order.getOrderItems()) {
                             String productKey = item.getProductName();
 
+                            // Obtener el producto para acceder al grupo/categoría
+                            String productGroupName = "Sin Categoría";
+                            if (item.getProductId() != null) {
+                                try {
+                                    Respuesta productResponse = productService.getProduct(
+                                        item.getProductId()
+                                    );
+                                    if (productResponse.getEstado()) {
+                                        ProductDTO product = (ProductDTO) productResponse.getResultado(
+                                            "Product"
+                                        );
+                                        if (
+                                            product != null &&
+                                            product.getProductGroupName() != null
+                                        ) {
+                                            productGroupName = product.getProductGroupName();
+                                        }
+                                    }
+                                } catch (Exception ex) {
+                                    LOG.log(
+                                        Level.WARNING,
+                                        "No se pudo obtener grupo de producto para item " +
+                                            item.getProductId(),
+                                        ex
+                                    );
+                                }
+                            }
+
                             if (!productSalesMap.containsKey(productKey)) {
                                 // Crear nuevo registro de producto
                                 ProductSalesDTO productSales = new ProductSalesDTO(
                                     item.getProductName(),
-                                    "Sin Categoría", // ProductDTO usa productGroupName, no categoría
+                                    productGroupName,
                                     item.getQuantity(),
                                     item.getUnitPrice()
                                 );
