@@ -15,8 +15,11 @@ import cr.ac.una.koffeefxws.util.Respuesta;
 import jakarta.ejb.EJB;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
+import cr.ac.una.koffeefxws.model.ProductSalesDTO;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -610,6 +613,535 @@ public class ReportService {
                 CodigoRespuesta.ERROR_INTERNO,
                 "Ocurrió un error al generar el reporte de cierre de caja PDF.",
                 "generarReporteCashierPDFBytes " + ex.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Prepara los parámetros y el datasource para generar el reporte de facturas por fecha
+     *
+     * @param dateFrom Fecha inicial del período
+     * @param dateTo Fecha final del período
+     * @return Respuesta con JasperPrint listo para exportar
+     */
+    private Respuesta prepararReporteInvoicesByDate(LocalDate dateFrom, LocalDate dateTo) {
+        try {
+            // 1. Validar parámetros
+            if (dateFrom == null || dateTo == null) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_CLIENTE,
+                    "Las fechas de inicio y fin son obligatorias",
+                    "prepararReporteInvoicesByDate NullDates"
+                );
+            }
+
+            if (dateFrom.isAfter(dateTo)) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_CLIENTE,
+                    "La fecha de inicio no puede ser posterior a la fecha de fin",
+                    "prepararReporteInvoicesByDate InvalidDates"
+                );
+            }
+
+            // 2. Obtener todas las facturas
+            Respuesta invoicesResponse = invoiceService.getInvoices();
+            if (!invoicesResponse.getEstado()) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No se encontraron facturas.",
+                    "prepararReporteInvoicesByDate " + invoicesResponse.getMensaje()
+                );
+            }
+
+            @SuppressWarnings("unchecked")
+            List<InvoiceDTO> allInvoices = (List<InvoiceDTO>) invoicesResponse.getResultado(
+                "Invoices"
+            );
+
+            // 3. Filtrar facturas por rango de fechas
+            List<InvoiceDTO> invoicesByDateRange = new ArrayList<>();
+            if (allInvoices != null) {
+                for (InvoiceDTO invoice : allInvoices) {
+                    if (
+                        invoice.getCreatedAt() != null &&
+                        !invoice.getCreatedAt().isBefore(dateFrom) &&
+                        !invoice.getCreatedAt().isAfter(dateTo)
+                    ) {
+                        invoicesByDateRange.add(invoice);
+                    }
+                }
+            }
+
+            if (invoicesByDateRange.isEmpty()) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No existen facturas en el período especificado.",
+                    "prepararReporteInvoicesByDate NoInvoicesInRange"
+                );
+            }
+
+            // 4. Crear JRBeanCollectionDataSource con las facturas filtradas
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(
+                invoicesByDateRange
+            );
+
+            // 5. Obtener parámetros del sistema
+            Respuesta paramsResponse = paramService.getSystemParameters();
+            Map<String, String> paramsMap = new HashMap<>();
+
+            if (paramsResponse.getEstado()) {
+                @SuppressWarnings("unchecked")
+                List<SystemParameterDTO> systemParams = (List<
+                    SystemParameterDTO
+                >) paramsResponse.getResultado("SystemParameters");
+                for (SystemParameterDTO param : systemParams) {
+                    paramsMap.put(param.getParamName(), param.getParamValue());
+                }
+            }
+
+            // 6. Calcular totales para el resumen
+            Double totalAmount = 0.0;
+            Double totalSubtotal = 0.0;
+            Double totalTaxAmount = 0.0;
+            Double totalServiceAmount = 0.0;
+            Double totalDiscountAmount = 0.0;
+            Integer totalRecords = invoicesByDateRange.size();
+
+            for (InvoiceDTO invoice : invoicesByDateRange) {
+                if (invoice.getTotal() != null) {
+                    totalAmount += invoice.getTotal();
+                }
+                if (invoice.getSubtotal() != null) {
+                    totalSubtotal += invoice.getSubtotal();
+                }
+                if (invoice.getTaxAmount() != null) {
+                    totalTaxAmount += invoice.getTaxAmount();
+                }
+                if (invoice.getServiceAmount() != null) {
+                    totalServiceAmount += invoice.getServiceAmount();
+                }
+                if (invoice.getDiscountAmount() != null) {
+                    totalDiscountAmount += invoice.getDiscountAmount();
+                }
+            }
+
+            Double averageTicket = totalRecords > 0 ? totalAmount / totalRecords : 0.0;
+
+            // 7. Preparar Map de parámetros para el reporte
+            Map<String, Object> parameters = new HashMap<>();
+
+            // Parámetros de fechas
+            parameters.put("dateFrom", dateFrom);
+            parameters.put("dateTo", dateTo);
+
+            // Parámetros de la compañía
+            parameters.put(
+                "companyName",
+                paramsMap.getOrDefault("company.name", "KoffeeFX")
+            );
+            parameters.put(
+                "restaurantAddress",
+                paramsMap.getOrDefault("company.address", "")
+            );
+            parameters.put(
+                "restaurantPhone",
+                paramsMap.getOrDefault("company.phone", "")
+            );
+
+            // Moneda
+            parameters.put("currency", "₡");
+
+            // Parámetros de totales
+            parameters.put("totalRecords", totalRecords);
+            parameters.put("totalAmount", totalAmount);
+            parameters.put("totalSubtotal", totalSubtotal);
+            parameters.put("totalTaxAmount", totalTaxAmount);
+            parameters.put("totalServiceAmount", totalServiceAmount);
+            parameters.put("totalDiscountAmount", totalDiscountAmount);
+            parameters.put("averageTicket", averageTicket);
+
+            // Parámetros de generación
+            parameters.put("reportGeneratedAt", LocalDate.now());
+            parameters.put("generatedByUser", System.getProperty("user.name", "System"));
+
+            // 8. Compilar el informe desde /reports/InvoicesByDate.jrxml
+            InputStream reportStream = getClass().getResourceAsStream(
+                "/reports/InvoicesByDate.jrxml"
+            );
+            if (reportStream == null) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "No se encontró el archivo de reporte InvoicesByDate.jrxml",
+                    "prepararReporteInvoicesByDate FileNotFound"
+                );
+            }
+
+            LOG.log(
+                Level.INFO,
+                "Compilando reporte InvoicesByDate.jrxml con lenguaje Java (JDT compiler)"
+            );
+            JasperReport jasperReport = JasperCompileManager.compileReport(
+                reportStream
+            );
+
+            // 9. Llenar el reporte con los parámetros y el dataSource
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                jasperReport,
+                parameters,
+                dataSource
+            );
+
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "JasperPrint",
+                jasperPrint
+            );
+        } catch (Exception ex) {
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al preparar el reporte de facturas por fecha.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al preparar el reporte de facturas por fecha.",
+                "prepararReporteInvoicesByDate " + ex.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Genera un reporte de facturas por fecha en PDF y retorna el array de bytes
+     *
+     * @param dateFrom Fecha inicial del período
+     * @param dateTo Fecha final del período
+     * @return Respuesta con el array de bytes del PDF
+     */
+    public Respuesta generarReporteInvoicesByDatePDFBytes(LocalDate dateFrom, LocalDate dateTo) {
+        try {
+            Respuesta reporteResponse = prepararReporteInvoicesByDate(dateFrom, dateTo);
+            if (!reporteResponse.getEstado()) {
+                return reporteResponse;
+            }
+
+            JasperPrint jasperPrint =
+                (JasperPrint) reporteResponse.getResultado("JasperPrint");
+
+            // Exportar a bytes
+            byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrint);
+
+            LOG.log(
+                Level.INFO,
+                "Reporte de facturas por fecha PDF generado exitosamente como bytes"
+            );
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "Reporte generado exitosamente.",
+                "",
+                "PDFBytes",
+                pdfBytes
+            );
+        } catch (Exception ex) {
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al generar el reporte de facturas por fecha PDF.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al generar el reporte de facturas por fecha PDF.",
+                "generarReporteInvoicesByDatePDFBytes " + ex.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Prepara los parámetros y el datasource para generar el reporte de productos más vendidos
+     *
+     * @param dateFrom Fecha inicial del período
+     * @param dateTo Fecha final del período
+     * @return Respuesta con JasperPrint listo para exportar
+     */
+    private Respuesta prepararReporteProductosMasVendidos(LocalDate dateFrom, LocalDate dateTo) {
+        try {
+            // 1. Validar parámetros
+            if (dateFrom == null || dateTo == null) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_CLIENTE,
+                    "Las fechas de inicio y fin son obligatorias",
+                    "prepararReporteProductosMasVendidos NullDates"
+                );
+            }
+
+            if (dateFrom.isAfter(dateTo)) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_CLIENTE,
+                    "La fecha de inicio no puede ser posterior a la fecha de fin",
+                    "prepararReporteProductosMasVendidos InvalidDates"
+                );
+            }
+
+            // 2. Obtener todas las facturas en el rango de fechas
+            Respuesta invoicesResponse = invoiceService.getInvoices();
+            if (!invoicesResponse.getEstado()) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No se encontraron facturas.",
+                    "prepararReporteProductosMasVendidos " + invoicesResponse.getMensaje()
+                );
+            }
+
+            @SuppressWarnings("unchecked")
+            List<InvoiceDTO> allInvoices = (List<InvoiceDTO>) invoicesResponse.getResultado(
+                "Invoices"
+            );
+
+            // 3. Filtrar facturas por rango de fechas
+            List<InvoiceDTO> invoicesByDateRange = new ArrayList<>();
+            if (allInvoices != null) {
+                for (InvoiceDTO invoice : allInvoices) {
+                    if (
+                        invoice.getCreatedAt() != null &&
+                        !invoice.getCreatedAt().isBefore(dateFrom) &&
+                        !invoice.getCreatedAt().isAfter(dateTo)
+                    ) {
+                        invoicesByDateRange.add(invoice);
+                    }
+                }
+            }
+
+            if (invoicesByDateRange.isEmpty()) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No existen facturas en el período especificado.",
+                    "prepararReporteProductosMasVendidos NoInvoicesInRange"
+                );
+            }
+
+            // 4. Agrupar y agregar datos de ventas por producto
+            Map<String, ProductSalesDTO> productSalesMap = new HashMap<>();
+
+            for (InvoiceDTO invoice : invoicesByDateRange) {
+                // Obtener la orden del cliente asociada
+                Respuesta orderResponse = orderService.getCustomerOrder(
+                    invoice.getCustomerOrderId()
+                );
+
+                if (orderResponse.getEstado()) {
+                    CustomerOrderDTO order =
+                        (CustomerOrderDTO) orderResponse.getResultado("CustomerOrder");
+
+                    if (order != null && order.getOrderItems() != null) {
+                        // Iterar sobre los items de la orden
+                        for (OrderItemDTO item : order.getOrderItems()) {
+                            String productKey = item.getProductName();
+
+                            if (!productSalesMap.containsKey(productKey)) {
+                                // Crear nuevo registro de producto
+                                ProductSalesDTO productSales = new ProductSalesDTO(
+                                    item.getProductName(),
+                                    "Sin Categoría", // ProductDTO usa productGroupName, no categoría
+                                    item.getQuantity(),
+                                    item.getUnitPrice()
+                                );
+                                productSalesMap.put(productKey, productSales);
+                            } else {
+                                // Agregar a registro existente
+                                ProductSalesDTO existing = productSalesMap.get(productKey);
+                                existing.addQuantity(item.getQuantity());
+                                if (item.getUnitPrice() != null) {
+                                    existing.setAvgPrice(item.getUnitPrice());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (productSalesMap.isEmpty()) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No hay productos vendidos en el período especificado.",
+                    "prepararReporteProductosMasVendidos NoProducts"
+                );
+            }
+
+            // 5. Convertir a lista y ordenar descendente por cantidad vendida
+            List<ProductSalesDTO> productSalesList = new ArrayList<>(productSalesMap.values());
+            productSalesList.sort((a, b) -> {
+                Integer qtdA = a.getTotalQuantitySold() != null ? a.getTotalQuantitySold() : 0;
+                Integer qtdB = b.getTotalQuantitySold() != null ? b.getTotalQuantitySold() : 0;
+                return qtdB.compareTo(qtdA); // Descendente
+            });
+
+            // 6. Calcular totales para el resumen
+            Integer totalProducts = productSalesList.size();
+            Integer totalQuantity = productSalesList
+                .stream()
+                .mapToInt(p -> p.getTotalQuantitySold() != null ? p.getTotalQuantitySold() : 0)
+                .sum();
+            Double totalRevenue = productSalesList
+                .stream()
+                .mapToDouble(p -> p.getTotalRevenue() != null ? p.getTotalRevenue() : 0.0)
+                .sum();
+
+            // 7. Obtener datos de la compañía
+            Respuesta paramsResponse = paramService.getSystemParameters();
+            Map<String, String> paramsMap = new HashMap<>();
+
+            if (paramsResponse.getEstado()) {
+                @SuppressWarnings("unchecked")
+                List<SystemParameterDTO> systemParams = (List<
+                    SystemParameterDTO
+                >) paramsResponse.getResultado("SystemParameters");
+                for (SystemParameterDTO param : systemParams) {
+                    paramsMap.put(param.getParamName(), param.getParamValue());
+                }
+            }
+
+            String companyName = paramsMap.getOrDefault("company.name", "KoffeeFX");
+            String address = paramsMap.getOrDefault("company.address", "");
+            String phone = paramsMap.getOrDefault("company.phone", "");
+
+            // 8. Preparar Map de parámetros para el reporte
+            Map<String, Object> parameters = new HashMap<>();
+
+            // Parámetros de fechas
+            parameters.put("dateFrom", dateFrom);
+            parameters.put("dateTo", dateTo);
+
+            // Parámetros de la compañía
+            parameters.put("companyName", companyName);
+            parameters.put("restaurantAddress", address);
+            parameters.put("restaurantPhone", phone);
+
+            // Moneda
+            parameters.put("currency", "₡");
+
+            // Parámetros de totales
+            parameters.put("totalProductsSold", totalProducts);
+            parameters.put("totalUnitsQuantity", totalQuantity);
+            parameters.put("totalRevenue", totalRevenue);
+
+            // Parámetros de generación
+            parameters.put("reportGeneratedAt", LocalDate.now());
+            parameters.put("generatedByUser", System.getProperty("user.name", "System"));
+
+            // 9. Crear JRBeanCollectionDataSource con los productos
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(
+                productSalesList
+            );
+
+            // 10. Compilar el informe desde /reports/Products-Report.jrxml
+            InputStream reportStream = getClass().getResourceAsStream(
+                "/reports/Products-Report.jrxml"
+            );
+            if (reportStream == null) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "No se encontró el archivo de reporte Products-Report.jrxml",
+                    "prepararReporteProductosMasVendidos FileNotFound"
+                );
+            }
+
+            LOG.log(
+                Level.INFO,
+                "Compilando reporte Products-Report.jrxml con lenguaje Java (JDT compiler)"
+            );
+            JasperReport jasperReport = JasperCompileManager.compileReport(
+                reportStream
+            );
+
+            // 11. Llenar el reporte con los parámetros y el dataSource
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                jasperReport,
+                parameters,
+                dataSource
+            );
+
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "JasperPrint",
+                jasperPrint
+            );
+        } catch (Exception ex) {
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al preparar el reporte de productos más vendidos.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al preparar el reporte de productos más vendidos.",
+                "prepararReporteProductosMasVendidos " + ex.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Genera un reporte de productos más vendidos en PDF y retorna el array de bytes
+     *
+     * @param dateFrom Fecha inicial del período
+     * @param dateTo Fecha final del período
+     * @return Respuesta con el array de bytes del PDF
+     */
+    public Respuesta generarReporteProductosMasVendidosPDFBytes(LocalDate dateFrom, LocalDate dateTo) {
+        try {
+            Respuesta reporteResponse = prepararReporteProductosMasVendidos(dateFrom, dateTo);
+            if (!reporteResponse.getEstado()) {
+                return reporteResponse;
+            }
+
+            JasperPrint jasperPrint =
+                (JasperPrint) reporteResponse.getResultado("JasperPrint");
+
+            // Exportar a bytes
+            byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrint);
+
+            LOG.log(
+                Level.INFO,
+                "Reporte de productos más vendidos PDF generado exitosamente como bytes"
+            );
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "Reporte generado exitosamente.",
+                "",
+                "PDFBytes",
+                pdfBytes
+            );
+        } catch (Exception ex) {
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al generar el reporte de productos más vendidos PDF.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al generar el reporte de productos más vendidos PDF.",
+                "generarReporteProductosMasVendidosPDFBytes " + ex.getMessage()
             );
         }
     }
