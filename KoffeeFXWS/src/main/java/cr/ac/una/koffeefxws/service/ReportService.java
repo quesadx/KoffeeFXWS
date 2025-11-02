@@ -4,6 +4,8 @@
  */
 package cr.ac.una.koffeefxws.service;
 
+import cr.ac.una.koffeefxws.model.AppUserDTO;
+import cr.ac.una.koffeefxws.model.CashOpeningDTO;
 import cr.ac.una.koffeefxws.model.CustomerOrderDTO;
 import cr.ac.una.koffeefxws.model.InvoiceDTO;
 import cr.ac.una.koffeefxws.model.OrderItemDTO;
@@ -44,6 +46,15 @@ public class ReportService {
 
     @EJB
     SystemParameterService paramService;
+
+    @EJB
+    CashOpeningService cashOpeningService;
+
+    @EJB
+    InvoiceService invoiceService;
+
+    @EJB
+    AppUserService appUserService;
 
     /**
      * Prepara los parámetros y el datasource para generar el reporte
@@ -352,6 +363,253 @@ public class ReportService {
                 CodigoRespuesta.ERROR_INTERNO,
                 "Ocurrió un error al generar la factura PDF.",
                 "generarFacturaPDFBytes " + ex.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Prepara los parámetros y el datasource para generar el reporte de cierre de caja
+     *
+     * @param cashOpeningId ID de la apertura de caja
+     * @return Respuesta con JasperPrint listo para exportar
+     */
+    private Respuesta prepararReporteCashierClosing(Long cashOpeningId) {
+        try {
+            // 1. Obtener CashOpening por ID
+            Respuesta cashOpeningResponse = cashOpeningService.getCashOpening(
+                cashOpeningId
+            );
+            if (!cashOpeningResponse.getEstado()) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No se encontró la apertura de caja con ID: " + cashOpeningId,
+                    "prepararReporteCashierClosing " + cashOpeningResponse.getMensaje()
+                );
+            }
+
+            // 2. Obtener todas las facturas del servicio y filtrar por userId
+            Respuesta invoicesResponse = invoiceService.getInvoices();
+            if (!invoicesResponse.getEstado()) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No se encontraron facturas.",
+                    "prepararReporteCashierClosing " + invoicesResponse.getMensaje()
+                );
+            }
+
+            @SuppressWarnings("unchecked")
+            List<InvoiceDTO> allInvoices = (List<InvoiceDTO>) invoicesResponse.getResultado(
+                "Invoices"
+            );
+
+            if (allInvoices == null || allInvoices.isEmpty()) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No existen facturas disponibles.",
+                    "prepararReporteCashierClosing NoInvoices"
+                );
+            }
+
+            // Log para validar que customerName esté siendo populado
+            for (InvoiceDTO invoice : allInvoices) {
+                LOG.log(
+                    Level.INFO,
+                    "Invoice: " +
+                        invoice.getInvoiceNumber() +
+                        " | Customer: " +
+                        (invoice.getCustomerName() != null
+                            ? invoice.getCustomerName()
+                            : "NULL") +
+                        " | Total: " +
+                        invoice.getTotal()
+                );
+            }
+
+            // 3. Crear JRBeanCollectionDataSource con las facturas
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(
+                allInvoices
+            );
+
+            // 4. Obtener parámetros del sistema
+            Respuesta paramsResponse = paramService.getSystemParameters();
+            Map<String, String> paramsMap = new HashMap<>();
+
+            if (paramsResponse.getEstado()) {
+                @SuppressWarnings("unchecked")
+                List<SystemParameterDTO> systemParams = (List<
+                    SystemParameterDTO
+                >) paramsResponse.getResultado("SystemParameters");
+                for (SystemParameterDTO param : systemParams) {
+                    paramsMap.put(param.getParamName(), param.getParamValue());
+                }
+            }
+
+            // 5. Preparar Map de parámetros para el reporte de cierre de caja
+            Map<String, Object> parameters = new HashMap<>();
+
+            // Obtener datos de la apertura de caja
+            CashOpeningDTO cashOpening = (CashOpeningDTO) cashOpeningResponse.getResultado(
+                "CashOpening"
+            );
+
+            // Parámetros de identificación del cajero y fecha
+            // Obtener nombre completo del usuario (firstName + lastName)
+            String cashierName = "N/A";
+            if (cashOpening.getUserId() != null) {
+                Respuesta userResponse = appUserService.getAppUser(cashOpening.getUserId());
+                if (userResponse.getEstado()) {
+                    AppUserDTO user = (AppUserDTO) userResponse.getResultado("AppUser");
+                    if (user != null && user.getFirstName() != null && user.getLastName() != null) {
+                        cashierName = user.getFirstName() + " " + user.getLastName();
+                    }
+                }
+            }
+            parameters.put("cashierName", cashierName);
+            parameters.put(
+                "closingDate",
+                cashOpening.getClosingDate() != null
+                    ? cashOpening.getClosingDate()
+                    : java.time.LocalDate.now()
+            );
+
+            // Parámetros financieros (montos)
+            // Calcular suma total de todas las facturas
+            Double systemGrandTotal = 0.0;
+            for (InvoiceDTO invoice : allInvoices) {
+                if (invoice.getTotal() != null) {
+                    systemGrandTotal += invoice.getTotal().doubleValue();
+                }
+            }
+
+            // cashierDeclaredTotal: lo que el cajero contó (closingAmount de la apertura de caja)
+            Double cashierDeclaredTotal = cashOpening.getClosingAmount() != null
+                ? cashOpening.getClosingAmount().doubleValue()
+                : 0.0;
+
+            // totalDifference: systemGrandTotal - cashierDeclaredTotal
+            Double totalDifference = systemGrandTotal - cashierDeclaredTotal;
+
+            // differenceStatus: "Correcto" si es 0, "Sobrante" si es positivo (cajero contó más), "Faltante" si es negativo (cajero contó menos)
+            String differenceStatus = "Pendiente";
+            if (totalDifference == 0.0) {
+                differenceStatus = "Correcto";
+            } else if (totalDifference > 0) {
+                differenceStatus = "Faltante";
+            } else if (totalDifference < 0) {
+                differenceStatus = "Sobrante";
+            }
+
+            parameters.put("systemGrandTotal", systemGrandTotal);
+            parameters.put("cashierDeclaredTotal", cashierDeclaredTotal);
+            parameters.put("totalDifference", Math.abs(totalDifference));
+            parameters.put("differenceStatus", differenceStatus);
+
+            // Parámetros de la compañía
+            parameters.put(
+                "companyName",
+                paramsMap.getOrDefault("company.name", "KoffeeFX")
+            );
+
+            // 6. Compilar el informe desde /reports/Cashier-Report.jrxml
+            InputStream reportStream = getClass().getResourceAsStream(
+                "/reports/Cashier-Report.jrxml"
+            );
+            if (reportStream == null) {
+                return new Respuesta(
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "No se encontró el archivo de reporte Cashier-Report.jrxml",
+                    "prepararReporteCashierClosing FileNotFound"
+                );
+            }
+
+            LOG.log(
+                Level.INFO,
+                "Compilando reporte Cashier-Report.jrxml con lenguaje Java (JDT compiler)"
+            );
+            JasperReport jasperReport = JasperCompileManager.compileReport(
+                reportStream
+            );
+
+            // 7. Llenar el reporte con los parámetros y el dataSource
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                jasperReport,
+                parameters,
+                dataSource
+            );
+
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "",
+                "",
+                "JasperPrint",
+                jasperPrint
+            );
+        } catch (Exception ex) {
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al preparar el reporte de cierre de caja.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al preparar el reporte de cierre de caja.",
+                "prepararReporteCashierClosing " + ex.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Genera un reporte de cierre de caja en PDF y retorna el array de bytes
+     *
+     * @param cashOpeningId ID de la apertura de caja para generar el reporte
+     * @return Respuesta con el array de bytes del PDF
+     */
+    public Respuesta generarReporteCashierPDFBytes(Long cashOpeningId) {
+        try {
+            Respuesta reporteResponse = prepararReporteCashierClosing(
+                cashOpeningId
+            );
+            if (!reporteResponse.getEstado()) {
+                return reporteResponse;
+            }
+
+            JasperPrint jasperPrint =
+                (JasperPrint) reporteResponse.getResultado("JasperPrint");
+
+            // Exportar a bytes
+            byte[] pdfBytes = JasperExportManager.exportReportToPdf(
+                jasperPrint
+            );
+
+            LOG.log(
+                Level.INFO,
+                "Reporte de cierre de caja PDF generado exitosamente como bytes"
+            );
+            return new Respuesta(
+                true,
+                CodigoRespuesta.CORRECTO,
+                "Reporte generado exitosamente.",
+                "",
+                "PDFBytes",
+                pdfBytes
+            );
+        } catch (Exception ex) {
+            LOG.log(
+                Level.SEVERE,
+                "Ocurrió un error al generar el reporte de cierre de caja PDF.",
+                ex
+            );
+            return new Respuesta(
+                false,
+                CodigoRespuesta.ERROR_INTERNO,
+                "Ocurrió un error al generar el reporte de cierre de caja PDF.",
+                "generarReporteCashierPDFBytes " + ex.getMessage()
             );
         }
     }
