@@ -772,22 +772,22 @@ public class ReportService {
             parameters.put("reportGeneratedAt", LocalDate.now());
             parameters.put("generatedByUser", System.getProperty("user.name", "System"));
 
-            // 8. Compilar el informe desde /reports/InvoicesByDate.jrxml
+            // 8. Compilar el informe desde /reports/Invoices-Report.jrxml
             InputStream reportStream = getClass().getResourceAsStream(
-                "/reports/InvoicesByDate.jrxml"
+                "/reports/Invoices-Report.jrxml"
             );
             if (reportStream == null) {
                 return new Respuesta(
                     false,
                     CodigoRespuesta.ERROR_INTERNO,
-                    "No se encontró el archivo de reporte InvoicesByDate.jrxml",
+                    "No se encontró el archivo de reporte Invoices-Report.jrxml",
                     "prepararReporteInvoicesByDate FileNotFound"
                 );
             }
 
             LOG.log(
                 Level.INFO,
-                "Compilando reporte InvoicesByDate.jrxml con lenguaje Java (JDT compiler)"
+                "Compilando reporte Invoices-Report.jrxml con lenguaje Java (JDT compiler)"
             );
             JasperReport jasperReport = JasperCompileManager.compileReport(
                 reportStream
@@ -814,11 +814,12 @@ public class ReportService {
                 "Ocurrió un error al preparar el reporte de facturas por fecha.",
                 ex
             );
+            ex.printStackTrace(); // Esto ayuda a ver la traza completa
             return new Respuesta(
                 false,
                 CodigoRespuesta.ERROR_INTERNO,
                 "Ocurrió un error al preparar el reporte de facturas por fecha.",
-                "prepararReporteInvoicesByDate " + ex.getMessage()
+                "prepararReporteInvoicesByDate " + ex.getClass().getName() + ": " + ex.getMessage()
             );
         }
     }

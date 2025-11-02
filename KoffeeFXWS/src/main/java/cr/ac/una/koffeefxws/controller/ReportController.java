@@ -295,6 +295,12 @@ public class ReportController {
         }
 
         try {
+            LOG.log(
+                Level.INFO,
+                "Generando reporte de facturas por fecha: {0} a {1}",
+                new Object[] { dateFrom, dateTo }
+            );
+            
             Respuesta r = reportService.generarReporteInvoicesByDatePDFBytes(
                 dateFrom,
                 dateTo
@@ -306,9 +312,14 @@ public class ReportController {
                     "Error generando reporte de facturas por fecha {0} a {1}: {2}",
                     new Object[] { dateFrom, dateTo, r.getMensaje() }
                 );
+                LOG.log(
+                    Level.WARNING,
+                    "Detalle del error: {0}",
+                    r.getMensajeInterno()
+                );
                 return Response.status(r.getCodigoRespuesta().getValue())
                     .type(MediaType.APPLICATION_JSON)
-                    .entity("{\"error\": \"" + r.getMensaje() + "\"}")
+                    .entity("{\"error\": \"" + r.getMensaje() + "\", \"detalle\": \"" + r.getMensajeInterno() + "\"}")
                     .build();
             }
 
