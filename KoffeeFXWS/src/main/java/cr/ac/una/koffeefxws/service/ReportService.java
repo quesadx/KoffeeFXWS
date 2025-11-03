@@ -286,15 +286,15 @@ public class ReportService {
         Respuesta customerResponse = customerService.getCustomer(order.getCustomerId());
         if (customerResponse.getEstado()) {
           CustomerDTO customer = (CustomerDTO) customerResponse.getResultado("Customer");
-          String customerEmail = customer.getEmail();
           String invoiceNumber =
               order.getInvoice() != null
                   ? order.getInvoice().getInvoiceNumber()
                   : String.valueOf(orderId);
 
-          if (customerEmail != null && !customerEmail.isBlank()) {
-            mailService.sendInvoicePDF(customerEmail, invoiceNumber, pdfBytes);
-            LOG.log(Level.INFO, "Email de factura enviado asincrónicamente a {0}", customerEmail);
+          if (customer.getEmail() != null && !customer.getEmail().isBlank()) {
+            mailService.sendInvoicePDF(customer, invoiceNumber, pdfBytes);
+            LOG.log(
+                Level.INFO, "Email de factura enviado asincrónicamente a {0}", customer.getEmail());
           } else {
             LOG.log(Level.WARNING, "No se pudo enviar email: cliente sin dirección de correo");
           }

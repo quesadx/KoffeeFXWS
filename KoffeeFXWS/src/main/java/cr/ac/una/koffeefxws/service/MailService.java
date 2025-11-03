@@ -8,6 +8,7 @@ import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
 import jakarta.annotation.Resource;
 import jakarta.ejb.Asynchronous;
+import jakarta.ejb.EJB;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.mail.Message;
@@ -21,6 +22,10 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import jakarta.mail.util.ByteArrayDataSource;
 
+import cr.ac.una.koffeefxws.model.CustomerDTO;
+import cr.ac.una.koffeefxws.model.SystemParameterDTO;
+import cr.ac.una.koffeefxws.util.Respuesta;
+
 @Stateless
 @LocalBean
 public class MailService {
@@ -30,6 +35,8 @@ public class MailService {
   // The mail session is configured in Payara with JNDI name: mail/RestUNASession
   @Resource(lookup = "mail/RestUNASession")
   private Session mailSession;
+
+  @EJB private SystemParameterService systemParameterService;
 
   // This is my personal email (Matteo here!) - please don't steal it, prof :)
   private static final String DEFAULT_FROM = "flowfxws@gmail.com";
@@ -42,17 +49,21 @@ public class MailService {
    * Sends an invoice PDF to the customer via email. This runs asynchronously so it won't block the
    * main thread.
    *
-   * @param recipientEmail where to send the invoice
+   * @param customer the customer receiving the invoice
    * @param invoiceNumber the invoice number (used in subject and filename)
    * @param pdfBytes the actual PDF file as bytes
    */
   @Asynchronous
-  public void sendInvoicePDF(String recipientEmail, String invoiceNumber, byte[] pdfBytes) {
-    // Basic validation - can't send without an email address
-    if (recipientEmail == null || recipientEmail.isBlank()) {
-      LOG.warning("Cannot send invoice email: recipient email is null or empty");
+  public void sendInvoicePDF(CustomerDTO customer, String invoiceNumber, byte[] pdfBytes) {
+    LOG.log(Level.INFO, "MAIL: sendInvoicePDF called for invoice: {0}", invoiceNumber);
+
+    // Basic validation - need customer info
+    if (customer == null || customer.getEmail() == null || customer.getEmail().isBlank()) {
+      LOG.warning("Cannot send invoice email: customer or customer email is null or empty");
       return;
     }
+
+    LOG.log(Level.INFO, "MAIL: Customer email: {0}", customer.getEmail());
 
     // Also need the actual PDF content
     if (pdfBytes == null || pdfBytes.length == 0) {
@@ -60,18 +71,45 @@ public class MailService {
       return;
     }
 
+    LOG.log(Level.INFO, "MAIL: PDF bytes length: {0}", pdfBytes.length);
+
     try {
-      // Build the email subject and body
-      String subject = "RestUNA System - Invoice " + (invoiceNumber != null ? invoiceNumber : "");
-      String htmlBody = buildSimpleInvoiceHtml(invoiceNumber);
+      // Fetch the language from database (default to "es" if not found)
+      String languageCode = "es";
+      LOG.log(Level.INFO, "MAIL: Fetching language parameter from database");
+      try {
+        Respuesta langResponse = systemParameterService.getSystemParameterByName("display.lang");
+        if (langResponse.getEstado()) {
+          SystemParameterDTO langParam =
+              (SystemParameterDTO) langResponse.getResultado("SystemParameter");
+          String langValue = langParam.getParamValue();
+          if ("en".equals(langValue) || "es".equals(langValue)) {
+            languageCode = langValue;
+            LOG.log(Level.INFO, "MAIL: Using language: {0}", languageCode);
+          }
+        } else {
+          LOG.log(
+              Level.WARNING,
+              "MAIL: Failed to fetch language parameter: {0}",
+              langResponse.getMensaje());
+        }
+      } catch (Exception langEx) {
+        LOG.log(Level.WARNING, "Failed to fetch language parameter, using default 'es'", langEx);
+      }
+
+      // Build the email subject and body based on language
+      LOG.log(Level.INFO, "MAIL: Building email subject and body");
+      String subject = buildSubject(languageCode, invoiceNumber);
+      String htmlBody = buildInvoiceHtml(languageCode, invoiceNumber, customer);
       String attachmentName =
           "factura_" + (invoiceNumber != null ? invoiceNumber : "invoice") + ".pdf";
 
+      LOG.log(Level.INFO, "MAIL: Attempting to send email to: {0}", customer.getEmail());
       // Send it off!
-      sendEmailWithAttachment(recipientEmail, subject, htmlBody, pdfBytes, attachmentName);
-      LOG.log(Level.INFO, "Invoice PDF email sent successfully to {0}", recipientEmail);
+      sendEmailWithAttachment(customer.getEmail(), subject, htmlBody, pdfBytes, attachmentName);
+      LOG.log(Level.INFO, "Invoice PDF email sent successfully to {0}", customer.getEmail());
     } catch (Exception ex) {
-      LOG.log(Level.WARNING, "Failed to send invoice PDF email to " + recipientEmail, ex);
+      LOG.log(Level.WARNING, "Failed to send invoice PDF email to " + customer.getEmail(), ex);
     }
   }
 
@@ -174,35 +212,115 @@ public class MailService {
   // HTML email template (full disclosure: made with ChatGPT, honesty first!)
   // ========================================================================
 
+  /** Builds the email subject based on the language. */
+  private String buildSubject(String languageCode, String invoiceNumber) {
+    if ("en".equals(languageCode)) {
+      return "RestUNA System - Invoice " + (invoiceNumber != null ? invoiceNumber : "");
+    } else {
+      return "Sistema RestUNA - Factura " + (invoiceNumber != null ? invoiceNumber : "");
+    }
+  }
+
   /**
-   * Builds a nice-looking HTML email for the invoice. It's got a clean design with a blue header
-   * and professional styling.
+   * Builds a nice-looking HTML email for the invoice with bilingual support. Supports English (en)
+   * and Spanish (es) based on display.lang parameter.
    */
-  private String buildSimpleInvoiceHtml(String invoiceNumber) {
-    return "<!DOCTYPE html>"
-        + "<html lang=\"es\"><head><meta charset=\"UTF-8\"/>"
-        + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>"
-        + "<style>"
-        + "body{margin:0;padding:24px;background:#f7f7f9;color:#252835;font-family:Arial,sans-serif;}"
-        + ".container{max-width:600px;margin:0 auto;background:#ffffff;border:1px solid #e6e7eb;border-radius:12px;padding:24px;}"
-        + ".header{border-bottom:2px solid #5c77ff;padding-bottom:16px;margin-bottom:16px;}"
-        + ".title{margin:0;font-size:24px;color:#252835;}"
-        + ".content{color:#667085;line-height:1.6;}"
-        + ".footer{margin-top:24px;padding-top:16px;border-top:1px solid #e6e7eb;color:#667085;font-size:12px;}"
-        + "</style></head><body>"
-        + "<div class=\"container\">"
-        + "<div class=\"header\"><h1 class=\"title\">RestUNA</h1></div>"
-        + "<div class=\"content\">"
-        + "<p>Estimado cliente,</p>"
-        + "<p>Adjunto encontrará su factura <strong>"
-        + escapeHtml(invoiceNumber)
-        + "</strong> en formato PDF.</p>"
-        + "<p>Gracias por su preferencia.</p>"
-        + "</div>"
-        + "<div class=\"footer\">"
-        + "<p>Este es un mensaje automático. Por favor no responda a este correo.</p>"
-        + "</div>"
-        + "</div></body></html>";
+  private String buildInvoiceHtml(String languageCode, String invoiceNumber, CustomerDTO customer) {
+    String lang = "en".equals(languageCode) ? "en" : "es";
+    String greeting = "en".equals(languageCode) ? "Dear" : "Estimado/a";
+    String customerName =
+        customer.getFullName() != null && !customer.getFullName().isBlank()
+            ? customer.getFullName()
+            : ("en".equals(languageCode) ? "Customer" : "Cliente");
+    String bodyText1 =
+        "en".equals(languageCode)
+            ? "Please find attached your invoice"
+            : "Adjunto encontrará su factura";
+    String bodyText2 = "en".equals(languageCode) ? "in PDF format." : "en formato PDF.";
+    String thanksText =
+        "en".equals(languageCode)
+            ? "Thank you for your preference."
+            : "Gracias por su preferencia.";
+    String footerText =
+        "en".equals(languageCode)
+            ? "This is an automated message. Please do not reply to this email."
+            : "Este es un mensaje automático. Por favor no responda a este correo.";
+    String customerInfoLabel =
+        "en".equals(languageCode) ? "Customer Information:" : "Información del Cliente:";
+    String emailLabel = "en".equals(languageCode) ? "Email:" : "Correo:";
+    String phoneLabel = "en".equals(languageCode) ? "Phone:" : "Teléfono:";
+
+    StringBuilder html = new StringBuilder();
+    html.append("<!DOCTYPE html>")
+        .append("<html lang=\"")
+        .append(lang)
+        .append("\"><head><meta charset=\"UTF-8\"/>")
+        .append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>")
+        .append("<style>")
+        .append(
+            "body{margin:0;padding:24px;background:#f7f7f9;color:#252835;font-family:Arial,sans-serif;}")
+        .append(
+            ".container{max-width:600px;margin:0 auto;background:#ffffff;border:1px solid #e6e7eb;border-radius:12px;padding:24px;}")
+        .append(".header{border-bottom:2px solid #5c77ff;padding-bottom:16px;margin-bottom:16px;}")
+        .append(".title{margin:0;font-size:24px;color:#252835;}")
+        .append(".content{color:#667085;line-height:1.6;}")
+        .append(
+            ".customer-info{background:#f7f7f9;border-left:3px solid #5c77ff;padding:12px;margin:16px 0;}")
+        .append(".customer-info p{margin:4px 0;}")
+        .append(
+            ".footer{margin-top:24px;padding-top:16px;border-top:1px solid #e6e7eb;color:#667085;font-size:12px;}")
+        .append("</style></head><body>")
+        .append("<div class=\"container\">")
+        .append("<div class=\"header\"><h1 class=\"title\">RestUNA</h1></div>")
+        .append("<div class=\"content\">")
+        .append("<p>")
+        .append(greeting)
+        .append(" ")
+        .append(escapeHtml(customerName))
+        .append(",</p>")
+        .append("<p>")
+        .append(bodyText1)
+        .append(" <strong>")
+        .append(escapeHtml(invoiceNumber))
+        .append("</strong> ")
+        .append(bodyText2)
+        .append("</p>")
+        .append("<div class=\"customer-info\">")
+        .append("<p><strong>")
+        .append(customerInfoLabel)
+        .append("</strong></p>")
+        .append("<p>")
+        .append(escapeHtml(customer.getFullName()))
+        .append("</p>");
+
+    if (customer.getEmail() != null && !customer.getEmail().isBlank()) {
+      html.append("<p>")
+          .append(emailLabel)
+          .append(" ")
+          .append(escapeHtml(customer.getEmail()))
+          .append("</p>");
+    }
+    if (customer.getPhone() != null && !customer.getPhone().isBlank()) {
+      html.append("<p>")
+          .append(phoneLabel)
+          .append(" ")
+          .append(escapeHtml(customer.getPhone()))
+          .append("</p>");
+    }
+
+    html.append("</div>")
+        .append("<p>")
+        .append(thanksText)
+        .append("</p>")
+        .append("</div>")
+        .append("<div class=\"footer\">")
+        .append("<p>")
+        .append(footerText)
+        .append("</p>")
+        .append("</div>")
+        .append("</div></body></html>");
+
+    return html.toString();
   }
 
   /**
