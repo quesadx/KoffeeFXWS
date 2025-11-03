@@ -20,26 +20,27 @@
 		<element kind="rectangle" uuid="a1b2c3d4-e5f6-a7b8-c9d0-e1f2a3b4c5d6" x="0" y="0" width="515" height="50" backcolor="#1F4E78">
 			<pen lineWidth="0.0"/>
 		</element>
-		<element kind="staticText" uuid="b2c3d4e5-f6a7-b8c9-d0e1-f2a3b4c5d6e7" x="20" y="8" width="350" height="34" forecolor="#FFFFFF" fontName="Arial" fontSize="18.0" bold="true" vTextAlign="Middle">
+		<element kind="staticText" uuid="b2c3d4e5-f6a7-b8c9-d0e1-f2a3b4c5d6e7" x="20" y="8" width="300" height="34" forecolor="#FFFFFF" fontName="Arial" fontSize="18.0" bold="true" vTextAlign="Middle">
 			<text><![CDATA[Cashier Closing Report]]></text>
 		</element>
-		<element kind="staticText" uuid="c3d4e5f6-a7b8-c9d0-e1f2-a3b4c5d6e7f8" x="370" y="8" width="125" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="c3d4e5f6-a7b8-c9d0-e1f2-a3b4c5d6e7f8" x="340" y="8" width="50" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0" bold="true" hTextAlign="Left">
 			<text><![CDATA[Company:]]></text>
 		</element>
-		<element kind="textField" uuid="d4e5f6a7-b8c9-d0e1-f2a3-b4c5d6e7f8a9" x="370" y="22" width="125" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0" hTextAlign="Right">
+		<element kind="textField" uuid="d4e5f6a7-b8c9-d0e1-f2a3-b4c5d6e7f8a9" x="400" y="8" width="95" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0" hTextAlign="Left">
 			<expression><![CDATA[$P{companyName}]]></expression>
 		</element>
-		<element kind="staticText" uuid="e5f6a7b8-c9d0-e1f2-a3b4-c5d6e7f8a9ba" x="370" y="36" width="125" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="e5f6a7b8-c9d0-e1f2-a3b4-c5d6e7f8a9ba" x="340" y="30" width="50" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0" bold="true" hTextAlign="Left">
 			<text><![CDATA[Cashier:]]></text>
 		</element>
-		<element kind="textField" uuid="f6a7b8c9-d0e1-f2a3-b4c5-d6e7f8a9bacb" x="370" y="50" width="125" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0" hTextAlign="Right">
+		<element kind="textField" uuid="f6a7b8c9-d0e1-f2a3-b4c5-d6e7f8a9bacb" x="400" y="30" width="95" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0" hTextAlign="Left">
 			<expression><![CDATA[$P{cashierName}]]></expression>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
 		</element>
 		<element kind="line" uuid="a7b8c9d0-e1f2-a3b4-c5d6-e7f8a9bacbdc" x="0" y="52" width="515" height="1" forecolor="#1F4E78"/>
-		<element kind="staticText" uuid="b8c9d0e1-f2a3-b4c5-d6e7-f8a9bacbdced" x="20" y="60" width="100" height="12" fontName="Arial" fontSize="9.0" bold="true">
+		<element kind="staticText" uuid="b8c9d0e1-f2a3-b4c5-d6e7-f8a9bacbdced" x="20" y="60" width="60" height="12" fontName="Arial" fontSize="9.0" bold="true">
 			<text><![CDATA[Closing date:]]></text>
 		</element>
-		<element kind="textField" uuid="c9d0e1f2-a3b4-c5d6-e7f8-a9bacbdcedfe" x="125" y="60" width="120" height="12" fontName="Arial" fontSize="9.0" pattern="dd/MM/yyyy">
+		<element kind="textField" uuid="c9d0e1f2-a3b4-c5d6-e7f8-a9bacbdcedfe" x="80" y="60" width="120" height="12" fontName="Arial" fontSize="9.0" pattern="dd/MM/yyyy">
 			<expression><![CDATA[$P{closingDate}]]></expression>
 		</element>
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -129,8 +130,10 @@
 		<element kind="staticText" uuid="1aa16ae9-20fd-4819-af13-bcfda6bfea13" x="20" y="65" width="150" height="12" fontName="Arial" fontSize="9.0" bold="true">
 			<text><![CDATA[State:]]></text>
 		</element>
-		<element kind="textField" uuid="faff9242-8352-4bed-96d2-3875969b6c64" x="175" y="65" width="320" height="12" fontName="Arial" fontSize="9.0">
+		<element kind="textField" uuid="faff9242-8352-4bed-96d2-3875969b6c64" x="380" y="65" width="115" height="12" fontName="Arial" fontSize="9.0" hTextAlign="Right">
 			<expression><![CDATA[$P{differenceStatus}]]></expression>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</summary>

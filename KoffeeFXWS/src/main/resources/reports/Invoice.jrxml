@@ -17,12 +17,13 @@
 	<parameter name="invoiceNumber" class="java.lang.String"/>
 	<parameter name="invoiceDate" class="java.time.LocalDate"/>
 	<parameter name="companyEmail" class="java.lang.String"/>
+	<parameter name="customerEmail" class="java.lang.String"/>
 	<query language="sql"><![CDATA[]]></query>
 	<field name="productName" class="java.lang.String"/>
 	<field name="quantity" class="java.lang.Integer"/>
 	<field name="unitPrice" class="java.lang.Double"/>
 	<field name="subtotal" class="java.lang.Double"/>
-	<title height="175" splitType="Stretch">
+	<title height="130" splitType="Stretch">
 		<element kind="rectangle" uuid="b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6" x="0" y="0" width="535" height="50" backcolor="#1F4E78">
 			<pen lineWidth="0.0"/>
 		</element>
@@ -36,29 +37,29 @@
 		<element kind="textField" uuid="f5a6b7c8-d9e0-f1a2-b3c4-d5e6f7a8b9ca" x="20" y="73" width="350" height="10" fontName="Arial" fontSize="8.0" blankWhenNull="true">
 			<expression><![CDATA[$P{companyPhoneNumber}]]></expression>
 		</element>
-		<element kind="staticText" uuid="a6b7c8d9-e0f1-a2b3-c4d5-e6f7a8b9cadb" x="420" y="15" width="40" height="12" fontName="Arial" fontSize="9.0" bold="true">
+		<element kind="staticText" uuid="a6b7c8d9-e0f1-a2b3-c4d5-e6f7a8b9cadb" x="420" y="15" width="40" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0" bold="true">
 			<text><![CDATA[Invoice]]></text>
 		</element>
-		<element kind="textField" uuid="b7c8d9e0-f1a2-b3c4-d5e6-f7a8b9cadbec" x="463" y="15" width="72" height="12" fontName="Arial" fontSize="9.0">
+		<element kind="textField" uuid="b7c8d9e0-f1a2-b3c4-d5e6-f7a8b9cadbec" x="463" y="15" width="72" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0">
 			<expression><![CDATA[$P{invoiceNumber}]]></expression>
 		</element>
-		<element kind="staticText" uuid="c8d9e0f1-a2b3-c4d5-e6f7-a8b9cadbecfd" x="420" y="30" width="40" height="12" fontName="Arial" fontSize="9.0" bold="true">
+		<element kind="staticText" uuid="c8d9e0f1-a2b3-c4d5-e6f7-a8b9cadbecfd" x="420" y="30" width="40" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0" bold="true">
 			<text><![CDATA[Date:]]></text>
 		</element>
-		<element kind="textField" uuid="d9e0f1a2-b3c4-d5e6-f7a8-b9cadbecfde0" x="463" y="30" width="72" height="12" fontName="Arial" fontSize="9.0" pattern="dd/MM/yyyy">
+		<element kind="textField" uuid="d9e0f1a2-b3c4-d5e6-f7a8-b9cadbecfde0" x="463" y="30" width="72" height="12" forecolor="#FFFFFF" fontName="Arial" fontSize="9.0" pattern="dd/MM/yyyy">
 			<expression><![CDATA[$P{invoiceDate}]]></expression>
 		</element>
-		<element kind="staticText" uuid="e0f1a2b3-c4d5-e6f7-a8b9-cadbecfde0f1" x="20" y="90" width="60" height="12" fontName="Arial" fontSize="9.0" bold="true">
+		<element kind="staticText" uuid="e0f1a2b3-c4d5-e6f7-a8b9-cadbecfde0f1" x="20" y="90" width="30" height="12" fontName="Arial" fontSize="9.0" bold="true">
 			<text><![CDATA[Client:]]></text>
 		</element>
-		<element kind="textField" uuid="f1a2b3c4-d5e6-f7a8-b9ca-dbecfde0f1a2" x="80" y="90" width="290" height="12" fontName="Arial" fontSize="9.0">
+		<element kind="textField" uuid="f1a2b3c4-d5e6-f7a8-b9ca-dbecfde0f1a2" x="50" y="90" width="290" height="12" fontName="Arial" fontSize="9.0">
 			<expression><![CDATA[$P{customerName}]]></expression>
 		</element>
-		<element kind="staticText" uuid="a2b3c4d5-e6f7-a8b9-cadb-ecfde0f1a2b3" x="20" y="105" width="60" height="12" fontName="Arial" fontSize="9.0" bold="true">
+		<element kind="staticText" uuid="a2b3c4d5-e6f7-a8b9-cadb-ecfde0f1a2b3" x="20" y="105" width="30" height="12" fontName="Arial" fontSize="9.0" bold="true">
 			<text><![CDATA[Email:]]></text>
 		</element>
-		<element kind="textField" uuid="b3c4d5e6-f7a8-b9ca-dbec-fde0f1a2b3c4" x="80" y="105" width="290" height="12" fontName="Arial" fontSize="9.0">
-			<expression><![CDATA[$P{companyEmail}]]></expression>
+		<element kind="textField" uuid="b3c4d5e6-f7a8-b9ca-dbec-fde0f1a2b3c4" x="50" y="105" width="290" height="12" fontName="Arial" fontSize="9.0">
+			<expression><![CDATA[$P{customerEmail}]]></expression>
 		</element>
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</title>
@@ -98,6 +99,14 @@
 		</band>
 	</detail>
 	<lastPageFooter height="150" splitType="Stretch">
+		<element kind="rectangle" uuid="5b6c7d8e-9f0a-1b2c-3d4e-5f6a7b8c9de0" x="0" y="110" width="535" height="40" backcolor="#1F4E78">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="36aa233d-4305-48e6-974a-1bbf89bb3c8f" x="20" y="120" width="495" height="20" forecolor="#FFFFFF" fontName="Arial" fontSize="10.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[We loved having you here—come back hungry!]]></text>
+		</element>
+	</lastPageFooter>
+	<summary height="105">
 		<element kind="rectangle" uuid="4a5b6c7d-8e9f-0a1b-2c3d-4e5f6a7b8c9d" x="0" y="0" width="535" height="105" backcolor="#E8F0F8">
 			<pen lineWidth="0.5" lineColor="#1F4E78"/>
 		</element>
@@ -135,15 +144,10 @@
 		<element kind="staticText" uuid="0cd18a17-e963-4de2-b96a-29745bef5928" x="20" y="90" width="150" height="10" forecolor="#333333" fontName="Arial" fontSize="8.0" bold="true">
 			<text><![CDATA[Payment Method:]]></text>
 		</element>
-		<element kind="textField" uuid="a6573890-c0df-4fe9-b271-2495419f789f" x="170" y="90" width="345" height="10" fontName="Arial" fontSize="8.0">
+		<element kind="textField" uuid="a6573890-c0df-4fe9-b271-2495419f789f" x="380" y="90" width="135" height="10" fontName="Arial" fontSize="8.0" hTextAlign="Right">
 			<expression><![CDATA[$P{paymentMethod}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
 		</element>
-		<element kind="rectangle" uuid="5b6c7d8e-9f0a-1b2c-3d4e-5f6a7b8c9de0" x="0" y="110" width="535" height="40" backcolor="#1F4E78">
-			<pen lineWidth="0.0"/>
-		</element>
-		<element kind="staticText" uuid="36aa233d-4305-48e6-974a-1bbf89bb3c8f" x="20" y="120" width="495" height="20" forecolor="#FFFFFF" fontName="Arial" fontSize="10.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-			<text><![CDATA[We loved having you here—come back hungry!]]></text>
-		</element>
-		<property name="com.jaspersoft.studio.unit.height" value="px"/>
-	</lastPageFooter>
+	</summary>
 </jasperReport>

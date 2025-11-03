@@ -148,6 +148,17 @@ public class ReportService {
                     "paymentMethod",
                     invoice.getPaymentMethod() != null ? invoice.getPaymentMethod() : "CASH");
 
+            // Email del cliente
+            String customerEmail = "N/A";
+            Respuesta customerResp = customerService.getCustomer(order.getCustomerId());
+            if (customerResp.getEstado()) {
+                CustomerDTO customer = (CustomerDTO) customerResp.getResultado("Customer");
+                if (customer != null && customer.getEmail() != null) {
+                    customerEmail = customer.getEmail();
+                }
+            }
+            parameters.put("customerEmail", customerEmail);
+
             // Montos calculados (NO tasas)
             parameters.put("subtotal", invoice.getSubtotal() != null ? invoice.getSubtotal() : 0.0);
             parameters.put(

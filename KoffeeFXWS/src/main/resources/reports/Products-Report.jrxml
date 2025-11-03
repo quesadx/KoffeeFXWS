@@ -140,7 +140,7 @@
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</band>
 	</detail>
-	<pageFooter height="20" splitType="Stretch">
+	<lastPageFooter height="18" splitType="Stretch">
 		<element kind="line" uuid="d8e9f0a1-b2c3-d4e5-f6a7-b8c9d0e1f2a3" x="0" y="3" width="802" height="1" forecolor="#1F4E78"/>
 		<element kind="textField" uuid="e9f0a1b2-c3d4-e5f6-a7b8-c9d0e1f2a3b4" x="20" y="6" width="400" height="12" fontName="Arial" fontSize="8.0">
 			<expression><![CDATA["Page " + $V{PAGE_NUMBER}]]></expression>
@@ -148,9 +148,6 @@
 		<element kind="textField" uuid="f0a1b2c3-d4e5-f6a7-b8c9-d0e1f2a3b4c5" x="650" y="6" width="152" height="12" fontName="Arial" fontSize="8.0" hTextAlign="Right">
 			<expression><![CDATA["User: " + $P{generatedByUser}]]></expression>
 		</element>
-		<property name="com.jaspersoft.studio.unit.height" value="px"/>
-	</pageFooter>
-	<lastPageFooter height="5" splitType="Stretch">
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</lastPageFooter>
 	<summary height="150" splitType="Stretch">
