@@ -1,59 +1,7 @@
 <!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
 <jasperReport name="Invoice" language="java" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50.0" bold="false" pdfFontName="Times-Bold"/>
-	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18.0" bold="false" pdfFontName="Times-Roman"/>
-	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14.0" bold="true"/>
-	<style name="Detail" mode="Transparent" fontName="Times New Roman"/>
-	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
-		<conditionalStyle mode="Opaque" backcolor="#EEEFF0">
-			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
-		</conditionalStyle>
-	</style>
-	<style name="Table">
-		<box>
-			<pen lineWidth="1.0" lineColor="#000000"/>
-			<topPen lineWidth="1.0" lineColor="#000000"/>
-			<leftPen lineWidth="1.0" lineColor="#000000"/>
-			<bottomPen lineWidth="1.0" lineColor="#000000"/>
-			<rightPen lineWidth="1.0" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Table_CH" mode="Opaque" backcolor="#CACED0">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-		<conditionalStyle backcolor="#D8D8D8">
-			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
-		</conditionalStyle>
-	</style>
-	<dataset name="tableDataset" uuid="f13e6d36-5148-4ecc-bbe3-3035def80980">
-		<query language="sql"><![CDATA[]]></query>
-		<field name="$F{firstName}" class="java.lang.String"/>
-		<field name="$F{lastName}" class="java.lang.String"/>
-	</dataset>
 	<parameter name="companyName" class="java.lang.String"/>
 	<parameter name="companyAddress" class="java.lang.String"/>
 	<parameter name="companyPhoneNumber" class="java.lang.String"/>
@@ -70,249 +18,132 @@
 	<parameter name="invoiceDate" class="java.time.LocalDate"/>
 	<parameter name="companyEmail" class="java.lang.String"/>
 	<query language="sql"><![CDATA[]]></query>
-	<!-- Header fields replaced by parameters -->
 	<field name="productName" class="java.lang.String"/>
 	<field name="quantity" class="java.lang.Integer"/>
 	<field name="unitPrice" class="java.lang.Double"/>
 	<field name="subtotal" class="java.lang.Double"/>
 	<title height="175" splitType="Stretch">
-		<element kind="staticText" uuid="57aed2b1-4f4e-40a3-a6ad-54dae8dd4c5a" x="0" y="100" width="84" height="25" fontSize="16.0" bold="true">
-			<text><![CDATA[Bill to:]]></text>
-			<property name="local_mesure_unitheight" value="pixel"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<element kind="rectangle" uuid="b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6" x="0" y="0" width="535" height="50" backcolor="#1F4E78">
+			<pen lineWidth="0.0"/>
 		</element>
-		<element kind="frame" uuid="20a0519a-f06e-4fb4-a4e6-41a5f650a2d3" x="10" y="125" width="100" height="45">
-			<element kind="textField" uuid="9862f927-ab34-49ac-86bf-9f0ecdb1e229" x="0" y="15" width="100" height="15">
-				<expression><![CDATA[$P{companyEmail}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			</element>
-			<element kind="textField" uuid="50bd33ae-b0a2-4768-9de2-d38056282c4f" x="0" y="30" width="100" height="15">
-				<expression><![CDATA[$P{companyPhoneNumber}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			</element>
-			<element kind="textField" uuid="5ad8c872-c0d6-43d7-a60e-77ac06efc0d1" x="0" y="0" width="100" height="15">
-				<expression><![CDATA[$P{customerName}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			</element>
+		<element kind="textField" uuid="c2d3e4f5-a6b7-c8d9-e0f1-a2b3c4d5e6f7" x="20" y="5" width="350" height="40" forecolor="#FFFFFF" fontName="Arial" fontSize="16.0" bold="true" vTextAlign="Middle">
+			<expression><![CDATA[$P{companyName}]]></expression>
 		</element>
-		<element kind="frame" uuid="43082c12-edfc-4637-905f-2280d4f4c6d4" positionType="FixRelativeToBottom" mode="Opaque" x="-20" y="-20" width="595" height="100" backcolor="#E1E1E1">
-			<element kind="textField" uuid="f2a327ef-e48f-47bb-8094-79553deed2ce" x="100" y="40" width="185" height="30">
-				<expression><![CDATA[$P{companyAddress}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			</element>
-			<element kind="textField" uuid="eb543f67-0236-45cc-9425-5ea260c53f09" x="100" y="10" width="185" height="30" fontSize="19.0" bold="true">
-				<expression><![CDATA[$P{companyName}]]></expression>
-			</element>
-			<element kind="textField" uuid="04b5b0d9-e2d1-46c8-bb96-5782452ac9a0" x="100" y="70" width="185" height="15">
-				<expression><![CDATA[$P{companyPhoneNumber}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			</element>
-			<element kind="staticText" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8" x="420" y="31" width="50" height="20" hTextAlign="Right">
-				<text><![CDATA[Date:]]></text>
-				<box rightPadding="4"/>
-			</element>
-			<element kind="staticText" uuid="0b3f9342-da78-4cfa-9fc5-2301c4749678" x="420" y="51" width="50" height="20" hTextAlign="Right">
-				<text><![CDATA[Invoice #]]></text>
-				<box rightPadding="4"/>
-			</element>
-			<element kind="textField" uuid="ce4573e8-bda0-43f6-ae7c-5863b86bf333" x="470" y="51" width="90" height="20">
-				<expression><![CDATA[$P{invoiceNumber}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			</element>
-			<element kind="textField" uuid="3fd76419-06af-4f34-be25-d7f178f80ac2" x="470" y="30" width="90" height="20" pattern="MMMM d, yyyy">
-				<expression><![CDATA[$P{invoiceDate}]]></expression>
-				<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			</element>
-			<element kind="image" uuid="27183d78-9464-44fd-9a79-df8f1144b62a" x="30" y="20" width="50" height="50">
-				<expression><![CDATA["/icons/pixelarticons--mood-happy.png"]]></expression>
-			</element>
+		<element kind="line" uuid="d3e4f5a6-b7c8-d9e0-f1a2-b3c4d5e6f7a8" x="0" y="52" width="535" height="1" forecolor="#1F4E78"/>
+		<element kind="textField" uuid="e4f5a6b7-c8d9-e0f1-a2b3-c4d5e6f7a8b9" x="20" y="60" width="350" height="10" fontName="Arial" fontSize="8.0" blankWhenNull="true">
+			<expression><![CDATA[$P{companyAddress}]]></expression>
 		</element>
-		<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
-	</title>
-	<columnHeader height="51">
-		<element kind="staticText" uuid="b22d9aeb-4755-4d6b-8deb-b793f3ae1345" x="0" y="5" width="290" height="20">
-			<text><![CDATA[Product]]></text>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		<element kind="textField" uuid="f5a6b7c8-d9e0-f1a2-b3c4-d5e6f7a8b9ca" x="20" y="73" width="350" height="10" fontName="Arial" fontSize="8.0" blankWhenNull="true">
+			<expression><![CDATA[$P{companyPhoneNumber}]]></expression>
 		</element>
-		<element kind="staticText" uuid="ca82b20e-f49b-4538-af70-40e3cae610ac" x="290" y="5" width="60" height="20" hTextAlign="Center">
-			<text><![CDATA[Quantity]]></text>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		<element kind="staticText" uuid="a6b7c8d9-e0f1-a2b3-c4d5-e6f7a8b9cadb" x="420" y="15" width="40" height="12" fontName="Arial" fontSize="9.0" bold="true">
+			<text><![CDATA[Invoice]]></text>
 		</element>
-		<element kind="staticText" uuid="f5ff8444-3cf2-43ec-bf77-783bc1ffb7c9" x="350" y="5" width="100" height="20" hTextAlign="Right">
-			<text><![CDATA[Unit Price]]></text>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<element kind="textField" uuid="b7c8d9e0-f1a2-b3c4-d5e6-f7a8b9cadbec" x="463" y="15" width="72" height="12" fontName="Arial" fontSize="9.0">
+			<expression><![CDATA[$P{invoiceNumber}]]></expression>
 		</element>
-		<element kind="staticText" uuid="0a334b9a-0d9f-44ed-92da-b3826fc8dc97" x="450" y="5" width="105" height="20" hTextAlign="Right">
-			<text><![CDATA[Subtotal]]></text>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<element kind="staticText" uuid="c8d9e0f1-a2b3-c4d5-e6f7-a8b9cadbecfd" x="420" y="30" width="40" height="12" fontName="Arial" fontSize="9.0" bold="true">
+			<text><![CDATA[Date:]]></text>
 		</element>
-		<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.spreadsheet.SpreadsheetLayout"/>
-	</columnHeader>
-	<detail>
-		<band height="57">
-			<element kind="textField" uuid="fa19520a-93a2-4b4d-8ad5-68e255e9328d" x="0" y="0" width="290" height="57">
-				<expression><![CDATA[$F{productName}]]></expression>
-				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="668944b8-cd6e-410a-aae4-83aa659c6614"/>
-				<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			</element>
-			<element kind="textField" uuid="ce58b30c-e3b9-460c-b32b-6810e1c75045" x="290" y="0" width="60" height="57" hTextAlign="Center">
-				<expression><![CDATA[$F{quantity}]]></expression>
-				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="23c0f74b-a68d-4a33-b0e2-77c741baea94"/>
-			</element>
-			<element kind="textField" uuid="0b44af61-5659-4358-b5e2-075c8e7433b1" x="350" y="0" width="100" height="57" hTextAlign="Right">
-				<expression><![CDATA[$F{unitPrice}]]></expression>
-				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1bfaac3f-cca6-4e9a-9551-563490c7519f"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			</element>
-			<element kind="textField" uuid="fec85f06-f908-45c5-a68b-a355b403e066" x="450" y="0" width="105" height="57" hTextAlign="Right">
-				<expression><![CDATA[$F{subtotal}]]></expression>
-				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="697d15f6-d245-4eb8-bd06-7a0030f6c8de"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			</element>
-			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.spreadsheet.SpreadsheetLayout"/>
-		</band>
-	</detail>
-	<lastPageFooter height="206">
-		<element kind="staticText" uuid="8f0293cf-1cf1-46b9-8acc-b0bc9ff2cd70" x="0" y="0" width="250" height="20">
-			<text><![CDATA[Subtotal]]></text>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<element kind="textField" uuid="d9e0f1a2-b3c4-d5e6-f7a8-b9cadbecfde0" x="463" y="30" width="72" height="12" fontName="Arial" fontSize="9.0" pattern="dd/MM/yyyy">
+			<expression><![CDATA[$P{invoiceDate}]]></expression>
 		</element>
-		<element kind="textField" uuid="7c2d100c-97c9-4768-8e3c-6c6ddcc34380" x="350" y="0" width="105" height="20" hTextAlign="Center">
-			<expression><![CDATA[$P{subtotal}]]></expression>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<element kind="staticText" uuid="e0f1a2b3-c4d5-e6f7-a8b9-cadbecfde0f1" x="20" y="90" width="60" height="12" fontName="Arial" fontSize="9.0" bold="true">
+			<text><![CDATA[Client:]]></text>
 		</element>
-		<element kind="staticText" uuid="39e8dd66-c9c9-4021-b507-d04d300bee54" x="0" y="20" width="250" height="20">
-			<text><![CDATA[Tax]]></text>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<element kind="textField" uuid="f1a2b3c4-d5e6-f7a8-b9ca-dbecfde0f1a2" x="80" y="90" width="290" height="12" fontName="Arial" fontSize="9.0">
+			<expression><![CDATA[$P{customerName}]]></expression>
 		</element>
-		<element kind="textField" uuid="104a1961-0e1e-4adf-ad00-834549e4d1e1" x="350" y="20" width="105" height="20" hTextAlign="Center">
-			<expression><![CDATA[$P{taxRate}]]></expression>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<element kind="staticText" uuid="a2b3c4d5-e6f7-a8b9-cadb-ecfde0f1a2b3" x="20" y="105" width="60" height="12" fontName="Arial" fontSize="9.0" bold="true">
+			<text><![CDATA[Email:]]></text>
 		</element>
-		<element kind="staticText" uuid="2aab8eaa-e36f-4897-8b3c-128d8e0e541c" x="0" y="40" width="250" height="20">
-			<text><![CDATA[Service]]></text>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="textField" uuid="6a18aef9-1ece-4a2b-adac-8f2e1c0c7337" x="350" y="40" width="105" height="20" hTextAlign="Center">
-			<expression><![CDATA[$P{serviceRate}]]></expression>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="staticText" uuid="fc39494c-cafe-403f-a9c7-b4aa4bc9648e" x="0" y="60" width="250" height="20">
-			<text><![CDATA[Discount]]></text>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="line" uuid="001da208-601e-4e6c-b6d7-63e999f3dd30" x="0" y="80" width="555" height="1">
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="textField" uuid="89df5cf6-28d0-483c-85d8-56d29ac45932" x="350" y="85" width="105" height="25" hTextAlign="Center">
-			<expression><![CDATA[$P{total}]]></expression>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="staticText" uuid="9f929867-fbf6-4e90-8cf0-1324f73ced3b" x="0" y="80" width="250" height="25" bold="true">
-			<text><![CDATA[Total]]></text>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="textField" uuid="650042f7-8301-4c0e-b656-c79cde9b9140" x="350" y="60" width="105" height="20" hTextAlign="Center">
-			<expression><![CDATA[$P{discountRate}]]></expression>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-		</element>
-		<element kind="staticText" uuid="0cd18a17-e963-4de2-b96a-29745bef5928" x="0" y="115" width="150" height="20">
-			<text><![CDATA[Payment Method]]></text>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="textField" uuid="a6573890-c0df-4fe9-b271-2495419f789f" x="150" y="115" width="150" height="20">
-			<expression><![CDATA[$P{paymentMethod}]]></expression>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="staticText" uuid="91823b0b-c398-4154-aa8c-0e183580ad1e" x="0" y="135" width="150" height="20">
-			<text><![CDATA[Amount Received]]></text>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="textField" uuid="5f884911-30d7-41d1-84a9-91e8ffa19ef5" x="150" y="135" width="150" height="20">
-			<expression><![CDATA[$P{amountReceived}]]></expression>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="staticText" uuid="4223bd26-3890-4c6c-a6ba-5665a8612f38" x="0" y="155" width="150" height="20">
-			<text><![CDATA[Change]]></text>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="textField" uuid="07248ad8-415d-43f0-80d6-0037801a2e33" x="150" y="155" width="150" height="20">
-			<expression><![CDATA[$P{changeAmount}]]></expression>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		</element>
-		<element kind="staticText" uuid="36aa233d-4305-48e6-974a-1bbf89bb3c8f" positionType="FixRelativeToBottom" mode="Opaque" x="0" y="186" width="555" height="20" forecolor="#BFBFBF" backcolor="#EFEFEF" fontName="Serif" fontSize="15.0" italic="true" hTextAlign="Center" vTextAlign="Middle">
-			<text><![CDATA[Your taste buds thank you. So do we!]]></text>
-			<property name="com.jaspersoft.studio.unit.x" value="px"/>
-			<property name="com.jaspersoft.studio.unit.y" value="px"/>
-			<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<element kind="textField" uuid="b3c4d5e6-f7a8-b9ca-dbec-fde0f1a2b3c4" x="80" y="105" width="290" height="12" fontName="Arial" fontSize="9.0">
+			<expression><![CDATA[$P{companyEmail}]]></expression>
 		</element>
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
-		<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+	</title>
+	<columnHeader height="20" splitType="Stretch">
+		<element kind="rectangle" uuid="b3c4d5e6-f7a8-b9ca-dbec-fde0f1a2b3c4" x="0" y="0" width="535" height="20" backcolor="#D9E8F5">
+			<pen lineWidth="0.5" lineColor="#1F4E78"/>
+		</element>
+		<element kind="staticText" uuid="c4d5e6f7-a8b9-cadb-ecfd-e0f1a2b3c4d5" x="0" y="2" width="290" height="16" fontName="Arial" fontSize="9.0" bold="true" vTextAlign="Middle">
+			<text><![CDATA[Product]]></text>
+		</element>
+		<element kind="staticText" uuid="d5e6f7a8-b9ca-dbec-fde0-f1a2b3c4d5e6" x="290" y="2" width="60" height="16" fontName="Arial" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Quantity]]></text>
+		</element>
+		<element kind="staticText" uuid="e6f7a8b9-cadb-ecfd-e0f1-a2b3c4d5e6f7" x="350" y="2" width="100" height="16" fontName="Arial" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Unit Price]]></text>
+		</element>
+		<element kind="staticText" uuid="f7a8b9ca-dbec-fde0-f1a2-b3c4d5e6f7a8" x="450" y="2" width="85" height="16" fontName="Arial" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Subtotal]]></text>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<element kind="textField" uuid="fa19520a-93a2-4b4d-8ad5-68e255e9328d" x="0" y="0" width="290" height="18" fontName="Arial" fontSize="9.0" vTextAlign="Middle">
+				<expression><![CDATA[$F{productName}]]></expression>
+			</element>
+			<element kind="textField" uuid="ce58b30c-e3b9-460c-b32b-6810e1c75045" x="290" y="0" width="60" height="18" fontName="Arial" fontSize="9.0" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{quantity}]]></expression>
+			</element>
+			<element kind="textField" uuid="0b44af61-5659-4358-b5e2-075c8e7433b1" x="350" y="0" width="100" height="18" fontName="Arial" fontSize="9.0" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{unitPrice}]]></expression>
+			</element>
+			<element kind="textField" uuid="fec85f06-f908-45c5-a68b-a355b403e066" x="450" y="0" width="85" height="18" fontName="Arial" fontSize="9.0" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{subtotal}]]></expression>
+			</element>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</detail>
+	<lastPageFooter height="150" splitType="Stretch">
+		<element kind="rectangle" uuid="4a5b6c7d-8e9f-0a1b-2c3d-4e5f6a7b8c9d" x="0" y="0" width="535" height="105" backcolor="#E8F0F8">
+			<pen lineWidth="0.5" lineColor="#1F4E78"/>
+		</element>
+		<element kind="staticText" uuid="8f0293cf-1cf1-46b9-8acc-b0bc9ff2cd70" x="20" y="8" width="150" height="12" fontName="Arial" fontSize="9.0" bold="true">
+			<text><![CDATA[Subtotal:]]></text>
+		</element>
+		<element kind="textField" uuid="7c2d100c-97c9-4768-8e3c-6c6ddcc34380" x="380" y="8" width="135" height="12" fontName="Arial" fontSize="9.0" hTextAlign="Right">
+			<expression><![CDATA[$P{subtotal}]]></expression>
+		</element>
+		<element kind="staticText" uuid="39e8dd66-c9c9-4021-b507-d04d300bee54" x="20" y="23" width="150" height="12" fontName="Arial" fontSize="9.0" bold="true">
+			<text><![CDATA[Tax:]]></text>
+		</element>
+		<element kind="textField" uuid="104a1961-0e1e-4adf-ad00-834549e4d1e1" x="380" y="23" width="135" height="12" fontName="Arial" fontSize="9.0" hTextAlign="Right">
+			<expression><![CDATA[$P{taxRate}]]></expression>
+		</element>
+		<element kind="staticText" uuid="2aab8eaa-e36f-4897-8b3c-128d8e0e541c" x="20" y="38" width="150" height="12" fontName="Arial" fontSize="9.0" bold="true">
+			<text><![CDATA[Service:]]></text>
+		</element>
+		<element kind="textField" uuid="6a18aef9-1ece-4a2b-adac-8f2e1c0c7337" x="380" y="38" width="135" height="12" fontName="Arial" fontSize="9.0" hTextAlign="Right">
+			<expression><![CDATA[$P{serviceRate}]]></expression>
+		</element>
+		<element kind="staticText" uuid="fc39494c-cafe-403f-a9c7-b4aa4bc9648e" x="20" y="53" width="150" height="12" fontName="Arial" fontSize="9.0" bold="true">
+			<text><![CDATA[Discount:]]></text>
+		</element>
+		<element kind="textField" uuid="650042f7-8301-4c0e-b656-c79cde9b9140" x="380" y="53" width="135" height="12" fontName="Arial" fontSize="9.0" hTextAlign="Right">
+			<expression><![CDATA[$P{discountRate}]]></expression>
+		</element>
+		<element kind="line" uuid="001da208-601e-4e6c-b6d7-63e999f3dd30" x="20" y="68" width="495" height="1" forecolor="#1F4E78"/>
+		<element kind="staticText" uuid="9f929867-fbf6-4e90-8cf0-1324f73ced3b" x="20" y="72" width="150" height="16" forecolor="#1F4E78" fontName="Arial" fontSize="11.0" bold="true">
+			<text><![CDATA[Total:]]></text>
+		</element>
+		<element kind="textField" uuid="89df5cf6-28d0-483c-85d8-56d29ac45932" x="380" y="72" width="135" height="16" forecolor="#1F4E78" fontName="Arial" fontSize="11.0" bold="true" hTextAlign="Right">
+			<expression><![CDATA[$P{total}]]></expression>
+		</element>
+		<element kind="staticText" uuid="0cd18a17-e963-4de2-b96a-29745bef5928" x="20" y="90" width="150" height="10" forecolor="#333333" fontName="Arial" fontSize="8.0" bold="true">
+			<text><![CDATA[Payment Method:]]></text>
+		</element>
+		<element kind="textField" uuid="a6573890-c0df-4fe9-b271-2495419f789f" x="170" y="90" width="345" height="10" fontName="Arial" fontSize="8.0">
+			<expression><![CDATA[$P{paymentMethod}]]></expression>
+		</element>
+		<element kind="rectangle" uuid="5b6c7d8e-9f0a-1b2c-3d4e-5f6a7b8c9de0" x="0" y="110" width="535" height="40" backcolor="#1F4E78">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="36aa233d-4305-48e6-974a-1bbf89bb3c8f" x="20" y="120" width="495" height="20" forecolor="#FFFFFF" fontName="Arial" fontSize="10.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[We loved having you here—come back hungry!]]></text>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</lastPageFooter>
 </jasperReport>

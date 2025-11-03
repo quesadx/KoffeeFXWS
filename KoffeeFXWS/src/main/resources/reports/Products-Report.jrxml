@@ -53,7 +53,7 @@
 			<expression><![CDATA[$P{companyName}]]></expression>
 		</element>
 		<element kind="textField" uuid="c3d4e5f6-a7b8-c9d0-e1f2-a3b4c5d6e7f8" x="550" y="8" width="232" height="24" forecolor="#FFFFFF" fontName="Arial" fontSize="12.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
-			<expression><![CDATA["Reporte de Productos"]]></expression>
+			<expression><![CDATA["Products Report"]]></expression>
 		</element>
 		<element kind="line" uuid="d4e5f6a7-b8c9-d0e1-f2a3-b4c5d6e7f8a9" x="0" y="42" width="802" height="1" forecolor="#1F4E78"/>
 		<element kind="textField" uuid="e5f6a7b8-c9d0-e1f2-a3b4-c5d6e7f8a9b0" x="20" y="50" width="762" height="12" fontName="Arial" fontSize="8.0" blankWhenNull="true">
@@ -63,7 +63,7 @@
 			<expression><![CDATA[$P{restaurantPhone} != null ? $P{restaurantPhone} : ""]]></expression>
 		</element>
 		<element kind="textField" uuid="a7b8c9d0-e1f2-a3b4-c5d6-e7f8a9b0c1d2" x="20" y="85" width="370" height="12" fontName="Arial" fontSize="9.0" bold="true">
-			<expression><![CDATA["Período: "]]></expression>
+			<expression><![CDATA["Period: "]]></expression>
 		</element>
 		<element kind="textField" uuid="b8c9d0e1-f2a3-b4c5-d6e7-f8a9b0c1d2e3" x="90" y="85" width="100" height="12" fontName="Arial" fontSize="9.0" pattern="dd/MM/yyyy">
 			<expression><![CDATA[$P{dateFrom}]]></expression>
@@ -75,7 +75,7 @@
 			<expression><![CDATA[$P{dateTo}]]></expression>
 		</element>
 		<element kind="textField" uuid="e1f2a3b4-c5d6-e7f8-a9b0-c1d2e3f4a5b6" x="550" y="85" width="70" height="12" fontName="Arial" fontSize="9.0" bold="true">
-			<expression><![CDATA["Generado: "]]></expression>
+			<expression><![CDATA["Generated at:"]]></expression>
 		</element>
 		<element kind="textField" uuid="f2a3b4c5-d6e7-f8a9-b0c1-d2e3f4a5b6c7" x="620" y="85" width="100" height="12" fontName="Arial" fontSize="9.0" pattern="dd/MM/yyyy">
 			<expression><![CDATA[$P{reportGeneratedAt}]]></expression>
@@ -93,19 +93,19 @@
 			<expression><![CDATA["#"]]></expression>
 		</element>
 		<element kind="textField" uuid="c5d6e7f8-a9b0-c1d2-e3f4-a5b6c7d8e9f0" x="50" y="2" width="250" height="16" fontName="Arial" fontSize="10.0" pdfFontName="Helvetica-Bold" bold="true" italic="false" vTextAlign="Middle">
-			<expression><![CDATA["Producto"]]></expression>
+			<expression><![CDATA["Product"]]></expression>
 		</element>
 		<element kind="textField" uuid="d6e7f8a9-b0c1-d2e3-f4a5-b6c7d8e9f0a1" x="305" y="2" width="150" height="16" fontName="Arial" fontSize="10.0" pdfFontName="Helvetica-Bold" bold="true" italic="false" vTextAlign="Middle">
-			<expression><![CDATA["Categoría"]]></expression>
+			<expression><![CDATA["Category"]]></expression>
 		</element>
 		<element kind="textField" uuid="e7f8a9b0-c1d2-e3f4-a5b6-c7d8e9f0a1b2" x="460" y="2" width="100" height="16" fontName="Arial" fontSize="10.0" pdfFontName="Helvetica-Bold" bold="true" italic="false" hTextAlign="Right" vTextAlign="Middle">
-			<expression><![CDATA["Cantidad"]]></expression>
+			<expression><![CDATA["Quantity"]]></expression>
 		</element>
 		<element kind="textField" uuid="f8a9b0c1-d2e3-f4a5-b6c7-d8e9f0a1b2c3" x="565" y="2" width="110" height="16" fontName="Arial" fontSize="10.0" pdfFontName="Helvetica-Bold" bold="true" italic="false" hTextAlign="Right" vTextAlign="Middle">
-			<expression><![CDATA["Precio Prom."]]></expression>
+			<expression><![CDATA["Avg. Price"]]></expression>
 		</element>
 		<element kind="textField" uuid="a9b0c1d2-e3f4-a5b6-c7d8-e9f0a1b2c3d4" x="680" y="2" width="117" height="16" fontName="Arial" fontSize="10.0" pdfFontName="Helvetica-Bold" bold="true" italic="false" hTextAlign="Right" vTextAlign="Middle">
-			<expression><![CDATA["Ingresos Totales"]]></expression>
+			<expression><![CDATA["Total Income"]]></expression>
 		</element>
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</columnHeader>
@@ -143,10 +143,10 @@
 	<pageFooter height="20" splitType="Stretch">
 		<element kind="line" uuid="d8e9f0a1-b2c3-d4e5-f6a7-b8c9d0e1f2a3" x="0" y="3" width="802" height="1" forecolor="#1F4E78"/>
 		<element kind="textField" uuid="e9f0a1b2-c3d4-e5f6-a7b8-c9d0e1f2a3b4" x="20" y="6" width="400" height="12" fontName="Arial" fontSize="8.0">
-			<expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+			<expression><![CDATA["Page " + $V{PAGE_NUMBER}]]></expression>
 		</element>
 		<element kind="textField" uuid="f0a1b2c3-d4e5-f6a7-b8c9-d0e1f2a3b4c5" x="650" y="6" width="152" height="12" fontName="Arial" fontSize="8.0" hTextAlign="Right">
-			<expression><![CDATA["Usuario: " + $P{generatedByUser}]]></expression>
+			<expression><![CDATA["User: " + $P{generatedByUser}]]></expression>
 		</element>
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</pageFooter>
@@ -158,30 +158,30 @@
 			<pen lineWidth="0.5" lineColor="#1F4E78"/>
 		</element>
 		<element kind="textField" uuid="d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a7" x="20" y="20" width="300" height="14" fontName="Arial" fontSize="11.0" bold="true">
-			<expression><![CDATA["RESUMEN DEL PERÍODO"]]></expression>
+			<expression><![CDATA["PERIOD SUMMARY"]]></expression>
 		</element>
 		<element kind="line" uuid="d2e3f4a5-b6c7-d8e9-f0a1-b2c3d4e5f6a8" x="20" y="36" width="762" height="1" forecolor="#1F4E78"/>
 		<element kind="textField" uuid="d4e5f6a7-b8c9-d0e1-f2a3-b4c5d6e7f8a9" x="40" y="45" width="250" height="12" fontName="Arial" fontSize="10.0" bold="true">
-			<expression><![CDATA["Total de Productos Diferentes:"]]></expression>
+			<expression><![CDATA["Total Unique Products:"]]></expression>
 		</element>
 		<element kind="textField" uuid="e5f6a7b8-c9d0-e1f2-a3b4-c5d6e7f8a9b0" x="680" y="45" width="100" height="12" fontName="Arial" fontSize="10.0" bold="true" hTextAlign="Right">
 			<expression><![CDATA[new java.text.DecimalFormat("#,##0").format($P{totalProductsSold})]]></expression>
 		</element>
 		<element kind="textField" uuid="f6a7b8c9-d0e1-f2a3-b4c5-d6e7f8a9b0c1" x="40" y="60" width="250" height="12" fontName="Arial" fontSize="10.0" bold="true">
-			<expression><![CDATA["Total de Unidades Vendidas:"]]></expression>
+			<expression><![CDATA["Total Units Sold:"]]></expression>
 		</element>
 		<element kind="textField" uuid="a7b8c9d0-e1f2-a3b4-c5d6-e7f8a9b0c1d2" x="680" y="60" width="100" height="12" fontName="Arial" fontSize="10.0" bold="true" hTextAlign="Right">
 			<expression><![CDATA[new java.text.DecimalFormat("#,##0").format($P{totalUnitsQuantity})]]></expression>
 		</element>
 		<element kind="textField" uuid="b8c9d0e1-f2a3-b4c5-d6e7-f8a9b0c1d2e3" x="40" y="75" width="250" height="12" fontName="Arial" fontSize="10.0" bold="true">
-			<expression><![CDATA["Total de Ingresos del Período:"]]></expression>
+			<expression><![CDATA["Total Income for the Period:"]]></expression>
 		</element>
 		<element kind="textField" uuid="c9d0e1f2-a3b4-c5d6-e7f8-a9b0c1d2e3f4" x="680" y="75" width="100" height="12" fontName="Arial" fontSize="10.0" bold="true" hTextAlign="Right">
 			<expression><![CDATA[$P{currency} + " " + new java.text.DecimalFormat("#,##0.00").format($P{totalRevenue})]]></expression>
 		</element>
 		<element kind="line" uuid="d3e4f5a6-b7c8-d9e0-f1a2-b3c4d5e6f7a9" x="20" y="100" width="762" height="1" forecolor="#1F4E78"/>
 		<element kind="textField" uuid="e1f2a3b4-c5d6-e7f8-a9b0-c1d2e3f4a5b6" x="40" y="110" width="350" height="12" fontName="Arial" fontSize="9.0" italic="true">
-			<expression><![CDATA["Reporte generado automáticamente por el sistema KoffeeFX"]]></expression>
+			<expression><![CDATA["Report automatically generated by the RestUNA system"]]></expression>
 		</element>
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</summary>
