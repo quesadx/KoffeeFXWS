@@ -9,6 +9,9 @@
 	<parameter name="subtotal" class="java.lang.Double"/>
 	<parameter name="discountRate" class="java.lang.Double"/>
 	<parameter name="taxRate" class="java.lang.Double"/>
+	<parameter name="taxAmount" class="java.lang.Double"/>
+	<parameter name="serviceAmount" class="java.lang.Double"/>
+	<parameter name="discountAmount" class="java.lang.Double"/>
 	<parameter name="total" class="java.lang.Double"/>
 	<parameter name="customerName" class="java.lang.String"/>
 	<parameter name="serviceRate" class="java.lang.Double"/>
@@ -113,32 +116,32 @@
 		<element kind="staticText" uuid="8f0293cf-1cf1-46b9-8acc-b0bc9ff2cd70" x="20" y="8" width="150" height="12" fontName="SansSerif" fontSize="9.0" bold="true">
 			<text><![CDATA[Subtotal:]]></text>
 		</element>
-		<element kind="textField" uuid="7c2d100c-97c9-4768-8e3c-6c6ddcc34380" x="380" y="8" width="135" height="12" fontName="SansSerif" fontSize="9.0" hTextAlign="Right" pattern="₡#,##0.00;-₡#,##0.00">
+		<element kind="textField" uuid="7c2d100c-97c9-4768-8e3c-6c6ddcc34380" x="380" y="8" width="135" height="12" fontName="SansSerif" fontSize="9.0" hTextAlign="Right">
 			<expression><![CDATA[$P{subtotal}]]></expression>
 		</element>
 		<element kind="staticText" uuid="39e8dd66-c9c9-4021-b507-d04d300bee54" x="20" y="23" width="150" height="12" fontName="SansSerif" fontSize="9.0" bold="true">
 			<text><![CDATA[Tax:]]></text>
 		</element>
-		<element kind="textField" uuid="104a1961-0e1e-4adf-ad00-834549e4d1e1" x="380" y="23" width="135" height="12" fontName="SansSerif" fontSize="9.0" hTextAlign="Right" pattern="₡#,##0.00;-₡#,##0.00">
+		<element kind="textField" uuid="104a1961-0e1e-4adf-ad00-834549e4d1e1" x="380" y="23" width="135" height="12" fontName="SansSerif" fontSize="9.0" hTextAlign="Right">
 			<expression><![CDATA[$P{taxAmount}]]></expression>
 		</element>
 		<element kind="staticText" uuid="2aab8eaa-e36f-4897-8b3c-128d8e0e541c" x="20" y="38" width="150" height="12" fontName="SansSerif" fontSize="9.0" bold="true">
 			<text><![CDATA[Service:]]></text>
 		</element>
-		<element kind="textField" uuid="6a18aef9-1ece-4a2b-adac-8f2e1c0c7337" x="380" y="38" width="135" height="12" fontName="SansSerif" fontSize="9.0" hTextAlign="Right" pattern="₡#,##0.00;-₡#,##0.00">
+		<element kind="textField" uuid="6a18aef9-1ece-4a2b-adac-8f2e1c0c7337" x="380" y="38" width="135" height="12" fontName="SansSerif" fontSize="9.0" hTextAlign="Right">
 			<expression><![CDATA[$P{serviceAmount}]]></expression>
 		</element>
 		<element kind="staticText" uuid="fc39494c-cafe-403f-a9c7-b4aa4bc9648e" x="20" y="53" width="150" height="12" fontName="SansSerif" fontSize="9.0" bold="true">
 			<text><![CDATA[Discount:]]></text>
 		</element>
-		<element kind="textField" uuid="650042f7-8301-4c0e-b656-c79cde9b9140" x="380" y="53" width="135" height="12" fontName="SansSerif" fontSize="9.0" hTextAlign="Right" pattern="₡#,##0.00;-₡#,##0.00">
+		<element kind="textField" uuid="650042f7-8301-4c0e-b656-c79cde9b9140" x="380" y="53" width="135" height="12" fontName="SansSerif" fontSize="9.0" hTextAlign="Right">
 			<expression><![CDATA[$P{discountAmount}]]></expression>
 		</element>
 		<element kind="line" uuid="001da208-601e-4e6c-b6d7-63e999f3dd30" x="20" y="68" width="495" height="1" forecolor="#1F4E78"/>
 		<element kind="staticText" uuid="9f929867-fbf6-4e90-8cf0-1324f73ced3b" x="20" y="72" width="150" height="16" forecolor="#1F4E78" fontName="SansSerif" fontSize="11.0" bold="true">
 			<text><![CDATA[Total:]]></text>
 		</element>
-		<element kind="textField" uuid="89df5cf6-28d0-483c-85d8-56d29ac45932" x="380" y="72" width="135" height="16" forecolor="#1F4E78" fontName="SansSerif" fontSize="11.0" bold="true" hTextAlign="Right" pattern="₡#,##0.00;-₡#,##0.00">
+		<element kind="textField" uuid="89df5cf6-28d0-483c-85d8-56d29ac45932" x="380" y="72" width="135" height="16" forecolor="#1F4E78" fontName="SansSerif" fontSize="11.0" bold="true" hTextAlign="Right">
 			<expression><![CDATA[$P{total}]]></expression>
 		</element>
 		<element kind="staticText" uuid="0cd18a17-e963-4de2-b96a-29745bef5928" x="20" y="90" width="150" height="10" forecolor="#333333" fontName="SansSerif" fontSize="8.0" bold="true">
