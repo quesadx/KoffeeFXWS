@@ -4,6 +4,9 @@
  */
 package cr.ac.una.koffeefxws.model;
 
+import java.io.Serializable;
+import java.util.List;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,59 +24,43 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
-import java.io.Serializable;
-import java.util.List;
 
 /**
- *
  * @author quesadx
  */
 @Entity
 @Table(name = "PRODUCT_GROUP")
 @XmlRootElement
-@NamedQueries(
-    {
-        @NamedQuery(
-            name = "ProductGroup.findAll",
-            query = "SELECT p FROM ProductGroup p"
-        ),
-        @NamedQuery(
+@NamedQueries({
+    @NamedQuery(name = "ProductGroup.findAll", query = "SELECT p FROM ProductGroup p"),
+    @NamedQuery(
             name = "ProductGroup.findById",
-            query = "SELECT p FROM ProductGroup p WHERE p.id = :id"
-        ),
-        @NamedQuery(
+            query = "SELECT p FROM ProductGroup p WHERE p.id = :id"),
+    @NamedQuery(
             name = "ProductGroup.findByName",
-            query = "SELECT p FROM ProductGroup p WHERE p.name = :name"
-        ),
-        @NamedQuery(
+            query = "SELECT p FROM ProductGroup p WHERE p.name = :name"),
+    @NamedQuery(
             name = "ProductGroup.findByShortName",
-            query = "SELECT p FROM ProductGroup p WHERE p.shortName = :shortName"
-        ),
-        @NamedQuery(
+            query = "SELECT p FROM ProductGroup p WHERE p.shortName = :shortName"),
+    @NamedQuery(
             name = "ProductGroup.findByIsQuickMenu",
-            query = "SELECT p FROM ProductGroup p WHERE p.isQuickMenu = :isQuickMenu"
-        ),
-        @NamedQuery(
+            query = "SELECT p FROM ProductGroup p WHERE p.isQuickMenu = :isQuickMenu"),
+    @NamedQuery(
             name = "ProductGroup.findByPurchaseFrequency",
-            query = "SELECT p FROM ProductGroup p WHERE p.purchaseFrequency = :purchaseFrequency"
-        ),
-    }
-)
+            query = "SELECT p FROM ProductGroup p WHERE p.purchaseFrequency = :purchaseFrequency"),
+})
 public class ProductGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+    // annotations to enforce field validation
     @Id
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "product_group_seq"
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_group_seq")
     @SequenceGenerator(
-        name = "product_group_seq",
-        sequenceName = "seq_product_group_id",
-        allocationSize = 1
-    )
+            name = "product_group_seq",
+            sequenceName = "seq_product_group_id",
+            allocationSize = 1)
     @Basic(optional = false)
     @Column(name = "PRODUCT_GROUP_ID")
     private Long id;
@@ -109,11 +96,7 @@ public class ProductGroup implements Serializable {
         this.id = productGroupId;
     }
 
-    public ProductGroup(
-        Long productGroupId,
-        String name,
-        Double purchaseFrequency
-    ) {
+    public ProductGroup(Long productGroupId, String name, Double purchaseFrequency) {
         this.id = productGroupId;
         this.name = name;
         this.purchaseFrequency = purchaseFrequency;
@@ -127,9 +110,7 @@ public class ProductGroup implements Serializable {
     public void actualizar(ProductGroupDTO dto) {
         this.name = dto.getName();
         this.shortName = dto.getShortName();
-        this.isQuickMenu = dto.getIsQuickMenu() != null && dto.getIsQuickMenu()
-            ? 'Y'
-            : 'N';
+        this.isQuickMenu = dto.getIsQuickMenu() != null && dto.getIsQuickMenu() ? 'Y' : 'N';
         this.purchaseFrequency = dto.getPurchaseFrequency();
     }
 
@@ -204,10 +185,8 @@ public class ProductGroup implements Serializable {
             return false;
         }
         ProductGroup other = (ProductGroup) object;
-        if (
-            (this.id == null && other.id != null) ||
-            (this.id != null && !this.id.equals(other.id))
-        ) {
+        if ((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -215,10 +194,6 @@ public class ProductGroup implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "cr.ac.una.koffeefxws.model.ProductGroup[ productGroupId=" +
-            id +
-            " ]"
-        );
+        return ("cr.ac.una.koffeefxws.model.ProductGroup[ productGroupId=" + id + " ]");
     }
 }

@@ -4,10 +4,12 @@
  */
 package cr.ac.una.koffeefxws.service;
 
-import cr.ac.una.koffeefxws.model.DiningArea;
-import cr.ac.una.koffeefxws.model.DiningAreaDTO;
-import cr.ac.una.koffeefxws.util.CodigoRespuesta;
-import cr.ac.una.koffeefxws.util.Respuesta;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
@@ -15,163 +17,114 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import cr.ac.una.koffeefxws.model.DiningArea;
+import cr.ac.una.koffeefxws.model.DiningAreaDTO;
+import cr.ac.una.koffeefxws.util.CodigoRespuesta;
+import cr.ac.una.koffeefxws.util.Respuesta;
 
 /**
- *
  * @author quesadx
  */
 @Stateless
 @LocalBean
 public class DiningAreaService {
 
-    private static final Logger LOG = Logger.getLogger(
-        DiningAreaService.class.getName()
-    );
+    private static final Logger LOG = Logger.getLogger(DiningAreaService.class.getName());
 
     @PersistenceContext(unitName = "KoffeeFXWSPU")
     private EntityManager em;
 
     public Respuesta getDiningArea(Long id) {
         try {
-            Query qryDiningArea = em.createNamedQuery(
-                "DiningArea.findById",
-                DiningArea.class
-            );
+            Query qryDiningArea = em.createNamedQuery("DiningArea.findById", DiningArea.class);
             qryDiningArea.setParameter("id", id);
 
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "",
-                "",
-                "DiningArea",
-                new DiningAreaDTO((DiningArea) qryDiningArea.getSingleResult())
-            );
+                    true,
+                    CodigoRespuesta.CORRECTO,
+                    "",
+                    "",
+                    "DiningArea",
+                    new DiningAreaDTO((DiningArea) qryDiningArea.getSingleResult()));
         } catch (NoResultException ex) {
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_NOENCONTRADO,
-                "No existe un área de comedor con el código ingresado.",
-                "getDiningArea NoResultException"
-            );
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No existe un área de comedor con el código ingresado.",
+                    "getDiningArea NoResultException");
         } catch (NonUniqueResultException ex) {
-            LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al consultar el área de comedor.",
-                ex
-            );
+            LOG.log(Level.SEVERE, "Ocurrió un error al consultar el área de comedor.", ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al consultar el área de comedor.",
-                "getDiningArea NonUniqueResultException"
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al consultar el área de comedor.",
+                    "getDiningArea NonUniqueResultException");
         } catch (Exception ex) {
-            LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al consultar el área de comedor.",
-                ex
-            );
+            LOG.log(Level.SEVERE, "Ocurrió un error al consultar el área de comedor.", ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al consultar el área de comedor.",
-                "getDiningArea " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al consultar el área de comedor.",
+                    "getDiningArea " + ex.getMessage());
         }
     }
 
     public Respuesta getDiningAreas() {
         try {
-            Query query = em.createNamedQuery(
-                "DiningArea.findAll",
-                DiningArea.class
-            );
-            List<DiningArea> diningAreas = (List<
-                DiningArea
-            >) query.getResultList();
+            Query query = em.createNamedQuery("DiningArea.findAll", DiningArea.class);
+            List<DiningArea> diningAreas = (List<DiningArea>) query.getResultList();
             List<DiningAreaDTO> diningAreasDto = new ArrayList<>();
             for (DiningArea diningArea : diningAreas) {
                 diningAreasDto.add(new DiningAreaDTO(diningArea));
             }
 
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "",
-                "",
-                "DiningAreas",
-                diningAreasDto
-            );
+                    true, CodigoRespuesta.CORRECTO, "", "", "DiningAreas", diningAreasDto);
         } catch (NoResultException ex) {
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_NOENCONTRADO,
-                "No existen áreas de comedor registradas.",
-                "getDiningAreas NoResultException"
-            );
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No existen áreas de comedor registradas.",
+                    "getDiningAreas NoResultException");
         } catch (Exception ex) {
-            LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al consultar las áreas de comedor.",
-                ex
-            );
+            LOG.log(Level.SEVERE, "Ocurrió un error al consultar las áreas de comedor.", ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al consultar las áreas de comedor.",
-                "getDiningAreas " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al consultar las áreas de comedor.",
+                    "getDiningAreas " + ex.getMessage());
         }
     }
 
     public Respuesta getActiveDiningAreas() {
         try {
-            Query query = em.createNamedQuery(
-                "DiningArea.findByIsActive",
-                DiningArea.class
-            );
+            Query query = em.createNamedQuery("DiningArea.findByIsActive", DiningArea.class);
             query.setParameter("isActive", 'Y');
-            List<DiningArea> diningAreas = (List<
-                DiningArea
-            >) query.getResultList();
+            List<DiningArea> diningAreas = (List<DiningArea>) query.getResultList();
             List<DiningAreaDTO> diningAreasDto = new ArrayList<>();
             for (DiningArea diningArea : diningAreas) {
                 diningAreasDto.add(new DiningAreaDTO(diningArea));
             }
 
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "",
-                "",
-                "DiningAreas",
-                diningAreasDto
-            );
+                    true, CodigoRespuesta.CORRECTO, "", "", "DiningAreas", diningAreasDto);
         } catch (NoResultException ex) {
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_NOENCONTRADO,
-                "No existen áreas de comedor activas.",
-                "getActiveDiningAreas NoResultException"
-            );
+                    false,
+                    CodigoRespuesta.ERROR_NOENCONTRADO,
+                    "No existen áreas de comedor activas.",
+                    "getActiveDiningAreas NoResultException");
         } catch (Exception ex) {
             LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al consultar las áreas de comedor activas.",
-                ex
-            );
+                    Level.SEVERE,
+                    "Ocurrió un error al consultar las áreas de comedor activas.",
+                    ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al consultar las áreas de comedor activas.",
-                "getActiveDiningAreas " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al consultar las áreas de comedor activas.",
+                    "getActiveDiningAreas " + ex.getMessage());
         }
     }
 
@@ -182,11 +135,10 @@ public class DiningAreaService {
                 diningArea = em.find(DiningArea.class, diningAreaDto.getId());
                 if (diningArea == null) {
                     return new Respuesta(
-                        false,
-                        CodigoRespuesta.ERROR_NOENCONTRADO,
-                        "No se encontró el área de comedor a modificar.",
-                        "guardarDiningArea NoResultException"
-                    );
+                            false,
+                            CodigoRespuesta.ERROR_NOENCONTRADO,
+                            "No se encontró el área de comedor a modificar.",
+                            "guardarDiningArea NoResultException");
                 }
                 diningArea.actualizar(diningAreaDto);
                 diningArea = em.merge(diningArea);
@@ -196,25 +148,19 @@ public class DiningAreaService {
             }
             em.flush();
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "",
-                "",
-                "DiningArea",
-                new DiningAreaDTO(diningArea)
-            );
+                    true,
+                    CodigoRespuesta.CORRECTO,
+                    "",
+                    "",
+                    "DiningArea",
+                    new DiningAreaDTO(diningArea));
         } catch (Exception ex) {
-            LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al guardar el área de comedor.",
-                ex
-            );
+            LOG.log(Level.SEVERE, "Ocurrió un error al guardar el área de comedor.", ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al guardar el área de comedor.",
-                "guardarDiningArea " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al guardar el área de comedor.",
+                    "guardarDiningArea " + ex.getMessage());
         }
     }
 
@@ -225,47 +171,37 @@ public class DiningAreaService {
                 diningArea = em.find(DiningArea.class, id);
                 if (diningArea == null) {
                     return new Respuesta(
-                        false,
-                        CodigoRespuesta.ERROR_NOENCONTRADO,
-                        "No se encontró el área de comedor a eliminar.",
-                        "eliminarDiningArea NoResultException"
-                    );
+                            false,
+                            CodigoRespuesta.ERROR_NOENCONTRADO,
+                            "No se encontró el área de comedor a eliminar.",
+                            "eliminarDiningArea NoResultException");
                 }
                 em.remove(diningArea);
             } else {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "Debe cargar el área de comedor a eliminar.",
-                    "eliminarDiningArea NoResultException"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "Debe cargar el área de comedor a eliminar.",
+                        "eliminarDiningArea NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
-            if (
-                ex.getCause() != null &&
-                ex.getCause().getCause().getClass() ==
-                SQLIntegrityConstraintViolationException.class
-            ) {
+            if (ex.getCause() != null
+                    && ex.getCause().getCause().getClass()
+                            == SQLIntegrityConstraintViolationException.class) {
                 return new Respuesta(
+                        false,
+                        CodigoRespuesta.ERROR_INTERNO,
+                        "No se puede eliminar el área de comedor porque tiene relaciones con otros registros.",
+                        "eliminarDiningArea " + ex.getMessage());
+            }
+            LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el área de comedor.", ex);
+            return new Respuesta(
                     false,
                     CodigoRespuesta.ERROR_INTERNO,
-                    "No se puede eliminar el área de comedor porque tiene relaciones con otros registros.",
-                    "eliminarDiningArea " + ex.getMessage()
-                );
-            }
-            LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al eliminar el área de comedor.",
-                ex
-            );
-            return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al eliminar el área de comedor.",
-                "eliminarDiningArea " + ex.getMessage()
-            );
+                    "Ocurrió un error al eliminar el área de comedor.",
+                    "eliminarDiningArea " + ex.getMessage());
         }
     }
 }

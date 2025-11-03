@@ -63,9 +63,9 @@ public class CustomerOrderDTO implements Serializable {
         if (customerOrder.getCustomerId() != null) {
             this.customerId = customerOrder.getCustomerId().getId();
             this.customerName =
-                customerOrder.getCustomerId().getFirstName() +
-                " " +
-                customerOrder.getCustomerId().getLastName();
+                    customerOrder.getCustomerId().getFirstName()
+                            + " "
+                            + customerOrder.getCustomerId().getLastName();
         }
 
         if (customerOrder.getDiningAreaId() != null) {
@@ -242,15 +242,13 @@ public class CustomerOrderDTO implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "CustomerOrderDTO{" +
-            "id=" +
-            id +
-            ", status=" +
-            status +
-            ", totalAmount=" +
-            totalAmount +
-            '}'
-        );
+        return ("CustomerOrderDTO{"
+                + "id="
+                + id
+                + ", status="
+                + status
+                + ", totalAmount="
+                + totalAmount
+                + '}');
     }
 }

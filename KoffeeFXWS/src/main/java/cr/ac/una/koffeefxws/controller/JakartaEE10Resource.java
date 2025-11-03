@@ -5,7 +5,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 
 /**
- *
  * @author nadie
  */
 @Path("jakartaee10")

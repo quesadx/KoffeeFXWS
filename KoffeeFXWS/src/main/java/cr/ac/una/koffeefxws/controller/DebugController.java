@@ -1,61 +1,48 @@
 package cr.ac.una.koffeefxws.controller;
 
-import cr.ac.una.koffeefxws.model.*;
-import cr.ac.una.koffeefxws.service.*;
-import cr.ac.una.koffeefxws.util.Respuesta;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import cr.ac.una.koffeefxws.model.*;
+import cr.ac.una.koffeefxws.service.*;
+import cr.ac.una.koffeefxws.util.Respuesta;
 
 /**
- *
  * @author quesadx
  */
 @Path("/debug")
 public class DebugController {
 
-    private static final Logger LOG = Logger.getLogger(
-        DebugController.class.getName()
-    );
+    private static final Logger LOG = Logger.getLogger(DebugController.class.getName());
 
-    @EJB
-    DiningTableService diningTableService;
+    @EJB DiningTableService diningTableService;
 
-    @EJB
-    AppUserService appUserService;
+    @EJB AppUserService appUserService;
 
-    @EJB
-    ProductService productService;
+    @EJB ProductService productService;
 
-    @EJB
-    ProductGroupService productGroupService;
+    @EJB ProductGroupService productGroupService;
 
-    @EJB
-    DiningAreaService diningAreaService;
+    @EJB DiningAreaService diningAreaService;
 
-    @EJB
-    CustomerService customerService;
+    @EJB CustomerService customerService;
 
-    @EJB
-    SystemParameterService systemParameterService;
+    @EJB SystemParameterService systemParameterService;
 
-    @EJB
-    RoleService roleService;
+    @EJB RoleService roleService;
 
-    @EJB
-    CashOpeningService cashOpeningService;
+    @EJB CashOpeningService cashOpeningService;
 
-    @EJB
-    CustomerOrderService customerOrderService;
+    @EJB CustomerOrderService customerOrderService;
 
-    @EJB
-    OrderItemService orderItemService;
+    @EJB OrderItemService orderItemService;
 
-    @EJB
-    InvoiceService invoiceService;
+    @EJB InvoiceService invoiceService;
 
     // ========== DINING TABLE ENDPOINTS ==========
 
@@ -65,14 +52,13 @@ public class DebugController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getDiningTable(@PathParam("id") Long id) {
         try {
-            cr.ac.una.koffeefxws.util.Respuesta res =
-                diningTableService.getDiningTable(id);
+            cr.ac.una.koffeefxws.util.Respuesta res = diningTableService.getDiningTable(id);
             return Response.ok(res).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting dining table", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -86,8 +72,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting dining tables", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -97,15 +83,13 @@ public class DebugController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response guardarDiningTable(DiningTableDTO diningTableDto) {
         try {
-            Respuesta res = diningTableService.guardarDiningTable(
-                diningTableDto
-            );
+            Respuesta res = diningTableService.guardarDiningTable(diningTableDto);
             return Response.ok(res).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving dining table", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -119,8 +103,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting dining table", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -137,25 +121,23 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting app user", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
     @GET
     @Path("/appUser/username/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAppUserByUsername(
-        @PathParam("username") String username
-    ) {
+    public Response getAppUserByUsername(@PathParam("username") String username) {
         try {
             Respuesta res = appUserService.getAppUserByUsername(username);
             return Response.ok(res).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting app user by username", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -169,8 +151,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting app users", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -185,8 +167,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving app user", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -200,8 +182,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting app user", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -217,8 +199,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting product", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -232,8 +214,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting products", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -248,8 +230,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving product", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -263,8 +245,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting product", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -280,8 +262,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting product group", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -295,8 +277,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting product groups", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -306,15 +288,13 @@ public class DebugController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response guardarProductGroup(ProductGroupDTO productGroupDto) {
         try {
-            Respuesta res = productGroupService.guardarProductGroup(
-                productGroupDto
-            );
+            Respuesta res = productGroupService.guardarProductGroup(productGroupDto);
             return Response.ok(res).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving product group", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -328,8 +308,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting product group", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -345,8 +325,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting dining area", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -360,8 +340,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting dining areas", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -376,8 +356,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving dining area", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -391,8 +371,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting dining area", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -408,8 +388,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting customer", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -423,8 +403,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting customers", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -439,8 +419,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving customer", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -454,8 +434,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting customer", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -471,8 +451,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting system parameter", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -481,15 +461,13 @@ public class DebugController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSystemParameterByName(@PathParam("name") String name) {
         try {
-            Respuesta res = systemParameterService.getSystemParameterByName(
-                name
-            );
+            Respuesta res = systemParameterService.getSystemParameterByName(name);
             return Response.ok(res).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting system parameter by name", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -503,8 +481,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting system parameters", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -512,19 +490,15 @@ public class DebugController {
     @Path("/systemParameter")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response guardarSystemParameter(
-        SystemParameterDTO systemParameterDto
-    ) {
+    public Response guardarSystemParameter(SystemParameterDTO systemParameterDto) {
         try {
-            Respuesta res = systemParameterService.guardarSystemParameter(
-                systemParameterDto
-            );
+            Respuesta res = systemParameterService.guardarSystemParameter(systemParameterDto);
             return Response.ok(res).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving system parameter", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -538,8 +512,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting system parameter", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -555,8 +529,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting role", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -570,8 +544,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting roles", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -586,8 +560,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving role", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -601,8 +575,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting role", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -618,8 +592,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting cash opening", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -633,8 +607,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting cash openings", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -648,8 +622,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting active cash opening", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -659,15 +633,13 @@ public class DebugController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response guardarCashOpening(CashOpeningDTO cashOpeningDto) {
         try {
-            Respuesta res = cashOpeningService.guardarCashOpening(
-                cashOpeningDto
-            );
+            Respuesta res = cashOpeningService.guardarCashOpening(cashOpeningDto);
             return Response.ok(res).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving cash opening", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -675,22 +647,17 @@ public class DebugController {
     @Path("/cashOpening/{id}/close")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response closeCashOpening(
-        @PathParam("id") Long id,
-        CashOpeningDTO cashOpeningDto
-    ) {
+    public Response closeCashOpening(@PathParam("id") Long id, CashOpeningDTO cashOpeningDto) {
         try {
-            Respuesta res = cashOpeningService.closeCashOpening(
-                id,
-                cashOpeningDto.getClosingAmount(),
-                cashOpeningDto.getNotes()
-            );
+            Respuesta res =
+                    cashOpeningService.closeCashOpening(
+                            id, cashOpeningDto.getClosingAmount(), cashOpeningDto.getNotes());
             return Response.ok(res).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error closing cash opening", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -704,8 +671,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting cash opening", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -721,8 +688,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting customer order", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -736,8 +703,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting customer orders", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -747,15 +714,13 @@ public class DebugController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response guardarCustomerOrder(CustomerOrderDTO customerOrderDto) {
         try {
-            Respuesta res = customerOrderService.guardarCustomerOrder(
-                customerOrderDto
-            );
+            Respuesta res = customerOrderService.guardarCustomerOrder(customerOrderDto);
             return Response.ok(res).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving customer order", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -769,8 +734,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting customer order", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -786,8 +751,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting order item", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -801,8 +766,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting order items", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -817,8 +782,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving order item", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -832,8 +797,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting order item", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -849,25 +814,23 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting invoice", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
     @GET
     @Path("/invoice/number/{invoiceNumber}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getInvoiceByNumber(
-        @PathParam("invoiceNumber") String invoiceNumber
-    ) {
+    public Response getInvoiceByNumber(@PathParam("invoiceNumber") String invoiceNumber) {
         try {
             Respuesta res = invoiceService.getInvoiceByNumber(invoiceNumber);
             return Response.ok(res).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting invoice by number", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -881,8 +844,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error getting invoices", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -897,8 +860,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error saving invoice", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 
@@ -912,8 +875,8 @@ public class DebugController {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error deleting invoice", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(ex.getMessage())
-                .build();
+                    .entity(ex.getMessage())
+                    .build();
         }
     }
 }

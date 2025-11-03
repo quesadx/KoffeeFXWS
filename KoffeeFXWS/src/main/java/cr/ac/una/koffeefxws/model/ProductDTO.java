@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
  * @author quesadx
  */
 public class ProductDTO implements Serializable {
@@ -46,11 +45,8 @@ public class ProductDTO implements Serializable {
         this.name = product.getName();
         this.shortName = product.getShortName();
         this.price = product.getPrice();
-        this.isQuickMenu =
-            product.getIsQuickMenu() != null &&
-            product.getIsQuickMenu().equals('Y');
-        this.isActive =
-            product.getIsActive() != null && product.getIsActive().equals('Y');
+        this.isQuickMenu = product.getIsQuickMenu() != null && product.getIsQuickMenu().equals('Y');
+        this.isActive = product.getIsActive() != null && product.getIsActive().equals('Y');
         this.createdAt = product.getCreatedAt();
         this.purchaseFrequency = product.getPurchaseFrequency();
         this.version = product.getVersion();

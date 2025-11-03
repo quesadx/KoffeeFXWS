@@ -1,5 +1,9 @@
 package cr.ac.una.koffeefxws.service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
 import jakarta.annotation.Resource;
@@ -16,16 +20,13 @@ import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import jakarta.mail.util.ByteArrayDataSource;
-import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * Stateless service responsible for sending email notifications via a container-managed
- * Jakarta Mail Session. Email delivery failures are logged but never propagate to callers
- * to avoid impacting core business flows.
+ * Stateless service responsible for sending email notifications via a container-managed Jakarta
+ * Mail Session. Email delivery failures are logged but never propagate to callers to avoid
+ * impacting core business flows.
  *
- * <p>JNDI configuration: a JavaMail session must be available at {@code mail/RestUNASession}.</p>
+ * <p>JNDI configuration: a JavaMail session must be available at {@code mail/RestUNASession}.
  */
 @Stateless
 @LocalBean
@@ -33,14 +34,13 @@ public class MailService {
 
     private static final Logger LOG = Logger.getLogger(MailService.class.getName());
 
-    /**
-     * Container-managed mail session (configure in Payara: JNDI name mail/RestUNASession).
-     */
+    /** Container-managed mail session (configure in Payara: JNDI name mail/RestUNASession). */
     @Resource(lookup = "mail/RestUNASession")
     private Session mailSession;
 
     /** Default From header if the server does not set one. */
     private static final String DEFAULT_FROM = "flowfxws@gmail.com"; // Es mío, soy Matteo
+
     // No me robe el correo profe
 
     // ---------------------------------------------------------------------
@@ -66,9 +66,11 @@ public class MailService {
         }
 
         try {
-            String subject = "RestUNA System - Invoice " + (invoiceNumber != null ? invoiceNumber : "");
+            String subject =
+                    "RestUNA System - Invoice " + (invoiceNumber != null ? invoiceNumber : "");
             String htmlBody = buildSimpleInvoiceHtml(invoiceNumber);
-            String attachmentName = "factura_" + (invoiceNumber != null ? invoiceNumber : "invoice") + ".pdf";
+            String attachmentName =
+                    "factura_" + (invoiceNumber != null ? invoiceNumber : "invoice") + ".pdf";
 
             sendEmailWithAttachment(recipientEmail, subject, htmlBody, pdfBytes, attachmentName);
             LOG.log(Level.INFO, "Invoice PDF email sent successfully to {0}", recipientEmail);
@@ -81,10 +83,16 @@ public class MailService {
     // Low-level send with attachment
     // ---------------------------------------------------------------------
 
-    private void sendEmailWithAttachment(String toEmail, String subject, String htmlBody, 
-                                         byte[] attachmentBytes, String attachmentName) throws MessagingException {
+    private void sendEmailWithAttachment(
+            String toEmail,
+            String subject,
+            String htmlBody,
+            byte[] attachmentBytes,
+            String attachmentName)
+            throws MessagingException {
         if (mailSession == null) {
-            LOG.warning("Mail session 'mail/RestUNASession' is not available; skipping email send.");
+            LOG.warning(
+                    "Mail session 'mail/RestUNASession' is not available; skipping email send.");
             return;
         }
 
@@ -124,7 +132,9 @@ public class MailService {
         LOG.log(Level.INFO, () -> "MAIL: Sending message to " + toEmail);
         Transport.send(msg);
         long t1 = System.currentTimeMillis();
-        LOG.log(Level.INFO, () -> "MAIL: Sent successfully to " + toEmail + " in " + (t1 - t0) + " ms");
+        LOG.log(
+                Level.INFO,
+                () -> "MAIL: Sent successfully to " + toEmail + " in " + (t1 - t0) + " ms");
     }
 
     private void configureSMTP() {
@@ -143,7 +153,8 @@ public class MailService {
             LOG.log(Level.INFO, () -> "MAIL: Configured SMTP host=" + host + ", port=" + port);
 
             if (host == null || host.isBlank() || "null".equalsIgnoreCase(host)) {
-                LOG.warning("MAIL: No SMTP host configured. Configure Payara JavaMail Session 'mail/RestUNASession'.");
+                LOG.warning(
+                        "MAIL: No SMTP host configured. Configure Payara JavaMail Session 'mail/RestUNASession'.");
             }
         } catch (Exception ex) {
             LOG.log(Level.WARNING, "Failed to configure SMTP properties", ex);
@@ -155,28 +166,30 @@ public class MailService {
     // ---------------------------------------------------------------------
 
     private String buildSimpleInvoiceHtml(String invoiceNumber) {
-        return "<!DOCTYPE html>" +
-            "<html lang=\"es\"><head><meta charset=\"UTF-8\"/>" +
-            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>" +
-            "<style>" +
-            "body{margin:0;padding:24px;background:#f7f7f9;color:#252835;font-family:Arial,sans-serif;}" +
-            ".container{max-width:600px;margin:0 auto;background:#ffffff;border:1px solid #e6e7eb;border-radius:12px;padding:24px;}" +
-            ".header{border-bottom:2px solid #5c77ff;padding-bottom:16px;margin-bottom:16px;}" +
-            ".title{margin:0;font-size:24px;color:#252835;}" +
-            ".content{color:#667085;line-height:1.6;}" +
-            ".footer{margin-top:24px;padding-top:16px;border-top:1px solid #e6e7eb;color:#667085;font-size:12px;}" +
-            "</style></head><body>" +
-            "<div class=\"container\">" +
-            "<div class=\"header\"><h1 class=\"title\">RestUNA</h1></div>" +
-            "<div class=\"content\">" +
-            "<p>Estimado cliente,</p>" +
-            "<p>Adjunto encontrará su factura <strong>" + escapeHtml(invoiceNumber) + "</strong> en formato PDF.</p>" +
-            "<p>Gracias por su preferencia.</p>" +
-            "</div>" +
-            "<div class=\"footer\">" +
-            "<p>Este es un mensaje automático. Por favor no responda a este correo.</p>" +
-            "</div>" +
-            "</div></body></html>";
+        return "<!DOCTYPE html>"
+                + "<html lang=\"es\"><head><meta charset=\"UTF-8\"/>"
+                + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>"
+                + "<style>"
+                + "body{margin:0;padding:24px;background:#f7f7f9;color:#252835;font-family:Arial,sans-serif;}"
+                + ".container{max-width:600px;margin:0 auto;background:#ffffff;border:1px solid #e6e7eb;border-radius:12px;padding:24px;}"
+                + ".header{border-bottom:2px solid #5c77ff;padding-bottom:16px;margin-bottom:16px;}"
+                + ".title{margin:0;font-size:24px;color:#252835;}"
+                + ".content{color:#667085;line-height:1.6;}"
+                + ".footer{margin-top:24px;padding-top:16px;border-top:1px solid #e6e7eb;color:#667085;font-size:12px;}"
+                + "</style></head><body>"
+                + "<div class=\"container\">"
+                + "<div class=\"header\"><h1 class=\"title\">RestUNA</h1></div>"
+                + "<div class=\"content\">"
+                + "<p>Estimado cliente,</p>"
+                + "<p>Adjunto encontrará su factura <strong>"
+                + escapeHtml(invoiceNumber)
+                + "</strong> en formato PDF.</p>"
+                + "<p>Gracias por su preferencia.</p>"
+                + "</div>"
+                + "<div class=\"footer\">"
+                + "<p>Este es un mensaje automático. Por favor no responda a este correo.</p>"
+                + "</div>"
+                + "</div></body></html>";
     }
 
     // Otro método hecho con chatgpt para escapar HTML

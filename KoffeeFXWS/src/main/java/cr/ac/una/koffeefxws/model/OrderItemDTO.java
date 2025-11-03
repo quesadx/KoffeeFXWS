@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- *
  * @author quesadx
  */
 public class OrderItemDTO implements Serializable {
@@ -157,15 +156,13 @@ public class OrderItemDTO implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "OrderItemDTO{" +
-            "productName=" +
-            productName +
-            ", quantity=" +
-            quantity +
-            ", unitPrice=" +
-            unitPrice +
-            '}'
-        );
+        return ("OrderItemDTO{"
+                + "productName="
+                + productName
+                + ", quantity="
+                + quantity
+                + ", unitPrice="
+                + unitPrice
+                + '}');
     }
 }

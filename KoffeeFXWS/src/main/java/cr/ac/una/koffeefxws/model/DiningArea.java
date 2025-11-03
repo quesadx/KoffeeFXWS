@@ -4,6 +4,9 @@
  */
 package cr.ac.una.koffeefxws.model;
 
+import java.io.Serializable;
+import java.util.List;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,59 +25,43 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
-import java.io.Serializable;
-import java.util.List;
 
 /**
- *
  * @author quesadx
  */
 @Entity
 @Table(name = "DINING_AREA")
 @XmlRootElement
-@NamedQueries(
-    {
-        @NamedQuery(
-            name = "DiningArea.findAll",
-            query = "SELECT d FROM DiningArea d"
-        ),
-        @NamedQuery(
+@NamedQueries({
+    @NamedQuery(name = "DiningArea.findAll", query = "SELECT d FROM DiningArea d"),
+    @NamedQuery(
             name = "DiningArea.findById",
-            query = "SELECT d FROM DiningArea d WHERE d.id = :id"
-        ),
-        @NamedQuery(
+            query = "SELECT d FROM DiningArea d WHERE d.id = :id"),
+    @NamedQuery(
             name = "DiningArea.findByName",
-            query = "SELECT d FROM DiningArea d WHERE d.name = :name"
-        ),
-        @NamedQuery(
+            query = "SELECT d FROM DiningArea d WHERE d.name = :name"),
+    @NamedQuery(
             name = "DiningArea.findByIsBar",
-            query = "SELECT d FROM DiningArea d WHERE d.isBar = :isBar"
-        ),
-        @NamedQuery(
+            query = "SELECT d FROM DiningArea d WHERE d.isBar = :isBar"),
+    @NamedQuery(
             name = "DiningArea.findByIsServiceCharged",
-            query = "SELECT d FROM DiningArea d WHERE d.isServiceCharged = :isServiceCharged"
-        ),
-        @NamedQuery(
+            query = "SELECT d FROM DiningArea d WHERE d.isServiceCharged = :isServiceCharged"),
+    @NamedQuery(
             name = "DiningArea.findByIsActive",
-            query = "SELECT d FROM DiningArea d WHERE d.isActive = :isActive"
-        ),
-    }
-)
+            query = "SELECT d FROM DiningArea d WHERE d.isActive = :isActive"),
+})
 public class DiningArea implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+    // annotations to enforce field validation
     @Id
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "dining_area_seq"
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dining_area_seq")
     @SequenceGenerator(
-        name = "dining_area_seq",
-        sequenceName = "seq_dining_area_id",
-        allocationSize = 1
-    )
+            name = "dining_area_seq",
+            sequenceName = "seq_dining_area_id",
+            allocationSize = 1)
     @Basic(optional = false)
     @Column(name = "DINING_AREA_ID")
     private Long id;
@@ -100,11 +87,7 @@ public class DiningArea implements Serializable {
     @Column(name = "VERSION")
     private Long version;
 
-    @OneToMany(
-        cascade = CascadeType.ALL,
-        mappedBy = "diningAreaId",
-        fetch = FetchType.LAZY
-    )
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "diningAreaId", fetch = FetchType.LAZY)
     private List<DiningTable> diningTableList;
 
     @OneToMany(mappedBy = "diningAreaId", fetch = FetchType.LAZY)
@@ -129,13 +112,9 @@ public class DiningArea implements Serializable {
     public void actualizar(DiningAreaDTO dto) {
         this.name = dto.getName();
         this.isBar = dto.getIsBar() != null && dto.getIsBar() ? 'Y' : 'N';
-        this.isServiceCharged = dto.getIsServiceCharged() != null &&
-            dto.getIsServiceCharged()
-            ? 'Y'
-            : 'N';
-        this.isActive = dto.getIsActive() != null && dto.getIsActive()
-            ? 'Y'
-            : 'N';
+        this.isServiceCharged =
+                dto.getIsServiceCharged() != null && dto.getIsServiceCharged() ? 'Y' : 'N';
+        this.isActive = dto.getIsActive() != null && dto.getIsActive() ? 'Y' : 'N';
     }
 
     public Long getId() {
@@ -218,10 +197,8 @@ public class DiningArea implements Serializable {
             return false;
         }
         DiningArea other = (DiningArea) object;
-        if (
-            (this.id == null && other.id != null) ||
-            (this.id != null && !this.id.equals(other.id))
-        ) {
+        if ((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -229,8 +206,6 @@ public class DiningArea implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "cr.ac.una.koffeefxws.model.DiningArea[ diningAreaId=" + id + " ]"
-        );
+        return ("cr.ac.una.koffeefxws.model.DiningArea[ diningAreaId=" + id + " ]");
     }
 }

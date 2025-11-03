@@ -4,6 +4,8 @@
  */
 package cr.ac.una.koffeefxws.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,54 +23,38 @@ import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
 
 /**
- *
  * @author quesadx
  */
 @Entity
 @Table(name = "ORDER_ITEM")
 @XmlRootElement
-@NamedQueries(
-    {
-        @NamedQuery(
-            name = "OrderItem.findAll",
-            query = "SELECT o FROM OrderItem o"
-        ),
-        @NamedQuery(
-            name = "OrderItem.findById",
-            query = "SELECT o FROM OrderItem o WHERE o.id = :id"
-        ),
-        @NamedQuery(
+@NamedQueries({
+    @NamedQuery(name = "OrderItem.findAll", query = "SELECT o FROM OrderItem o"),
+    @NamedQuery(name = "OrderItem.findById", query = "SELECT o FROM OrderItem o WHERE o.id = :id"),
+    @NamedQuery(
             name = "OrderItem.findByQuantity",
-            query = "SELECT o FROM OrderItem o WHERE o.quantity = :quantity"
-        ),
-        @NamedQuery(
+            query = "SELECT o FROM OrderItem o WHERE o.quantity = :quantity"),
+    @NamedQuery(
             name = "OrderItem.findByUnitPrice",
-            query = "SELECT o FROM OrderItem o WHERE o.unitPrice = :unitPrice"
-        ),
-        @NamedQuery(
+            query = "SELECT o FROM OrderItem o WHERE o.unitPrice = :unitPrice"),
+    @NamedQuery(
             name = "OrderItem.findByStatus",
-            query = "SELECT o FROM OrderItem o WHERE o.status = :status"
-        ),
-    }
-)
+            query = "SELECT o FROM OrderItem o WHERE o.status = :status"),
+})
 public class OrderItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+    // annotations to enforce field validation
     @Id
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "order_item_seq"
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_seq")
     @SequenceGenerator(
-        name = "order_item_seq",
-        sequenceName = "seq_order_item_id",
-        allocationSize = 1
-    )
+            name = "order_item_seq",
+            sequenceName = "seq_order_item_id",
+            allocationSize = 1)
     @Basic(optional = false)
     @NotNull
     @Column(name = "ITEM_ID")
@@ -90,10 +76,7 @@ public class OrderItem implements Serializable {
     @Column(name = "VERSION")
     private Long version;
 
-    @JoinColumn(
-        name = "CUSTOMER_ORDER_ID",
-        referencedColumnName = "CUSTOMER_ORDER_ID"
-    )
+    @JoinColumn(name = "CUSTOMER_ORDER_ID", referencedColumnName = "CUSTOMER_ORDER_ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private CustomerOrder customerOrderId;
 
@@ -193,10 +176,8 @@ public class OrderItem implements Serializable {
             return false;
         }
         OrderItem other = (OrderItem) object;
-        if (
-            (this.id == null && other.id != null) ||
-            (this.id != null && !this.id.equals(other.id))
-        ) {
+        if ((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;

@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- *
  * @author quesadx
  */
 public class SystemParameterDTO implements Serializable {
@@ -102,13 +101,11 @@ public class SystemParameterDTO implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "SystemParameterDTO{" +
-            "paramName=" +
-            paramName +
-            ", paramValue=" +
-            paramValue +
-            '}'
-        );
+        return ("SystemParameterDTO{"
+                + "paramName="
+                + paramName
+                + ", paramValue="
+                + paramValue
+                + '}');
     }
 }

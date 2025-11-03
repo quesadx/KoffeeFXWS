@@ -50,8 +50,7 @@ public class AppUserDTO implements Serializable {
         this.username = appUser.getUsername();
         this.password = appUser.getPassword();
         this.email = appUser.getEmail();
-        this.isActive =
-            appUser.getIsActive() != null && appUser.getIsActive().equals('Y');
+        this.isActive = appUser.getIsActive() != null && appUser.getIsActive().equals('Y');
         this.creationDate = appUser.getCreationDate();
         this.version = appUser.getVersion();
         this.userRole = appUser.getUserRole();
@@ -196,15 +195,13 @@ public class AppUserDTO implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "AppUserDTO{" +
-            "username=" +
-            username +
-            ", firstName=" +
-            firstName +
-            ", lastName=" +
-            lastName +
-            '}'
-        );
+        return ("AppUserDTO{"
+                + "username="
+                + username
+                + ", firstName="
+                + firstName
+                + ", lastName="
+                + lastName
+                + '}');
     }
 }

@@ -4,6 +4,10 @@
  */
 package cr.ac.una.koffeefxws.model;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,78 +22,52 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.List;
 
 /**
- *
  * @author quesadx
  */
 @Entity
 @Table(name = "APP_USER")
 @XmlRootElement
-@NamedQueries(
-    {
-        @NamedQuery(
-            name = "AppUser.findAll",
-            query = "SELECT a FROM AppUser a"
-        ),
-        @NamedQuery(
-            name = "AppUser.findById",
-            query = "SELECT a FROM AppUser a WHERE a.id = :id"
-        ),
-        @NamedQuery(
+@NamedQueries({
+    @NamedQuery(name = "AppUser.findAll", query = "SELECT a FROM AppUser a"),
+    @NamedQuery(name = "AppUser.findById", query = "SELECT a FROM AppUser a WHERE a.id = :id"),
+    @NamedQuery(
             name = "AppUser.findByFirstName",
-            query = "SELECT a FROM AppUser a WHERE a.firstName = :firstName"
-        ),
-        @NamedQuery(
+            query = "SELECT a FROM AppUser a WHERE a.firstName = :firstName"),
+    @NamedQuery(
             name = "AppUser.findByLastName",
-            query = "SELECT a FROM AppUser a WHERE a.lastName = :lastName"
-        ),
-        @NamedQuery(
+            query = "SELECT a FROM AppUser a WHERE a.lastName = :lastName"),
+    @NamedQuery(
             name = "AppUser.findByUsername",
-            query = "SELECT a FROM AppUser a WHERE a.username = :username"
-        ),
-        @NamedQuery(
+            query = "SELECT a FROM AppUser a WHERE a.username = :username"),
+    @NamedQuery(
             name = "AppUser.findByPassword",
-            query = "SELECT a FROM AppUser a WHERE a.password = :password"
-        ),
-        @NamedQuery(
+            query = "SELECT a FROM AppUser a WHERE a.password = :password"),
+    @NamedQuery(
             name = "AppUser.findByEmail",
-            query = "SELECT a FROM AppUser a WHERE a.email = :email"
-        ),
-        @NamedQuery(
+            query = "SELECT a FROM AppUser a WHERE a.email = :email"),
+    @NamedQuery(
             name = "AppUser.findByIsActive",
-            query = "SELECT a FROM AppUser a WHERE a.isActive = :isActive"
-        ),
-        @NamedQuery(
+            query = "SELECT a FROM AppUser a WHERE a.isActive = :isActive"),
+    @NamedQuery(
             name = "AppUser.findByCreationDate",
-            query = "SELECT a FROM AppUser a WHERE a.creationDate = :creationDate"
-        ),
-    }
-)
+            query = "SELECT a FROM AppUser a WHERE a.creationDate = :creationDate"),
+})
 public class AppUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+    // annotations to enforce field validation
     @Id
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "app_user_seq"
-    )
-    @SequenceGenerator(
-        name = "app_user_seq",
-        sequenceName = "seq_app_user_id",
-        allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_seq")
+    @SequenceGenerator(name = "app_user_seq", sequenceName = "seq_app_user_id", allocationSize = 1)
     @Basic(optional = false)
     @Column(name = "USER_ID")
     private Long id;
@@ -133,28 +111,16 @@ public class AppUser implements Serializable {
     @Column(name = "VERSION")
     private Long version;
 
-    @OneToMany(
-        cascade = CascadeType.ALL,
-        mappedBy = "userId",
-        fetch = FetchType.LAZY
-    )
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
     private List<CashOpening> cashOpeningList;
 
-    @OneToMany(
-        cascade = CascadeType.ALL,
-        mappedBy = "createdBy",
-        fetch = FetchType.LAZY
-    )
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
     private List<CustomerOrder> customerOrderList;
 
     @Column(name = "USER_ROLE")
     private Character userRole;
 
-    @OneToMany(
-        cascade = CascadeType.ALL,
-        mappedBy = "createdBy",
-        fetch = FetchType.LAZY
-    )
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
     private List<Invoice> invoiceList;
 
     public AppUser() {}
@@ -164,12 +130,7 @@ public class AppUser implements Serializable {
     }
 
     public AppUser(
-        Long id,
-        String firstName,
-        String username,
-        String password,
-        LocalDate creationDate
-    ) {
+            Long id, String firstName, String username, String password, LocalDate creationDate) {
         this.id = id;
         this.firstName = firstName;
         this.username = username;
@@ -190,15 +151,11 @@ public class AppUser implements Serializable {
             this.password = dto.getPassword();
         }
         this.email = dto.getEmail();
-        this.isActive = dto.getIsActive() != null && dto.getIsActive()
-            ? 'Y'
-            : 'N';
+        this.isActive = dto.getIsActive() != null && dto.getIsActive() ? 'Y' : 'N';
         this.userRole = dto.getUserRole();
     }
 
-    /**
-     * Lifecycle hook: Automatically sets creation date before persisting
-     */
+    /** Lifecycle hook: Automatically sets creation date before persisting */
     @PrePersist
     protected void onCreate() {
         if (creationDate == null) {
@@ -330,10 +287,8 @@ public class AppUser implements Serializable {
             return false;
         }
         AppUser other = (AppUser) object;
-        if (
-            (this.id == null && other.id != null) ||
-            (this.id != null && !this.id.equals(other.id))
-        ) {
+        if ((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;

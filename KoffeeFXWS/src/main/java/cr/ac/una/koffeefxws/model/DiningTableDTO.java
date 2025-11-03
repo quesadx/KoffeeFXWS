@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
  * @author quesadx
  */
 public class DiningTableDTO implements Serializable {

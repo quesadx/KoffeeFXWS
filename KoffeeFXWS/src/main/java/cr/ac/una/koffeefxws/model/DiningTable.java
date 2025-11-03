@@ -4,6 +4,9 @@
  */
 package cr.ac.una.koffeefxws.model;
 
+import java.io.Serializable;
+import java.util.List;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,67 +27,49 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
-import java.io.Serializable;
-import java.util.List;
 
 /**
- *
  * @author quesadx
  */
 @Entity
 @Table(name = "DINING_TABLE")
 @XmlRootElement
-@NamedQueries(
-    {
-        @NamedQuery(
-            name = "DiningTable.findAll",
-            query = "SELECT d FROM DiningTable d"
-        ),
-        @NamedQuery(
+@NamedQueries({
+    @NamedQuery(name = "DiningTable.findAll", query = "SELECT d FROM DiningTable d"),
+    @NamedQuery(
             name = "DiningTable.findById",
-            query = "SELECT d FROM DiningTable d WHERE d.id = :id"
-        ),
-        @NamedQuery(
+            query = "SELECT d FROM DiningTable d WHERE d.id = :id"),
+    @NamedQuery(
             name = "DiningTable.findByName",
-            query = "SELECT d FROM DiningTable d WHERE d.name = :name"
-        ),
-        @NamedQuery(
+            query = "SELECT d FROM DiningTable d WHERE d.name = :name"),
+    @NamedQuery(
             name = "DiningTable.findByXPos",
-            query = "SELECT d FROM DiningTable d WHERE d.xPos = :xPos"
-        ),
-        @NamedQuery(
+            query = "SELECT d FROM DiningTable d WHERE d.xPos = :xPos"),
+    @NamedQuery(
             name = "DiningTable.findByYPos",
-            query = "SELECT d FROM DiningTable d WHERE d.yPos = :yPos"
-        ),
-        @NamedQuery(
+            query = "SELECT d FROM DiningTable d WHERE d.yPos = :yPos"),
+    @NamedQuery(
             name = "DiningTable.findByWidth",
-            query = "SELECT d FROM DiningTable d WHERE d.width = :width"
-        ),
-        @NamedQuery(
+            query = "SELECT d FROM DiningTable d WHERE d.width = :width"),
+    @NamedQuery(
             name = "DiningTable.findByHeight",
-            query = "SELECT d FROM DiningTable d WHERE d.height = :height"
-        ),
-        @NamedQuery(
+            query = "SELECT d FROM DiningTable d WHERE d.height = :height"),
+    @NamedQuery(
             name = "DiningTable.findByStatus",
-            query = "SELECT d FROM DiningTable d WHERE d.status = :status"
-        ),
-    }
-)
+            query = "SELECT d FROM DiningTable d WHERE d.status = :status"),
+})
 public class DiningTable implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+    // annotations to enforce field validation
     @Id
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "dining_table_seq"
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dining_table_seq")
     @SequenceGenerator(
-        name = "dining_table_seq",
-        sequenceName = "seq_dining_table_id",
-        allocationSize = 1
-    )
+            name = "dining_table_seq",
+            sequenceName = "seq_dining_table_id",
+            allocationSize = 1)
     @Basic(optional = false)
     @Column(name = "DINING_TABLE_ID")
     private Long id;
@@ -119,10 +104,7 @@ public class DiningTable implements Serializable {
     @Column(name = "VERSION")
     private Long version;
 
-    @JoinColumn(
-        name = "DINING_AREA_ID",
-        referencedColumnName = "DINING_AREA_ID"
-    )
+    @JoinColumn(name = "DINING_AREA_ID", referencedColumnName = "DINING_AREA_ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private DiningArea diningAreaId;
 
@@ -258,10 +240,8 @@ public class DiningTable implements Serializable {
             return false;
         }
         DiningTable other = (DiningTable) object;
-        if (
-            (this.id == null && other.id != null) ||
-            (this.id != null && !this.id.equals(other.id))
-        ) {
+        if ((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -269,8 +249,6 @@ public class DiningTable implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "cr.ac.una.koffeefxws.model.DiningTable[ diningTableId=" + id + " ]"
-        );
+        return ("cr.ac.una.koffeefxws.model.DiningTable[ diningTableId=" + id + " ]");
     }
 }

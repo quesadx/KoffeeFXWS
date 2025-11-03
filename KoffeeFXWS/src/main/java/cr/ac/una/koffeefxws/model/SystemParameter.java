@@ -4,6 +4,8 @@
  */
 package cr.ac.una.koffeefxws.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,54 +20,40 @@ import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
 
 /**
- *
  * @author quesadx
  */
 @Entity
 @Table(name = "SYSTEM_PARAMETER")
 @XmlRootElement
-@NamedQueries(
-    {
-        @NamedQuery(
-            name = "SystemParameter.findAll",
-            query = "SELECT s FROM SystemParameter s"
-        ),
-        @NamedQuery(
+@NamedQueries({
+    @NamedQuery(name = "SystemParameter.findAll", query = "SELECT s FROM SystemParameter s"),
+    @NamedQuery(
             name = "SystemParameter.findById",
-            query = "SELECT s FROM SystemParameter s WHERE s.id = :id"
-        ),
-        @NamedQuery(
+            query = "SELECT s FROM SystemParameter s WHERE s.id = :id"),
+    @NamedQuery(
             name = "SystemParameter.findByParamName",
-            query = "SELECT s FROM SystemParameter s WHERE s.paramName = :paramName"
-        ),
-        @NamedQuery(
+            query = "SELECT s FROM SystemParameter s WHERE s.paramName = :paramName"),
+    @NamedQuery(
             name = "SystemParameter.findByParamValue",
-            query = "SELECT s FROM SystemParameter s WHERE s.paramValue = :paramValue"
-        ),
-        @NamedQuery(
+            query = "SELECT s FROM SystemParameter s WHERE s.paramValue = :paramValue"),
+    @NamedQuery(
             name = "SystemParameter.findByDescription",
-            query = "SELECT s FROM SystemParameter s WHERE s.description = :description"
-        ),
-    }
-)
+            query = "SELECT s FROM SystemParameter s WHERE s.description = :description"),
+})
 public class SystemParameter implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+    // annotations to enforce field validation
     @Id
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "system_parameter_seq"
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "system_parameter_seq")
     @SequenceGenerator(
-        name = "system_parameter_seq",
-        sequenceName = "seq_system_parameter_id",
-        allocationSize = 1
-    )
+            name = "system_parameter_seq",
+            sequenceName = "seq_system_parameter_id",
+            allocationSize = 1)
     @Basic(optional = false)
     @NotNull
     @Column(name = "PARAM_ID")
@@ -165,10 +153,8 @@ public class SystemParameter implements Serializable {
             return false;
         }
         SystemParameter other = (SystemParameter) object;
-        if (
-            (this.id == null && other.id != null) ||
-            (this.id != null && !this.id.equals(other.id))
-        ) {
+        if ((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -176,8 +162,6 @@ public class SystemParameter implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "cr.ac.una.koffeefxws.model.SystemParameter[ paramId=" + id + " ]"
-        );
+        return ("cr.ac.una.koffeefxws.model.SystemParameter[ paramId=" + id + " ]");
     }
 }

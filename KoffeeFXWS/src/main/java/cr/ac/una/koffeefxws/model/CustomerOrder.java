@@ -4,6 +4,11 @@
  */
 package cr.ac.una.koffeefxws.model;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -20,68 +25,48 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
 /**
- *
  * @author quesadx
  */
 @Entity
 @Table(name = "CUSTOMER_ORDER")
 @XmlRootElement
-@NamedQueries(
-    {
-        @NamedQuery(
-            name = "CustomerOrder.findAll",
-            query = "SELECT c FROM CustomerOrder c"
-        ),
-        @NamedQuery(
+@NamedQueries({
+    @NamedQuery(name = "CustomerOrder.findAll", query = "SELECT c FROM CustomerOrder c"),
+    @NamedQuery(
             name = "CustomerOrder.findById",
-            query = "SELECT c FROM CustomerOrder c WHERE c.id = :id"
-        ),
-        @NamedQuery(
+            query = "SELECT c FROM CustomerOrder c WHERE c.id = :id"),
+    @NamedQuery(
             name = "CustomerOrder.findByStatus",
-            query = "SELECT c FROM CustomerOrder c WHERE c.status = :status"
-        ),
-        @NamedQuery(
+            query = "SELECT c FROM CustomerOrder c WHERE c.status = :status"),
+    @NamedQuery(
             name = "CustomerOrder.findByCreatedAt",
-            query = "SELECT c FROM CustomerOrder c WHERE c.createdAt = :createdAt"
-        ),
-        @NamedQuery(
+            query = "SELECT c FROM CustomerOrder c WHERE c.createdAt = :createdAt"),
+    @NamedQuery(
             name = "CustomerOrder.findByUpdatedAt",
-            query = "SELECT c FROM CustomerOrder c WHERE c.updatedAt = :updatedAt"
-        ),
-        @NamedQuery(
+            query = "SELECT c FROM CustomerOrder c WHERE c.updatedAt = :updatedAt"),
+    @NamedQuery(
             name = "CustomerOrder.findByTotalAmount",
-            query = "SELECT c FROM CustomerOrder c WHERE c.totalAmount = :totalAmount"
-        ),
-    }
-)
+            query = "SELECT c FROM CustomerOrder c WHERE c.totalAmount = :totalAmount"),
+})
 public class CustomerOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+    // annotations to enforce field validation
     @Id
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "customer_order_seq"
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_order_seq")
     @SequenceGenerator(
-        name = "customer_order_seq",
-        sequenceName = "seq_customer_order_id",
-        allocationSize = 1
-    )
+            name = "customer_order_seq",
+            sequenceName = "seq_customer_order_id",
+            allocationSize = 1)
     @Basic(optional = false)
     @NotNull
     @Column(name = "CUSTOMER_ORDER_ID")
@@ -92,11 +77,11 @@ public class CustomerOrder implements Serializable {
     private String status;
 
     @Column(name = "CREATED_AT")
-    //@Temporal(TemporalType.TIMESTAMP)
+    // @Temporal(TemporalType.TIMESTAMP)
     private LocalDate createdAt;
 
     @Column(name = "UPDATED_AT")
-    //@Temporal(TemporalType.TIMESTAMP)
+    // @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
     @Column(name = "TOTAL_AMOUNT")
@@ -114,32 +99,18 @@ public class CustomerOrder implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customerId;
 
-    @JoinColumn(
-        name = "DINING_AREA_ID",
-        referencedColumnName = "DINING_AREA_ID"
-    )
+    @JoinColumn(name = "DINING_AREA_ID", referencedColumnName = "DINING_AREA_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private DiningArea diningAreaId;
 
-    @JoinColumn(
-        name = "DINING_TABLE_ID",
-        referencedColumnName = "DINING_TABLE_ID"
-    )
+    @JoinColumn(name = "DINING_TABLE_ID", referencedColumnName = "DINING_TABLE_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private DiningTable diningTableId;
 
-    @OneToMany(
-        cascade = CascadeType.ALL,
-        mappedBy = "customerOrderId",
-        fetch = FetchType.LAZY
-    )
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerOrderId", fetch = FetchType.LAZY)
     private List<OrderItem> orderItemList;
 
-    @OneToOne(
-        cascade = CascadeType.ALL,
-        mappedBy = "customerOrderId",
-        fetch = FetchType.LAZY
-    )
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "customerOrderId", fetch = FetchType.LAZY)
     private Invoice invoice;
 
     public CustomerOrder() {}
@@ -271,10 +242,8 @@ public class CustomerOrder implements Serializable {
             return false;
         }
         CustomerOrder other = (CustomerOrder) object;
-        if (
-            (this.id == null && other.id != null) ||
-            (this.id != null && !this.id.equals(other.id))
-        ) {
+        if ((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -282,10 +251,6 @@ public class CustomerOrder implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "cr.ac.una.koffeefxws.model.CustomerOrder[ customerOrderId=" +
-            id +
-            " ]"
-        );
+        return ("cr.ac.una.koffeefxws.model.CustomerOrder[ customerOrderId=" + id + " ]");
     }
 }

@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
  * @author quesadx
  */
 public class CashOpeningDTO implements Serializable {
@@ -42,9 +41,7 @@ public class CashOpeningDTO implements Serializable {
         this.id = cashOpening.getId();
         this.openingDate = cashOpening.getOpeningDate();
         this.initialAmount = cashOpening.getInitialAmount();
-        this.isClosed =
-            cashOpening.getIsClosed() != null &&
-            cashOpening.getIsClosed().equals('Y');
+        this.isClosed = cashOpening.getIsClosed() != null && cashOpening.getIsClosed().equals('Y');
         this.closingDate = cashOpening.getClosingDate();
         this.closingAmount = cashOpening.getClosingAmount();
         this.notes = cashOpening.getNotes();
@@ -171,13 +168,6 @@ public class CashOpeningDTO implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "CashOpeningDTO{" +
-            "openingDate=" +
-            openingDate +
-            ", isClosed=" +
-            isClosed +
-            '}'
-        );
+        return ("CashOpeningDTO{" + "openingDate=" + openingDate + ", isClosed=" + isClosed + '}');
     }
 }

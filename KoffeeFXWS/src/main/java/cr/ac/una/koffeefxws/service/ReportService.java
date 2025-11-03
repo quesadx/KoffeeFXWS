@@ -4,6 +4,27 @@
  */
 package cr.ac.una.koffeefxws.service;
 
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import jakarta.ejb.EJB;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 import cr.ac.una.koffeefxws.model.AppUserDTO;
 import cr.ac.una.koffeefxws.model.CashOpeningDTO;
 import cr.ac.una.koffeefxws.model.CustomerDTO;
@@ -15,60 +36,31 @@ import cr.ac.una.koffeefxws.model.ProductSalesDTO;
 import cr.ac.una.koffeefxws.model.SystemParameterDTO;
 import cr.ac.una.koffeefxws.util.CodigoRespuesta;
 import cr.ac.una.koffeefxws.util.Respuesta;
-import jakarta.ejb.EJB;
-import jakarta.ejb.LocalBean;
-import jakarta.ejb.Stateless;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
- *
  * @author krist
  */
 @Stateless
 @LocalBean
 public class ReportService {
 
-    private static final Logger LOG = Logger.getLogger(
-        ReportService.class.getName()
-    );
+    private static final Logger LOG = Logger.getLogger(ReportService.class.getName());
 
-    @EJB
-    CustomerOrderService orderService;
+    @EJB CustomerOrderService orderService;
 
-    @EJB
-    SystemParameterService paramService;
+    @EJB SystemParameterService paramService;
 
-    @EJB
-    CashOpeningService cashOpeningService;
+    @EJB CashOpeningService cashOpeningService;
 
-    @EJB
-    InvoiceService invoiceService;
+    @EJB InvoiceService invoiceService;
 
-    @EJB
-    AppUserService appUserService;
+    @EJB AppUserService appUserService;
 
-    @EJB
-    ProductService productService;
+    @EJB ProductService productService;
 
-    @EJB
-    CustomerService customerService;
+    @EJB CustomerService customerService;
 
-    @EJB
-    MailService mailService;
+    @EJB MailService mailService;
 
     /**
      * Prepara los parámetros y el datasource para generar el reporte
@@ -82,20 +74,21 @@ public class ReportService {
             Respuesta orderResponse = orderService.getCustomerOrder(orderId);
             if (!orderResponse.getEstado()) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "No se encontró la orden con ID: " + orderId,
-                    "prepararReporte " + orderResponse.getMensaje()
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No se encontró la orden con ID: " + orderId,
+                        "prepararReporte " + orderResponse.getMensaje());
             }
 
-            CustomerOrderDTO order =
-                (CustomerOrderDTO) orderResponse.getResultado("CustomerOrder");
+            CustomerOrderDTO order = (CustomerOrderDTO) orderResponse.getResultado("CustomerOrder");
 
             // Get the user mail for later implementation
             Respuesta r = customerService.getCustomer(order.getCustomerId());
-            if(!r.getEstado()){
-                LOG.log(Level.INFO, "No se encontró el cliente con ID: {0} en el sistema", order.getCustomerId());
+            if (!r.getEstado()) {
+                LOG.log(
+                        Level.INFO,
+                        "No se encontró el cliente con ID: {0} en el sistema",
+                        order.getCustomerId());
             } else {
                 // La extracción como tal va acá
                 CustomerDTO customer = (CustomerDTO) r.getResultado("Customer");
@@ -106,30 +99,26 @@ public class ReportService {
                 // Email logic goes probably here!
             }
 
-
             // 2. Extraer InvoiceDTO de la orden
             InvoiceDTO invoice = order.getInvoice();
             if (invoice == null) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "La orden no tiene una factura asociada.",
-                    "prepararReporte NoInvoice"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "La orden no tiene una factura asociada.",
+                        "prepararReporte NoInvoice");
             }
 
             // 3. Crear JRBeanCollectionDataSource con orden.getOrderItems()
             List<OrderItemDTO> orderItems = order.getOrderItems();
             if (orderItems == null || orderItems.isEmpty()) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "La orden no tiene items.",
-                    "prepararReporte NoItems"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "La orden no tiene items.",
+                        "prepararReporte NoItems");
             }
-            JRBeanCollectionDataSource dataSource =
-                new JRBeanCollectionDataSource(orderItems);
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(orderItems);
 
             // 4. Obtener parámetros del sistema y convertir a Map
             Respuesta paramsResponse = paramService.getSystemParameters();
@@ -137,9 +126,8 @@ public class ReportService {
 
             if (paramsResponse.getEstado()) {
                 @SuppressWarnings("unchecked")
-                List<SystemParameterDTO> systemParams = (List<
-                    SystemParameterDTO
-                >) paramsResponse.getResultado("SystemParameters");
+                List<SystemParameterDTO> systemParams =
+                        (List<SystemParameterDTO>) paramsResponse.getResultado("SystemParameters");
                 for (SystemParameterDTO param : systemParams) {
                     paramsMap.put(param.getParamName(), param.getParamValue());
                 }
@@ -150,149 +138,79 @@ public class ReportService {
 
             // Parámetros de la factura - Información básica
             parameters.put(
-                "invoiceNumber",
-                invoice.getInvoiceNumber() != null
-                    ? invoice.getInvoiceNumber()
-                    : ""
-            );
+                    "invoiceNumber",
+                    invoice.getInvoiceNumber() != null ? invoice.getInvoiceNumber() : "");
             parameters.put("invoiceDate", invoice.getCreatedAt()); // LocalDate directamente
             parameters.put(
-                "customerName",
-                order.getCustomerName() != null
-                    ? order.getCustomerName()
-                    : "Cliente General"
-            );
+                    "customerName",
+                    order.getCustomerName() != null ? order.getCustomerName() : "Cliente General");
             parameters.put(
-                "paymentMethod",
-                invoice.getPaymentMethod() != null
-                    ? invoice.getPaymentMethod()
-                    : "CASH"
-            );
+                    "paymentMethod",
+                    invoice.getPaymentMethod() != null ? invoice.getPaymentMethod() : "CASH");
 
             // Montos calculados (NO tasas)
+            parameters.put("subtotal", invoice.getSubtotal() != null ? invoice.getSubtotal() : 0.0);
             parameters.put(
-                "subtotal",
-                invoice.getSubtotal() != null ? invoice.getSubtotal() : 0.0
-            );
+                    "taxAmount", invoice.getTaxAmount() != null ? invoice.getTaxAmount() : 0.0);
             parameters.put(
-                "taxAmount",
-                invoice.getTaxAmount() != null ? invoice.getTaxAmount() : 0.0
-            );
+                    "serviceAmount",
+                    invoice.getServiceAmount() != null ? invoice.getServiceAmount() : 0.0);
             parameters.put(
-                "serviceAmount",
-                invoice.getServiceAmount() != null
-                    ? invoice.getServiceAmount()
-                    : 0.0
-            );
-            parameters.put(
-                "discountAmount",
-                invoice.getDiscountAmount() != null
-                    ? invoice.getDiscountAmount()
-                    : 0.0
-            );
-            parameters.put(
-                "total",
-                invoice.getTotal() != null ? invoice.getTotal() : 0.0
-            );
+                    "discountAmount",
+                    invoice.getDiscountAmount() != null ? invoice.getDiscountAmount() : 0.0);
+            parameters.put("total", invoice.getTotal() != null ? invoice.getTotal() : 0.0);
 
             // Información de pago
             parameters.put(
-                "amountReceived",
-                invoice.getAmountReceived() != null
-                    ? invoice.getAmountReceived()
-                    : 0.0
-            );
+                    "amountReceived",
+                    invoice.getAmountReceived() != null ? invoice.getAmountReceived() : 0.0);
             parameters.put(
-                "changeAmount",
-                invoice.getChangeAmount() != null
-                    ? invoice.getChangeAmount()
-                    : 0.0
-            );
+                    "changeAmount",
+                    invoice.getChangeAmount() != null ? invoice.getChangeAmount() : 0.0);
 
             // Tasas (por si se necesitan en el reporte para mostrar porcentajes)
+            parameters.put("taxRate", invoice.getTaxRate() != null ? invoice.getTaxRate() : 0.0);
             parameters.put(
-                "taxRate",
-                invoice.getTaxRate() != null ? invoice.getTaxRate() : 0.0
-            );
+                    "serviceRate",
+                    invoice.getServiceRate() != null ? invoice.getServiceRate() : 0.0);
             parameters.put(
-                "serviceRate",
-                invoice.getServiceRate() != null
-                    ? invoice.getServiceRate()
-                    : 0.0
-            );
-            parameters.put(
-                "discountRate",
-                invoice.getDiscountRate() != null
-                    ? invoice.getDiscountRate()
-                    : 0.0
-            );
+                    "discountRate",
+                    invoice.getDiscountRate() != null ? invoice.getDiscountRate() : 0.0);
 
             // Parámetros de la compañía desde SystemParameters
-            parameters.put(
-                "companyName",
-                paramsMap.getOrDefault("company.name", "KoffeeFX")
-            );
-            parameters.put(
-                "companyAddress",
-                paramsMap.getOrDefault("company.address", "")
-            );
-            parameters.put(
-                "companyPhoneNumber",
-                paramsMap.getOrDefault("company.phone", "")
-            );
-            parameters.put(
-                "companyEmail",
-                paramsMap.getOrDefault("company.email", "")
-            );
+            parameters.put("companyName", paramsMap.getOrDefault("company.name", "KoffeeFX"));
+            parameters.put("companyAddress", paramsMap.getOrDefault("company.address", ""));
+            parameters.put("companyPhoneNumber", paramsMap.getOrDefault("company.phone", ""));
+            parameters.put("companyEmail", paramsMap.getOrDefault("company.email", ""));
 
             // 6. Compilar el informe desde /reports/Invoice.jrxml
-            InputStream reportStream = getClass().getResourceAsStream(
-                "/reports/Invoice.jrxml"
-            );
+            InputStream reportStream = getClass().getResourceAsStream("/reports/Invoice.jrxml");
             if (reportStream == null) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_INTERNO,
-                    "No se encontró el archivo de reporte Invoice.jrxml",
-                    "prepararReporte FileNotFound"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_INTERNO,
+                        "No se encontró el archivo de reporte Invoice.jrxml",
+                        "prepararReporte FileNotFound");
             }
 
             LOG.log(
-                Level.INFO,
-                "Compilando reporte Invoice.jrxml con lenguaje Java (JDT compiler)"
-            );
-            JasperReport jasperReport = JasperCompileManager.compileReport(
-                reportStream
-            );
+                    Level.INFO,
+                    "Compilando reporte Invoice.jrxml con lenguaje Java (JDT compiler)");
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
 
             // 7. Llenar el reporte con los parámetros y el dataSource
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                jasperReport,
-                parameters,
-                dataSource
-            );
+            JasperPrint jasperPrint =
+                    JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "",
-                "",
-                "JasperPrint",
-                jasperPrint
-            );
+                    true, CodigoRespuesta.CORRECTO, "", "", "JasperPrint", jasperPrint);
         } catch (Exception ex) {
-            LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al preparar el reporte.",
-                ex
-            );
+            LOG.log(Level.SEVERE, "Ocurrió un error al preparar el reporte.", ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al preparar el reporte.",
-                "prepararReporte " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al preparar el reporte.",
+                    "prepararReporte " + ex.getMessage());
         }
     }
 
@@ -310,44 +228,28 @@ public class ReportService {
                 return reporteResponse;
             }
 
-            JasperPrint jasperPrint =
-                (JasperPrint) reporteResponse.getResultado("JasperPrint");
+            JasperPrint jasperPrint = (JasperPrint) reporteResponse.getResultado("JasperPrint");
 
             // Exportar a PDF en outputPath
-            try (
-                FileOutputStream outputStream = new FileOutputStream(outputPath)
-            ) {
-                JasperExportManager.exportReportToPdfStream(
-                    jasperPrint,
-                    outputStream
-                );
+            try (FileOutputStream outputStream = new FileOutputStream(outputPath)) {
+                JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
             }
 
-            LOG.log(
-                Level.INFO,
-                "Factura PDF generada exitosamente en: {0}",
-                outputPath
-            );
+            LOG.log(Level.INFO, "Factura PDF generada exitosamente en: {0}", outputPath);
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "Factura generada exitosamente.",
-                "",
-                "OutputPath",
-                outputPath
-            );
+                    true,
+                    CodigoRespuesta.CORRECTO,
+                    "Factura generada exitosamente.",
+                    "",
+                    "OutputPath",
+                    outputPath);
         } catch (Exception ex) {
-            LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al generar la factura PDF.",
-                ex
-            );
+            LOG.log(Level.SEVERE, "Ocurrió un error al generar la factura PDF.", ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al generar la factura PDF.",
-                "generarFacturaPDF " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al generar la factura PDF.",
+                    "generarFacturaPDF " + ex.getMessage());
         }
     }
 
@@ -371,13 +273,10 @@ public class ReportService {
                 return r;
             }
 
-            JasperPrint jasperPrint =
-                (JasperPrint) r.getResultado("JasperPrint");
+            JasperPrint jasperPrint = (JasperPrint) r.getResultado("JasperPrint");
 
             // Exportar a bytes
-            byte[] pdfBytes = JasperExportManager.exportReportToPdf(
-                jasperPrint
-            );
+            byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrint);
 
             LOG.log(Level.INFO, "Factura PDF generada exitosamente como bytes");
 
@@ -387,17 +286,26 @@ public class ReportService {
                 if (customerResponse.getEstado()) {
                     CustomerDTO customer = (CustomerDTO) customerResponse.getResultado("Customer");
                     String customerEmail = customer.getEmail();
-                    String invoiceNumber = order.getInvoice() != null ? 
-                        order.getInvoice().getInvoiceNumber() : String.valueOf(orderId);
+                    String invoiceNumber =
+                            order.getInvoice() != null
+                                    ? order.getInvoice().getInvoiceNumber()
+                                    : String.valueOf(orderId);
 
                     if (customerEmail != null && !customerEmail.isBlank()) {
                         mailService.sendInvoicePDF(customerEmail, invoiceNumber, pdfBytes);
-                        LOG.log(Level.INFO, "Email de factura enviado asincrónicamente a {0}", customerEmail);
+                        LOG.log(
+                                Level.INFO,
+                                "Email de factura enviado asincrónicamente a {0}",
+                                customerEmail);
                     } else {
-                        LOG.log(Level.WARNING, "No se pudo enviar email: cliente sin dirección de correo");
+                        LOG.log(
+                                Level.WARNING,
+                                "No se pudo enviar email: cliente sin dirección de correo");
                     }
                 } else {
-                    LOG.log(Level.WARNING, "No se pudo obtener datos del cliente para enviar email");
+                    LOG.log(
+                            Level.WARNING,
+                            "No se pudo obtener datos del cliente para enviar email");
                 }
             } catch (Exception emailEx) {
                 // No propagamos el error para evitar afectar la generación del PDF
@@ -405,25 +313,19 @@ public class ReportService {
             }
 
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "Factura generada exitosamente.",
-                "",
-                "PDFBytes",
-                pdfBytes
-            );
+                    true,
+                    CodigoRespuesta.CORRECTO,
+                    "Factura generada exitosamente.",
+                    "",
+                    "PDFBytes",
+                    pdfBytes);
         } catch (Exception ex) {
-            LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al generar la factura PDF.",
-                ex
-            );
+            LOG.log(Level.SEVERE, "Ocurrió un error al generar la factura PDF.", ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al generar la factura PDF.",
-                "generarFacturaPDFBytes " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al generar la factura PDF.",
+                    "generarFacturaPDFBytes " + ex.getMessage());
         }
     }
 
@@ -436,62 +338,53 @@ public class ReportService {
     private Respuesta prepararReporteCashierClosing(Long cashOpeningId) {
         try {
             // 1. Obtener CashOpening por ID
-            Respuesta cashOpeningResponse = cashOpeningService.getCashOpening(
-                cashOpeningId
-            );
+            Respuesta cashOpeningResponse = cashOpeningService.getCashOpening(cashOpeningId);
             if (!cashOpeningResponse.getEstado()) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "No se encontró la apertura de caja con ID: " + cashOpeningId,
-                    "prepararReporteCashierClosing " + cashOpeningResponse.getMensaje()
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No se encontró la apertura de caja con ID: " + cashOpeningId,
+                        "prepararReporteCashierClosing " + cashOpeningResponse.getMensaje());
             }
 
             // 2. Obtener todas las facturas del servicio y filtrar por userId
             Respuesta invoicesResponse = invoiceService.getInvoices();
             if (!invoicesResponse.getEstado()) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "No se encontraron facturas.",
-                    "prepararReporteCashierClosing " + invoicesResponse.getMensaje()
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No se encontraron facturas.",
+                        "prepararReporteCashierClosing " + invoicesResponse.getMensaje());
             }
 
             @SuppressWarnings("unchecked")
-            List<InvoiceDTO> allInvoices = (List<InvoiceDTO>) invoicesResponse.getResultado(
-                "Invoices"
-            );
+            List<InvoiceDTO> allInvoices =
+                    (List<InvoiceDTO>) invoicesResponse.getResultado("Invoices");
 
             if (allInvoices == null || allInvoices.isEmpty()) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "No existen facturas disponibles.",
-                    "prepararReporteCashierClosing NoInvoices"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No existen facturas disponibles.",
+                        "prepararReporteCashierClosing NoInvoices");
             }
 
             // Log para validar que customerName esté siendo populado
             for (InvoiceDTO invoice : allInvoices) {
                 LOG.log(
-                    Level.INFO,
-                    "Invoice: " +
-                        invoice.getInvoiceNumber() +
-                        " | Customer: " +
-                        (invoice.getCustomerName() != null
-                            ? invoice.getCustomerName()
-                            : "NULL") +
-                        " | Total: " +
-                        invoice.getTotal()
-                );
+                        Level.INFO,
+                        "Invoice: "
+                                + invoice.getInvoiceNumber()
+                                + " | Customer: "
+                                + (invoice.getCustomerName() != null
+                                        ? invoice.getCustomerName()
+                                        : "NULL")
+                                + " | Total: "
+                                + invoice.getTotal());
             }
 
             // 3. Crear JRBeanCollectionDataSource con las facturas
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(
-                allInvoices
-            );
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(allInvoices);
 
             // 4. Obtener parámetros del sistema
             Respuesta paramsResponse = paramService.getSystemParameters();
@@ -499,9 +392,8 @@ public class ReportService {
 
             if (paramsResponse.getEstado()) {
                 @SuppressWarnings("unchecked")
-                List<SystemParameterDTO> systemParams = (List<
-                    SystemParameterDTO
-                >) paramsResponse.getResultado("SystemParameters");
+                List<SystemParameterDTO> systemParams =
+                        (List<SystemParameterDTO>) paramsResponse.getResultado("SystemParameters");
                 for (SystemParameterDTO param : systemParams) {
                     paramsMap.put(param.getParamName(), param.getParamValue());
                 }
@@ -511,9 +403,8 @@ public class ReportService {
             Map<String, Object> parameters = new HashMap<>();
 
             // Obtener datos de la apertura de caja
-            CashOpeningDTO cashOpening = (CashOpeningDTO) cashOpeningResponse.getResultado(
-                "CashOpening"
-            );
+            CashOpeningDTO cashOpening =
+                    (CashOpeningDTO) cashOpeningResponse.getResultado("CashOpening");
 
             // Parámetros de identificación del cajero y fecha
             // Obtener nombre completo del usuario (firstName + lastName)
@@ -529,11 +420,10 @@ public class ReportService {
             }
             parameters.put("cashierName", cashierName);
             parameters.put(
-                "closingDate",
-                cashOpening.getClosingDate() != null
-                    ? cashOpening.getClosingDate()
-                    : java.time.LocalDate.now()
-            );
+                    "closingDate",
+                    cashOpening.getClosingDate() != null
+                            ? cashOpening.getClosingDate()
+                            : java.time.LocalDate.now());
 
             // Parámetros financieros (montos)
             // Calcular suma total de todas las facturas
@@ -545,14 +435,16 @@ public class ReportService {
             }
 
             // cashierDeclaredTotal: lo que el cajero contó (closingAmount de la apertura de caja)
-            Double cashierDeclaredTotal = cashOpening.getClosingAmount() != null
-                ? cashOpening.getClosingAmount().doubleValue()
-                : 0.0;
+            Double cashierDeclaredTotal =
+                    cashOpening.getClosingAmount() != null
+                            ? cashOpening.getClosingAmount().doubleValue()
+                            : 0.0;
 
             // totalDifference: systemGrandTotal - cashierDeclaredTotal
             Double totalDifference = systemGrandTotal - cashierDeclaredTotal;
 
-            // differenceStatus: "Correcto" si es 0, "Sobrante" si es positivo (cajero contó más), "Faltante" si es negativo (cajero contó menos)
+            // differenceStatus: "Correcto" si es 0, "Sobrante" si es positivo (cajero contó más),
+            // "Faltante" si es negativo (cajero contó menos)
             String differenceStatus = "Pendiente";
             if (totalDifference == 0.0) {
                 differenceStatus = "Correcto";
@@ -568,59 +460,37 @@ public class ReportService {
             parameters.put("differenceStatus", differenceStatus);
 
             // Parámetros de la compañía
-            parameters.put(
-                "companyName",
-                paramsMap.getOrDefault("company.name", "KoffeeFX")
-            );
+            parameters.put("companyName", paramsMap.getOrDefault("company.name", "KoffeeFX"));
 
             // 6. Compilar el informe desde /reports/Cashier-Report.jrxml
-            InputStream reportStream = getClass().getResourceAsStream(
-                "/reports/Cashier-Report.jrxml"
-            );
+            InputStream reportStream =
+                    getClass().getResourceAsStream("/reports/Cashier-Report.jrxml");
             if (reportStream == null) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_INTERNO,
-                    "No se encontró el archivo de reporte Cashier-Report.jrxml",
-                    "prepararReporteCashierClosing FileNotFound"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_INTERNO,
+                        "No se encontró el archivo de reporte Cashier-Report.jrxml",
+                        "prepararReporteCashierClosing FileNotFound");
             }
 
             LOG.log(
-                Level.INFO,
-                "Compilando reporte Cashier-Report.jrxml con lenguaje Java (JDT compiler)"
-            );
-            JasperReport jasperReport = JasperCompileManager.compileReport(
-                reportStream
-            );
+                    Level.INFO,
+                    "Compilando reporte Cashier-Report.jrxml con lenguaje Java (JDT compiler)");
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
 
             // 7. Llenar el reporte con los parámetros y el dataSource
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                jasperReport,
-                parameters,
-                dataSource
-            );
+            JasperPrint jasperPrint =
+                    JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "",
-                "",
-                "JasperPrint",
-                jasperPrint
-            );
+                    true, CodigoRespuesta.CORRECTO, "", "", "JasperPrint", jasperPrint);
         } catch (Exception ex) {
-            LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al preparar el reporte de cierre de caja.",
-                ex
-            );
+            LOG.log(Level.SEVERE, "Ocurrió un error al preparar el reporte de cierre de caja.", ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al preparar el reporte de cierre de caja.",
-                "prepararReporteCashierClosing " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al preparar el reporte de cierre de caja.",
+                    "prepararReporteCashierClosing " + ex.getMessage());
         }
     }
 
@@ -632,45 +502,34 @@ public class ReportService {
      */
     public Respuesta generarReporteCashierPDFBytes(Long cashOpeningId) {
         try {
-            Respuesta reporteResponse = prepararReporteCashierClosing(
-                cashOpeningId
-            );
+            Respuesta reporteResponse = prepararReporteCashierClosing(cashOpeningId);
             if (!reporteResponse.getEstado()) {
                 return reporteResponse;
             }
 
-            JasperPrint jasperPrint =
-                (JasperPrint) reporteResponse.getResultado("JasperPrint");
+            JasperPrint jasperPrint = (JasperPrint) reporteResponse.getResultado("JasperPrint");
 
             // Exportar a bytes
-            byte[] pdfBytes = JasperExportManager.exportReportToPdf(
-                jasperPrint
-            );
+            byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrint);
 
-            LOG.log(
-                Level.INFO,
-                "Reporte de cierre de caja PDF generado exitosamente como bytes"
-            );
+            LOG.log(Level.INFO, "Reporte de cierre de caja PDF generado exitosamente como bytes");
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "Reporte generado exitosamente.",
-                "",
-                "PDFBytes",
-                pdfBytes
-            );
+                    true,
+                    CodigoRespuesta.CORRECTO,
+                    "Reporte generado exitosamente.",
+                    "",
+                    "PDFBytes",
+                    pdfBytes);
         } catch (Exception ex) {
             LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al generar el reporte de cierre de caja PDF.",
-                ex
-            );
+                    Level.SEVERE,
+                    "Ocurrió un error al generar el reporte de cierre de caja PDF.",
+                    ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al generar el reporte de cierre de caja PDF.",
-                "generarReporteCashierPDFBytes " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al generar el reporte de cierre de caja PDF.",
+                    "generarReporteCashierPDFBytes " + ex.getMessage());
         }
     }
 
@@ -686,47 +545,41 @@ public class ReportService {
             // 1. Validar parámetros
             if (dateFrom == null || dateTo == null) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_CLIENTE,
-                    "Las fechas de inicio y fin son obligatorias",
-                    "prepararReporteInvoicesByDate NullDates"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_CLIENTE,
+                        "Las fechas de inicio y fin son obligatorias",
+                        "prepararReporteInvoicesByDate NullDates");
             }
 
             if (dateFrom.isAfter(dateTo)) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_CLIENTE,
-                    "La fecha de inicio no puede ser posterior a la fecha de fin",
-                    "prepararReporteInvoicesByDate InvalidDates"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_CLIENTE,
+                        "La fecha de inicio no puede ser posterior a la fecha de fin",
+                        "prepararReporteInvoicesByDate InvalidDates");
             }
 
             // 2. Obtener todas las facturas
             Respuesta invoicesResponse = invoiceService.getInvoices();
             if (!invoicesResponse.getEstado()) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "No se encontraron facturas.",
-                    "prepararReporteInvoicesByDate " + invoicesResponse.getMensaje()
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No se encontraron facturas.",
+                        "prepararReporteInvoicesByDate " + invoicesResponse.getMensaje());
             }
 
             @SuppressWarnings("unchecked")
-            List<InvoiceDTO> allInvoices = (List<InvoiceDTO>) invoicesResponse.getResultado(
-                "Invoices"
-            );
+            List<InvoiceDTO> allInvoices =
+                    (List<InvoiceDTO>) invoicesResponse.getResultado("Invoices");
 
             // 3. Filtrar facturas por rango de fechas
             List<InvoiceDTO> invoicesByDateRange = new ArrayList<>();
             if (allInvoices != null) {
                 for (InvoiceDTO invoice : allInvoices) {
-                    if (
-                        invoice.getCreatedAt() != null &&
-                        !invoice.getCreatedAt().isBefore(dateFrom) &&
-                        !invoice.getCreatedAt().isAfter(dateTo)
-                    ) {
+                    if (invoice.getCreatedAt() != null
+                            && !invoice.getCreatedAt().isBefore(dateFrom)
+                            && !invoice.getCreatedAt().isAfter(dateTo)) {
                         invoicesByDateRange.add(invoice);
                     }
                 }
@@ -734,17 +587,15 @@ public class ReportService {
 
             if (invoicesByDateRange.isEmpty()) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "No existen facturas en el período especificado.",
-                    "prepararReporteInvoicesByDate NoInvoicesInRange"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No existen facturas en el período especificado.",
+                        "prepararReporteInvoicesByDate NoInvoicesInRange");
             }
 
             // 4. Crear JRBeanCollectionDataSource con las facturas filtradas
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(
-                invoicesByDateRange
-            );
+            JRBeanCollectionDataSource dataSource =
+                    new JRBeanCollectionDataSource(invoicesByDateRange);
 
             // 5. Obtener parámetros del sistema
             Respuesta paramsResponse = paramService.getSystemParameters();
@@ -752,9 +603,8 @@ public class ReportService {
 
             if (paramsResponse.getEstado()) {
                 @SuppressWarnings("unchecked")
-                List<SystemParameterDTO> systemParams = (List<
-                    SystemParameterDTO
-                >) paramsResponse.getResultado("SystemParameters");
+                List<SystemParameterDTO> systemParams =
+                        (List<SystemParameterDTO>) paramsResponse.getResultado("SystemParameters");
                 for (SystemParameterDTO param : systemParams) {
                     paramsMap.put(param.getParamName(), param.getParamValue());
                 }
@@ -796,18 +646,9 @@ public class ReportService {
             parameters.put("dateTo", dateTo);
 
             // Parámetros de la compañía
-            parameters.put(
-                "companyName",
-                paramsMap.getOrDefault("company.name", "KoffeeFX")
-            );
-            parameters.put(
-                "restaurantAddress",
-                paramsMap.getOrDefault("company.address", "")
-            );
-            parameters.put(
-                "restaurantPhone",
-                paramsMap.getOrDefault("company.phone", "")
-            );
+            parameters.put("companyName", paramsMap.getOrDefault("company.name", "KoffeeFX"));
+            parameters.put("restaurantAddress", paramsMap.getOrDefault("company.address", ""));
+            parameters.put("restaurantPhone", paramsMap.getOrDefault("company.phone", ""));
 
             // Moneda
             parameters.put("currency", "₡");
@@ -826,54 +667,41 @@ public class ReportService {
             parameters.put("generatedByUser", System.getProperty("user.name", "System"));
 
             // 8. Compilar el informe desde /reports/Invoices-Report.jrxml
-            InputStream reportStream = getClass().getResourceAsStream(
-                "/reports/Invoices-Report.jrxml"
-            );
+            InputStream reportStream =
+                    getClass().getResourceAsStream("/reports/Invoices-Report.jrxml");
             if (reportStream == null) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_INTERNO,
-                    "No se encontró el archivo de reporte Invoices-Report.jrxml",
-                    "prepararReporteInvoicesByDate FileNotFound"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_INTERNO,
+                        "No se encontró el archivo de reporte Invoices-Report.jrxml",
+                        "prepararReporteInvoicesByDate FileNotFound");
             }
 
             LOG.log(
-                Level.INFO,
-                "Compilando reporte Invoices-Report.jrxml con lenguaje Java (JDT compiler)"
-            );
-            JasperReport jasperReport = JasperCompileManager.compileReport(
-                reportStream
-            );
+                    Level.INFO,
+                    "Compilando reporte Invoices-Report.jrxml con lenguaje Java (JDT compiler)");
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
 
             // 9. Llenar el reporte con los parámetros y el dataSource
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                jasperReport,
-                parameters,
-                dataSource
-            );
+            JasperPrint jasperPrint =
+                    JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "",
-                "",
-                "JasperPrint",
-                jasperPrint
-            );
+                    true, CodigoRespuesta.CORRECTO, "", "", "JasperPrint", jasperPrint);
         } catch (Exception ex) {
             LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al preparar el reporte de facturas por fecha.",
-                ex
-            );
+                    Level.SEVERE,
+                    "Ocurrió un error al preparar el reporte de facturas por fecha.",
+                    ex);
             ex.printStackTrace(); // Esto ayuda a ver la traza completa
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al preparar el reporte de facturas por fecha.",
-                "prepararReporteInvoicesByDate " + ex.getClass().getName() + ": " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al preparar el reporte de facturas por fecha.",
+                    "prepararReporteInvoicesByDate "
+                            + ex.getClass().getName()
+                            + ": "
+                            + ex.getMessage());
         }
     }
 
@@ -891,36 +719,31 @@ public class ReportService {
                 return reporteResponse;
             }
 
-            JasperPrint jasperPrint =
-                (JasperPrint) reporteResponse.getResultado("JasperPrint");
+            JasperPrint jasperPrint = (JasperPrint) reporteResponse.getResultado("JasperPrint");
 
             // Exportar a bytes
             byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrint);
 
             LOG.log(
-                Level.INFO,
-                "Reporte de facturas por fecha PDF generado exitosamente como bytes"
-            );
+                    Level.INFO,
+                    "Reporte de facturas por fecha PDF generado exitosamente como bytes");
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "Reporte generado exitosamente.",
-                "",
-                "PDFBytes",
-                pdfBytes
-            );
+                    true,
+                    CodigoRespuesta.CORRECTO,
+                    "Reporte generado exitosamente.",
+                    "",
+                    "PDFBytes",
+                    pdfBytes);
         } catch (Exception ex) {
             LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al generar el reporte de facturas por fecha PDF.",
-                ex
-            );
+                    Level.SEVERE,
+                    "Ocurrió un error al generar el reporte de facturas por fecha PDF.",
+                    ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al generar el reporte de facturas por fecha PDF.",
-                "generarReporteInvoicesByDatePDFBytes " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al generar el reporte de facturas por fecha PDF.",
+                    "generarReporteInvoicesByDatePDFBytes " + ex.getMessage());
         }
     }
 
@@ -936,47 +759,41 @@ public class ReportService {
             // 1. Validar parámetros
             if (dateFrom == null || dateTo == null) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_CLIENTE,
-                    "Las fechas de inicio y fin son obligatorias",
-                    "prepararReporteProductosMasVendidos NullDates"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_CLIENTE,
+                        "Las fechas de inicio y fin son obligatorias",
+                        "prepararReporteProductosMasVendidos NullDates");
             }
 
             if (dateFrom.isAfter(dateTo)) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_CLIENTE,
-                    "La fecha de inicio no puede ser posterior a la fecha de fin",
-                    "prepararReporteProductosMasVendidos InvalidDates"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_CLIENTE,
+                        "La fecha de inicio no puede ser posterior a la fecha de fin",
+                        "prepararReporteProductosMasVendidos InvalidDates");
             }
 
             // 2. Obtener todas las facturas en el rango de fechas
             Respuesta invoicesResponse = invoiceService.getInvoices();
             if (!invoicesResponse.getEstado()) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "No se encontraron facturas.",
-                    "prepararReporteProductosMasVendidos " + invoicesResponse.getMensaje()
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No se encontraron facturas.",
+                        "prepararReporteProductosMasVendidos " + invoicesResponse.getMensaje());
             }
 
             @SuppressWarnings("unchecked")
-            List<InvoiceDTO> allInvoices = (List<InvoiceDTO>) invoicesResponse.getResultado(
-                "Invoices"
-            );
+            List<InvoiceDTO> allInvoices =
+                    (List<InvoiceDTO>) invoicesResponse.getResultado("Invoices");
 
             // 3. Filtrar facturas por rango de fechas
             List<InvoiceDTO> invoicesByDateRange = new ArrayList<>();
             if (allInvoices != null) {
                 for (InvoiceDTO invoice : allInvoices) {
-                    if (
-                        invoice.getCreatedAt() != null &&
-                        !invoice.getCreatedAt().isBefore(dateFrom) &&
-                        !invoice.getCreatedAt().isAfter(dateTo)
-                    ) {
+                    if (invoice.getCreatedAt() != null
+                            && !invoice.getCreatedAt().isBefore(dateFrom)
+                            && !invoice.getCreatedAt().isAfter(dateTo)) {
                         invoicesByDateRange.add(invoice);
                     }
                 }
@@ -984,11 +801,10 @@ public class ReportService {
 
             if (invoicesByDateRange.isEmpty()) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "No existen facturas en el período especificado.",
-                    "prepararReporteProductosMasVendidos NoInvoicesInRange"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No existen facturas en el período especificado.",
+                        "prepararReporteProductosMasVendidos NoInvoicesInRange");
             }
 
             // 4. Agrupar y agregar datos de ventas por producto
@@ -996,13 +812,12 @@ public class ReportService {
 
             for (InvoiceDTO invoice : invoicesByDateRange) {
                 // Obtener la orden del cliente asociada
-                Respuesta orderResponse = orderService.getCustomerOrder(
-                    invoice.getCustomerOrderId()
-                );
+                Respuesta orderResponse =
+                        orderService.getCustomerOrder(invoice.getCustomerOrderId());
 
                 if (orderResponse.getEstado()) {
                     CustomerOrderDTO order =
-                        (CustomerOrderDTO) orderResponse.getResultado("CustomerOrder");
+                            (CustomerOrderDTO) orderResponse.getResultado("CustomerOrder");
 
                     if (order != null && order.getOrderItems() != null) {
                         // Iterar sobre los items de la orden
@@ -1013,38 +828,34 @@ public class ReportService {
                             String productGroupName = "Sin Categoría";
                             if (item.getProductId() != null) {
                                 try {
-                                    Respuesta productResponse = productService.getProduct(
-                                        item.getProductId()
-                                    );
+                                    Respuesta productResponse =
+                                            productService.getProduct(item.getProductId());
                                     if (productResponse.getEstado()) {
-                                        ProductDTO product = (ProductDTO) productResponse.getResultado(
-                                            "Product"
-                                        );
-                                        if (
-                                            product != null &&
-                                            product.getProductGroupName() != null
-                                        ) {
+                                        ProductDTO product =
+                                                (ProductDTO)
+                                                        productResponse.getResultado("Product");
+                                        if (product != null
+                                                && product.getProductGroupName() != null) {
                                             productGroupName = product.getProductGroupName();
                                         }
                                     }
                                 } catch (Exception ex) {
                                     LOG.log(
-                                        Level.WARNING,
-                                        "No se pudo obtener grupo de producto para item " +
-                                            item.getProductId(),
-                                        ex
-                                    );
+                                            Level.WARNING,
+                                            "No se pudo obtener grupo de producto para item "
+                                                    + item.getProductId(),
+                                            ex);
                                 }
                             }
 
                             if (!productSalesMap.containsKey(productKey)) {
                                 // Crear nuevo registro de producto
-                                ProductSalesDTO productSales = new ProductSalesDTO(
-                                    item.getProductName(),
-                                    productGroupName,
-                                    item.getQuantity(),
-                                    item.getUnitPrice()
-                                );
+                                ProductSalesDTO productSales =
+                                        new ProductSalesDTO(
+                                                item.getProductName(),
+                                                productGroupName,
+                                                item.getQuantity(),
+                                                item.getUnitPrice());
                                 productSalesMap.put(productKey, productSales);
                             } else {
                                 // Agregar a registro existente
@@ -1061,31 +872,38 @@ public class ReportService {
 
             if (productSalesMap.isEmpty()) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_NOENCONTRADO,
-                    "No hay productos vendidos en el período especificado.",
-                    "prepararReporteProductosMasVendidos NoProducts"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_NOENCONTRADO,
+                        "No hay productos vendidos en el período especificado.",
+                        "prepararReporteProductosMasVendidos NoProducts");
             }
 
             // 5. Convertir a lista y ordenar descendente por cantidad vendida
             List<ProductSalesDTO> productSalesList = new ArrayList<>(productSalesMap.values());
-            productSalesList.sort((a, b) -> {
-                Integer qtdA = a.getTotalQuantitySold() != null ? a.getTotalQuantitySold() : 0;
-                Integer qtdB = b.getTotalQuantitySold() != null ? b.getTotalQuantitySold() : 0;
-                return qtdB.compareTo(qtdA); // Descendente
-            });
+            productSalesList.sort(
+                    (a, b) -> {
+                        Integer qtdA =
+                                a.getTotalQuantitySold() != null ? a.getTotalQuantitySold() : 0;
+                        Integer qtdB =
+                                b.getTotalQuantitySold() != null ? b.getTotalQuantitySold() : 0;
+                        return qtdB.compareTo(qtdA); // Descendente
+                    });
 
             // 6. Calcular totales para el resumen
             Integer totalProducts = productSalesList.size();
-            Integer totalQuantity = productSalesList
-                .stream()
-                .mapToInt(p -> p.getTotalQuantitySold() != null ? p.getTotalQuantitySold() : 0)
-                .sum();
-            Double totalRevenue = productSalesList
-                .stream()
-                .mapToDouble(p -> p.getTotalRevenue() != null ? p.getTotalRevenue() : 0.0)
-                .sum();
+            Integer totalQuantity =
+                    productSalesList.stream()
+                            .mapToInt(
+                                    p ->
+                                            p.getTotalQuantitySold() != null
+                                                    ? p.getTotalQuantitySold()
+                                                    : 0)
+                            .sum();
+            Double totalRevenue =
+                    productSalesList.stream()
+                            .mapToDouble(
+                                    p -> p.getTotalRevenue() != null ? p.getTotalRevenue() : 0.0)
+                            .sum();
 
             // 7. Obtener datos de la compañía
             Respuesta paramsResponse = paramService.getSystemParameters();
@@ -1093,9 +911,8 @@ public class ReportService {
 
             if (paramsResponse.getEstado()) {
                 @SuppressWarnings("unchecked")
-                List<SystemParameterDTO> systemParams = (List<
-                    SystemParameterDTO
-                >) paramsResponse.getResultado("SystemParameters");
+                List<SystemParameterDTO> systemParams =
+                        (List<SystemParameterDTO>) paramsResponse.getResultado("SystemParameters");
                 for (SystemParameterDTO param : systemParams) {
                     paramsMap.put(param.getParamName(), param.getParamValue());
                 }
@@ -1130,58 +947,41 @@ public class ReportService {
             parameters.put("generatedByUser", System.getProperty("user.name", "System"));
 
             // 9. Crear JRBeanCollectionDataSource con los productos
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(
-                productSalesList
-            );
+            JRBeanCollectionDataSource dataSource =
+                    new JRBeanCollectionDataSource(productSalesList);
 
             // 10. Compilar el informe desde /reports/Products-Report.jrxml
-            InputStream reportStream = getClass().getResourceAsStream(
-                "/reports/Products-Report.jrxml"
-            );
+            InputStream reportStream =
+                    getClass().getResourceAsStream("/reports/Products-Report.jrxml");
             if (reportStream == null) {
                 return new Respuesta(
-                    false,
-                    CodigoRespuesta.ERROR_INTERNO,
-                    "No se encontró el archivo de reporte Products-Report.jrxml",
-                    "prepararReporteProductosMasVendidos FileNotFound"
-                );
+                        false,
+                        CodigoRespuesta.ERROR_INTERNO,
+                        "No se encontró el archivo de reporte Products-Report.jrxml",
+                        "prepararReporteProductosMasVendidos FileNotFound");
             }
 
             LOG.log(
-                Level.INFO,
-                "Compilando reporte Products-Report.jrxml con lenguaje Java (JDT compiler)"
-            );
-            JasperReport jasperReport = JasperCompileManager.compileReport(
-                reportStream
-            );
+                    Level.INFO,
+                    "Compilando reporte Products-Report.jrxml con lenguaje Java (JDT compiler)");
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
 
             // 11. Llenar el reporte con los parámetros y el dataSource
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                jasperReport,
-                parameters,
-                dataSource
-            );
+            JasperPrint jasperPrint =
+                    JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "",
-                "",
-                "JasperPrint",
-                jasperPrint
-            );
+                    true, CodigoRespuesta.CORRECTO, "", "", "JasperPrint", jasperPrint);
         } catch (Exception ex) {
             LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al preparar el reporte de productos más vendidos.",
-                ex
-            );
+                    Level.SEVERE,
+                    "Ocurrió un error al preparar el reporte de productos más vendidos.",
+                    ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al preparar el reporte de productos más vendidos.",
-                "prepararReporteProductosMasVendidos " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al preparar el reporte de productos más vendidos.",
+                    "prepararReporteProductosMasVendidos " + ex.getMessage());
         }
     }
 
@@ -1192,43 +992,39 @@ public class ReportService {
      * @param dateTo Fecha final del período
      * @return Respuesta con el array de bytes del PDF
      */
-    public Respuesta generarReporteProductosMasVendidosPDFBytes(LocalDate dateFrom, LocalDate dateTo) {
+    public Respuesta generarReporteProductosMasVendidosPDFBytes(
+            LocalDate dateFrom, LocalDate dateTo) {
         try {
             Respuesta reporteResponse = prepararReporteProductosMasVendidos(dateFrom, dateTo);
             if (!reporteResponse.getEstado()) {
                 return reporteResponse;
             }
 
-            JasperPrint jasperPrint =
-                (JasperPrint) reporteResponse.getResultado("JasperPrint");
+            JasperPrint jasperPrint = (JasperPrint) reporteResponse.getResultado("JasperPrint");
 
             // Exportar a bytes
             byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrint);
 
             LOG.log(
-                Level.INFO,
-                "Reporte de productos más vendidos PDF generado exitosamente como bytes"
-            );
+                    Level.INFO,
+                    "Reporte de productos más vendidos PDF generado exitosamente como bytes");
             return new Respuesta(
-                true,
-                CodigoRespuesta.CORRECTO,
-                "Reporte generado exitosamente.",
-                "",
-                "PDFBytes",
-                pdfBytes
-            );
+                    true,
+                    CodigoRespuesta.CORRECTO,
+                    "Reporte generado exitosamente.",
+                    "",
+                    "PDFBytes",
+                    pdfBytes);
         } catch (Exception ex) {
             LOG.log(
-                Level.SEVERE,
-                "Ocurrió un error al generar el reporte de productos más vendidos PDF.",
-                ex
-            );
+                    Level.SEVERE,
+                    "Ocurrió un error al generar el reporte de productos más vendidos PDF.",
+                    ex);
             return new Respuesta(
-                false,
-                CodigoRespuesta.ERROR_INTERNO,
-                "Ocurrió un error al generar el reporte de productos más vendidos PDF.",
-                "generarReporteProductosMasVendidosPDFBytes " + ex.getMessage()
-            );
+                    false,
+                    CodigoRespuesta.ERROR_INTERNO,
+                    "Ocurrió un error al generar el reporte de productos más vendidos PDF.",
+                    "generarReporteProductosMasVendidosPDFBytes " + ex.getMessage());
         }
     }
 }

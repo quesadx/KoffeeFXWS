@@ -4,6 +4,8 @@
  */
 package cr.ac.una.koffeefxws.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,44 +19,28 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
 
 /**
- *
  * @author quesadx
  */
 @Entity
 @Table(name = "ROLE")
 @XmlRootElement
-@NamedQueries(
-    {
-        @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
-        @NamedQuery(
-            name = "Role.findById",
-            query = "SELECT r FROM Role r WHERE r.id = :id"
-        ),
-        @NamedQuery(
-            name = "Role.findByCode",
-            query = "SELECT r FROM Role r WHERE r.code = :code"
-        ),
-        @NamedQuery(
-            name = "Role.findByName",
-            query = "SELECT r FROM Role r WHERE r.name = :name"
-        ),
-    }
-)
+@NamedQueries({
+    @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
+    @NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.id = :id"),
+    @NamedQuery(name = "Role.findByCode", query = "SELECT r FROM Role r WHERE r.code = :code"),
+    @NamedQuery(name = "Role.findByName", query = "SELECT r FROM Role r WHERE r.name = :name"),
+})
 public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+    // annotations to enforce field validation
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
-    @SequenceGenerator(
-        name = "role_seq",
-        sequenceName = "seq_role_id",
-        allocationSize = 1
-    )
+    @SequenceGenerator(name = "role_seq", sequenceName = "seq_role_id", allocationSize = 1)
     @Basic(optional = false)
     @Column(name = "ROLE_ID")
     private Long id;
@@ -135,10 +121,8 @@ public class Role implements Serializable {
             return false;
         }
         Role other = (Role) object;
-        if (
-            (this.id == null && other.id != null) ||
-            (this.id != null && !this.id.equals(other.id))
-        ) {
+        if ((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;

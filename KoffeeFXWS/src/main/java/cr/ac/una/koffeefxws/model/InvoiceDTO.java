@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- *
  * @author quesadx
  */
 public class InvoiceDTO implements Serializable {
@@ -60,12 +59,8 @@ public class InvoiceDTO implements Serializable {
         this.amountReceived = invoice.getAmountReceived();
         this.changeAmount = invoice.getChangeAmount();
         this.createdAt = invoice.getCreatedAt();
-        this.isPrinted =
-            invoice.getIsPrinted() != null &&
-            invoice.getIsPrinted().equals('Y');
-        this.isEmailSent =
-            invoice.getIsEmailSent() != null &&
-            invoice.getIsEmailSent().equals('Y');
+        this.isPrinted = invoice.getIsPrinted() != null && invoice.getIsPrinted().equals('Y');
+        this.isEmailSent = invoice.getIsEmailSent() != null && invoice.getIsEmailSent().equals('Y');
         this.paymentMethod = invoice.getPaymentMethod();
         this.version = invoice.getVersion();
 
@@ -81,9 +76,9 @@ public class InvoiceDTO implements Serializable {
         if (invoice.getCustomerId() != null) {
             this.customerId = invoice.getCustomerId().getId();
             this.customerName =
-                invoice.getCustomerId().getFirstName() +
-                " " +
-                invoice.getCustomerId().getLastName();
+                    invoice.getCustomerId().getFirstName()
+                            + " "
+                            + invoice.getCustomerId().getLastName();
         }
 
         if (invoice.getCustomerOrderId() != null) {
@@ -299,15 +294,13 @@ public class InvoiceDTO implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "InvoiceDTO{" +
-            "invoiceNumber=" +
-            invoiceNumber +
-            ", total=" +
-            total +
-            ", paymentMethod=" +
-            paymentMethod +
-            '}'
-        );
+        return ("InvoiceDTO{"
+                + "invoiceNumber="
+                + invoiceNumber
+                + ", total="
+                + total
+                + ", paymentMethod="
+                + paymentMethod
+                + '}');
     }
 }

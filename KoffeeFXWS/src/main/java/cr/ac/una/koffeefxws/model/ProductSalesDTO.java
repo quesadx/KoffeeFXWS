@@ -4,21 +4,20 @@ import java.io.Serializable;
 
 /**
  * ProductSalesDTO
- * 
- * DTO para agregar y presentar datos de ventas de productos
- * en el reporte "Products-Report"
- * 
- * Contiene información de productos vendidos entre un rango de fechas,
- * con totales agregados por producto.
+ *
+ * <p>DTO para agregar y presentar datos de ventas de productos en el reporte "Products-Report"
+ *
+ * <p>Contiene información de productos vendidos entre un rango de fechas, con totales agregados por
+ * producto.
  */
 public class ProductSalesDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String productName;           // Nombre del producto
-    private String productCategory;       // Categoría/Grupo del producto
-    private Integer totalQuantitySold;    // Total de unidades vendidas
-    private Double avgPrice;              // Precio promedio del producto
-    private Double totalRevenue;          // Ingresos totales (cantidad × precio promedio)
+    private String productName; // Nombre del producto
+    private String productCategory; // Categoría/Grupo del producto
+    private Integer totalQuantitySold; // Total de unidades vendidas
+    private Double avgPrice; // Precio promedio del producto
+    private Double totalRevenue; // Ingresos totales (cantidad × precio promedio)
 
     // ===== CONSTRUCTORES =====
 
@@ -28,8 +27,8 @@ public class ProductSalesDTO implements Serializable {
         this.totalRevenue = 0.0;
     }
 
-    public ProductSalesDTO(String productName, String productCategory, 
-                          Integer quantity, Double price) {
+    public ProductSalesDTO(
+            String productName, String productCategory, Integer quantity, Double price) {
         this.productName = productName;
         this.productCategory = productCategory;
         this.totalQuantitySold = quantity != null ? quantity : 0;
@@ -39,28 +38,23 @@ public class ProductSalesDTO implements Serializable {
 
     // ===== MÉTODOS HELPER =====
 
-    /**
-     * Suma cantidad a las unidades ya vendidas
-     */
+    /** Suma cantidad a las unidades ya vendidas */
     public void addQuantity(Integer quantity) {
         if (quantity != null) {
-            this.totalQuantitySold = (this.totalQuantitySold != null ? this.totalQuantitySold : 0) + quantity;
+            this.totalQuantitySold =
+                    (this.totalQuantitySold != null ? this.totalQuantitySold : 0) + quantity;
             this.totalRevenue = calculateRevenue();
         }
     }
 
-    /**
-     * Suma ingresos (cantidad × precio)
-     */
+    /** Suma ingresos (cantidad × precio) */
     public void addRevenue(Double revenue) {
         if (revenue != null) {
             this.totalRevenue = (this.totalRevenue != null ? this.totalRevenue : 0.0) + revenue;
         }
     }
 
-    /**
-     * Calcula el ingreso total basado en cantidad y precio
-     */
+    /** Calcula el ingreso total basado en cantidad y precio */
     private Double calculateRevenue() {
         Integer qty = this.totalQuantitySold != null ? this.totalQuantitySold : 0;
         Double price = this.avgPrice != null ? this.avgPrice : 0.0;
@@ -113,13 +107,20 @@ public class ProductSalesDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductSalesDTO{" +
-                "productName='" + productName + '\'' +
-                ", productCategory='" + productCategory + '\'' +
-                ", totalQuantitySold=" + totalQuantitySold +
-                ", avgPrice=" + avgPrice +
-                ", totalRevenue=" + totalRevenue +
-                '}';
+        return "ProductSalesDTO{"
+                + "productName='"
+                + productName
+                + '\''
+                + ", productCategory='"
+                + productCategory
+                + '\''
+                + ", totalQuantitySold="
+                + totalQuantitySold
+                + ", avgPrice="
+                + avgPrice
+                + ", totalRevenue="
+                + totalRevenue
+                + '}';
     }
 
     @Override
@@ -132,7 +133,7 @@ public class ProductSalesDTO implements Serializable {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         ProductSalesDTO other = (ProductSalesDTO) obj;
-        return java.util.Objects.equals(productName, other.productName) &&
-               java.util.Objects.equals(productCategory, other.productCategory);
+        return java.util.Objects.equals(productName, other.productName)
+                && java.util.Objects.equals(productCategory, other.productCategory);
     }
 }

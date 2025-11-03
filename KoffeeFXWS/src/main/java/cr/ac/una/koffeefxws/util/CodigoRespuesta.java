@@ -1,7 +1,6 @@
 package cr.ac.una.koffeefxws.util;
 
 /**
- *
  * @author ccarranza
  */
 public enum CodigoRespuesta {

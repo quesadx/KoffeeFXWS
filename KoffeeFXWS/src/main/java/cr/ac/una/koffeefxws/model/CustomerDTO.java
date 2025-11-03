@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
  * @author quesadx
  */
 public class CustomerDTO implements Serializable {
@@ -156,15 +155,13 @@ public class CustomerDTO implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "CustomerDTO{" +
-            "firstName=" +
-            firstName +
-            ", lastName=" +
-            lastName +
-            ", email=" +
-            email +
-            '}'
-        );
+        return ("CustomerDTO{"
+                + "firstName="
+                + firstName
+                + ", lastName="
+                + lastName
+                + ", email="
+                + email
+                + '}');
     }
 }

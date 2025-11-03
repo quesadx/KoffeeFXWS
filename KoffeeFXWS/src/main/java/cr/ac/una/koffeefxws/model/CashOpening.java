@@ -4,6 +4,10 @@
  */
 package cr.ac.una.koffeefxws.model;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
+
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,75 +22,53 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.persistence.Version;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.List;
 
 /**
- *
  * @author quesadx
  */
 @Entity
 @Table(name = "CASH_OPENING")
 @XmlRootElement
-@NamedQueries(
-    {
-        @NamedQuery(
-            name = "CashOpening.findAll",
-            query = "SELECT c FROM CashOpening c"
-        ),
-        @NamedQuery(
+@NamedQueries({
+    @NamedQuery(name = "CashOpening.findAll", query = "SELECT c FROM CashOpening c"),
+    @NamedQuery(
             name = "CashOpening.findById",
-            query = "SELECT c FROM CashOpening c WHERE c.id = :id"
-        ),
-        @NamedQuery(
+            query = "SELECT c FROM CashOpening c WHERE c.id = :id"),
+    @NamedQuery(
             name = "CashOpening.findByOpeningDate",
-            query = "SELECT c FROM CashOpening c WHERE c.openingDate = :openingDate"
-        ),
-        @NamedQuery(
+            query = "SELECT c FROM CashOpening c WHERE c.openingDate = :openingDate"),
+    @NamedQuery(
             name = "CashOpening.findByInitialAmount",
-            query = "SELECT c FROM CashOpening c WHERE c.initialAmount = :initialAmount"
-        ),
-        @NamedQuery(
+            query = "SELECT c FROM CashOpening c WHERE c.initialAmount = :initialAmount"),
+    @NamedQuery(
             name = "CashOpening.findByIsClosed",
-            query = "SELECT c FROM CashOpening c WHERE c.isClosed = :isClosed"
-        ),
-        @NamedQuery(
+            query = "SELECT c FROM CashOpening c WHERE c.isClosed = :isClosed"),
+    @NamedQuery(
             name = "CashOpening.findByClosingDate",
-            query = "SELECT c FROM CashOpening c WHERE c.closingDate = :closingDate"
-        ),
-        @NamedQuery(
+            query = "SELECT c FROM CashOpening c WHERE c.closingDate = :closingDate"),
+    @NamedQuery(
             name = "CashOpening.findByClosingAmount",
-            query = "SELECT c FROM CashOpening c WHERE c.closingAmount = :closingAmount"
-        ),
-        @NamedQuery(
+            query = "SELECT c FROM CashOpening c WHERE c.closingAmount = :closingAmount"),
+    @NamedQuery(
             name = "CashOpening.findByNotes",
-            query = "SELECT c FROM CashOpening c WHERE c.notes = :notes"
-        ),
-    }
-)
+            query = "SELECT c FROM CashOpening c WHERE c.notes = :notes"),
+})
 public class CashOpening implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+    // annotations to enforce field validation
     @Id
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "cash_opening_seq"
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cash_opening_seq")
     @SequenceGenerator(
-        name = "cash_opening_seq",
-        sequenceName = "seq_cash_opening_id",
-        allocationSize = 1
-    )
+            name = "cash_opening_seq",
+            sequenceName = "seq_cash_opening_id",
+            allocationSize = 1)
     @Basic(optional = false)
     @Column(name = "CASH_OPENING_ID")
     private Long id;
@@ -135,9 +117,7 @@ public class CashOpening implements Serializable {
     public void actualizar(CashOpeningDTO dto) {
         this.openingDate = dto.getOpeningDate();
         this.initialAmount = dto.getInitialAmount();
-        this.isClosed = dto.getIsClosed() != null && dto.getIsClosed()
-            ? 'Y'
-            : 'N';
+        this.isClosed = dto.getIsClosed() != null && dto.getIsClosed() ? 'Y' : 'N';
         this.closingDate = dto.getClosingDate();
         this.closingAmount = dto.getClosingAmount();
         this.notes = dto.getNotes();
@@ -238,10 +218,8 @@ public class CashOpening implements Serializable {
             return false;
         }
         CashOpening other = (CashOpening) object;
-        if (
-            (this.id == null && other.id != null) ||
-            (this.id != null && !this.id.equals(other.id))
-        ) {
+        if ((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
