@@ -36,36 +36,37 @@ import cr.ac.una.koffeefxws.util.Secure;
  */
 @Secure
 @Path("/ProductGroupController")
-@Tag(name = "ProductGroups", description = "Operaciones sobre grupos de productos")
+@Tag(name = "ProductGroups", description = "Operations on product groups")
 @SecurityRequirement(name = "jwt-auth")
 public class ProductGroupController {
 
   @EJB ProductGroupService productGroupService;
 
+  @Secure
   @GET
   @Path("/productgroup/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene un grupo de productos por ID")
+  @Operation(description = "Gets a product group by ID")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Grupo de productos encontrado",
+        description = "Product group found",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = ProductGroupDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Grupo de productos no encontrado",
+        description = "Product group not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getProductGroup(
-      @Parameter(description = "ID del grupo de productos") @PathParam("id") Long id) {
+      @Parameter(description = "Product group ID") @PathParam("id") Long id) {
     try {
       Respuesta r = productGroupService.getProductGroup(id);
       if (!r.getEstado()) {
@@ -76,28 +77,29 @@ public class ProductGroupController {
     } catch (Exception ex) {
       Logger.getLogger(ProductGroupController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo el grupo de productos.")
+          .entity("Error getting the product group.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/productgroups")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todos los grupos de productos")
+  @Operation(description = "Gets all product groups")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Grupos de productos encontrados",
+        description = "Product groups found",
         content = @Content(mediaType = MediaType.APPLICATION_JSON)),
     @ApiResponse(
         responseCode = "404",
-        description = "No hay grupos de productos registrados",
+        description = "No product groups registered",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getProductGroups() {
@@ -113,31 +115,32 @@ public class ProductGroupController {
     } catch (Exception ex) {
       Logger.getLogger(ProductGroupController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo los grupos de productos")
+          .entity("Error getting product groups")
           .build();
     }
   }
 
+  @Secure
   @POST
   @Path("/productgroup")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Guarda o actualiza un grupo de productos")
+  @Operation(description = "Creates or updates a product group")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Grupo de productos guardado exitosamente",
+        description = "Product group saved successfully",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = ProductGroupDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Grupo de productos no encontrado",
+        description = "Product group not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response guardarProductGroup(ProductGroupDTO productGroup) {
@@ -151,29 +154,30 @@ public class ProductGroupController {
     } catch (Exception ex) {
       Logger.getLogger(ProductGroupController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error guardando el grupo de productos.")
+          .entity("Error saving the product group.")
           .build();
     }
   }
 
+  @Secure
   @DELETE
   @Path("/productgroup/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Elimina un grupo de productos")
+  @Operation(description = "Deletes a product group")
   @ApiResponses({
-    @ApiResponse(responseCode = "200", description = "Grupo de productos eliminado exitosamente"),
+    @ApiResponse(responseCode = "200", description = "Product group deleted successfully"),
     @ApiResponse(
         responseCode = "404",
-        description = "Grupo de productos no encontrado",
+        description = "Product group not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response eliminarProductGroup(
-      @Parameter(description = "ID del grupo de productos") @PathParam("id") Long id) {
+      @Parameter(description = "Product group ID") @PathParam("id") Long id) {
     try {
       Respuesta r = productGroupService.eliminarProductGroup(id);
       if (!r.getEstado()) {
@@ -183,7 +187,7 @@ public class ProductGroupController {
     } catch (Exception ex) {
       Logger.getLogger(ProductGroupController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error eliminando el grupo de productos.")
+          .entity("Error deleting the product group.")
           .build();
     }
   }

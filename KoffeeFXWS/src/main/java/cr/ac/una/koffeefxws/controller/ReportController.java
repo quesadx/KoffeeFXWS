@@ -37,15 +37,7 @@ public class ReportController {
 
   @EJB ReportService reportService;
 
-  /**
-   * Método privado para generar el PDF de la factura
-   *
-   * @param orderId ID de la orden
-   * @param contentDisposition "attachment" para descarga, "inline" para visualización
-   * @return Response con el PDF o mensaje de error
-   */
   private Response generarPDF(Long orderId, String contentDisposition) {
-    // Validar que orderId no sea nulo
     if (orderId == null) {
       LOG.log(Level.WARNING, "Se intentó generar factura con orderId nulo");
       return Response.status(CodigoRespuesta.ERROR_CLIENTE.getValue())
@@ -86,12 +78,6 @@ public class ReportController {
     }
   }
 
-  /**
-   * Genera y descarga una factura en formato PDF
-   *
-   * @param orderId ID de la orden para generar la factura
-   * @return Response con el PDF como bytes o mensaje de error
-   */
   @GET
   @Path("/invoice/{orderId}/pdf")
   @Produces("application/pdf")
@@ -102,12 +88,6 @@ public class ReportController {
     return generarPDF(orderId, "attachment");
   }
 
-  /**
-   * Genera y retorna la factura en formato PDF para visualización en línea
-   *
-   * @param orderId ID de la orden para generar la factura
-   * @return Response con el PDF para visualización en navegador
-   */
   @GET
   @Path("/invoice/{orderId}/preview")
   @Produces("application/pdf")
@@ -120,15 +100,7 @@ public class ReportController {
     return generarPDF(orderId, "inline");
   }
 
-  /**
-   * Método privado para generar el PDF del reporte de cierre de caja
-   *
-   * @param cashOpeningId ID de la apertura de caja
-   * @param contentDisposition "attachment" para descarga, "inline" para visualización
-   * @return Response con el PDF o mensaje de error
-   */
   private Response generarPDFCashierClosing(Long cashOpeningId, String contentDisposition) {
-    // Validar que cashOpeningId no sea nulo
     if (cashOpeningId == null) {
       LOG.log(Level.WARNING, "Se intentó generar reporte de cierre con cashOpeningId nulo");
       return Response.status(CodigoRespuesta.ERROR_CLIENTE.getValue())
@@ -179,12 +151,6 @@ public class ReportController {
     }
   }
 
-  /**
-   * Genera y descarga un reporte de cierre de caja en formato PDF
-   *
-   * @param cashOpeningId ID de la apertura de caja para generar el reporte
-   * @return Response con el PDF como bytes o mensaje de error
-   */
   @GET
   @Path("/cashier-closing/{cashOpeningId}/pdf")
   @Produces("application/pdf")
@@ -196,12 +162,6 @@ public class ReportController {
     return generarPDFCashierClosing(cashOpeningId, "attachment");
   }
 
-  /**
-   * Genera y retorna el reporte de cierre de caja en formato PDF para visualización en línea
-   *
-   * @param cashOpeningId ID de la apertura de caja para generar el reporte
-   * @return Response con el PDF para visualización en navegador
-   */
   @GET
   @Path("/cashier-closing/{cashOpeningId}/preview")
   @Produces("application/pdf")
@@ -215,14 +175,6 @@ public class ReportController {
     return generarPDFCashierClosing(cashOpeningId, "inline");
   }
 
-  /**
-   * Método privado para generar el PDF del reporte de facturas por fecha
-   *
-   * @param dateFrom Fecha inicial del período
-   * @param dateTo Fecha final del período
-   * @param contentDisposition "attachment" para descarga, "inline" para visualización
-   * @return Response con el PDF o mensaje de error
-   */
   private Response generarPDFInvoicesByDate(
       LocalDate dateFrom, LocalDate dateTo, String contentDisposition) {
     // Validar que las fechas no sean nulas
@@ -287,13 +239,6 @@ public class ReportController {
     }
   }
 
-  /**
-   * Genera y descarga un reporte de facturas por fecha en formato PDF
-   *
-   * @param dateFrom Fecha inicial del período (formato: YYYY-MM-DD)
-   * @param dateTo Fecha final del período (formato: YYYY-MM-DD)
-   * @return Response con el PDF como bytes o mensaje de error
-   */
   @GET
   @Path("/invoices-by-date/{dateFrom}/{dateTo}/pdf")
   @Produces("application/pdf")
@@ -321,13 +266,6 @@ public class ReportController {
     }
   }
 
-  /**
-   * Genera y retorna el reporte de facturas por fecha en formato PDF para visualización en línea
-   *
-   * @param dateFrom Fecha inicial del período (formato: YYYY-MM-DD)
-   * @param dateTo Fecha final del período (formato: YYYY-MM-DD)
-   * @return Response con el PDF para visualización en navegador
-   */
   @GET
   @Path("/invoices-by-date/{dateFrom}/{dateTo}/preview")
   @Produces("application/pdf")
@@ -355,14 +293,6 @@ public class ReportController {
     }
   }
 
-  /**
-   * Método privado para generar el PDF del reporte de productos más vendidos
-   *
-   * @param dateFrom Fecha inicial del período
-   * @param dateTo Fecha final del período
-   * @param contentDisposition "attachment" para descarga, "inline" para visualización
-   * @return Response con el PDF o mensaje de error
-   */
   private Response generarPDFProductosMasVendidos(
       LocalDate dateFrom, LocalDate dateTo, String contentDisposition) {
     // Validar que las fechas no sean nulas
@@ -425,13 +355,6 @@ public class ReportController {
     }
   }
 
-  /**
-   * Genera y descarga un reporte de productos más vendidos en formato PDF
-   *
-   * @param dateFrom Fecha inicial del período (formato: YYYY-MM-DD)
-   * @param dateTo Fecha final del período (formato: YYYY-MM-DD)
-   * @return Response con el PDF como bytes o mensaje de error
-   */
   @GET
   @Path("/products-sales/{dateFrom}/{dateTo}/pdf")
   @Produces("application/pdf")
@@ -459,14 +382,6 @@ public class ReportController {
     }
   }
 
-  /**
-   * Genera y retorna el reporte de productos más vendidos en formato PDF para visualización en
-   * línea
-   *
-   * @param dateFrom Fecha inicial del período (formato: YYYY-MM-DD)
-   * @param dateTo Fecha final del período (formato: YYYY-MM-DD)
-   * @return Response con el PDF para visualización en navegador
-   */
   @GET
   @Path("/products-sales/{dateFrom}/{dateTo}/preview")
   @Produces("application/pdf")

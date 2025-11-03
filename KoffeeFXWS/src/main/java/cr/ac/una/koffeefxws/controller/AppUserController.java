@@ -37,39 +37,40 @@ import cr.ac.una.koffeefxws.util.Secure;
 /**
  * @author quesadx
  */
+@Secure
 @Path("/AppUserController")
 @Tag(name = "AppUsers", description = "Operaciones sobre usuarios de la aplicación")
+@Tag(name = "AppUsers", description = "Operations on application users")
 public class AppUserController {
 
   @EJB AppUserService appUserService;
 
   @Context SecurityContext securityContext;
 
-  /** Validar usuario (estilo UNAPlanilla): GET con ruta y parámetros de path */
   @GET
   @Path("/usuario/{usuario}/{clave}")
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(description = "Autentica un usuario")
+  @Operation(description = "Authenticates a user")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Usuario Autenticado",
+        description = "User Authenticated",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = AppUserDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Usuario No Autenticado",
+        description = "User Not Authenticated",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno durante autenticación del usuario",
+        description = "Internal error during user authentication",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response validarUsuario(
-      @Parameter(description = "Codigo de usuario") @PathParam("usuario") String usuario,
-      @Parameter(description = "Clave de usuario") @PathParam("clave") String clave) {
+      @Parameter(description = "Username") @PathParam("usuario") String usuario,
+      @Parameter(description = "User password") @PathParam("clave") String clave) {
     try {
       Respuesta r = appUserService.validateUser(usuario, clave);
       if (!r.getEstado()) {
@@ -81,7 +82,7 @@ public class AppUserController {
     } catch (Exception ex) {
       Logger.getLogger(AppUserController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error validando el usuario.")
+          .entity("Error validating the user.")
           .build();
     }
   }
@@ -90,20 +91,20 @@ public class AppUserController {
   @GET
   @Path("/renovar")
   @Produces(MediaType.TEXT_PLAIN)
-  @Operation(description = "Genera un nuevo token a partir de un token de renovación")
+  @Operation(description = "Generates a new token from a refresh token")
   @SecurityRequirement(name = "jwt-auth")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Renovación exitosa del token",
+        description = "Token successfully renewed",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "401",
-        description = "No se pudo renovar el token",
+        description = "Could not renew the token",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error renovando el token",
+        description = "Error renewing the token",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response renovarToken() {
@@ -113,13 +114,13 @@ public class AppUserController {
         return Response.ok(JwTokenHelper.getInstance().generatePrivateKey(usuarioRequest)).build();
       } else {
         return Response.status(CodigoRespuesta.ERROR_PERMISOS.getValue())
-            .entity("No se pudo renovar el token")
+            .entity("Could not renew the token")
             .build();
       }
     } catch (Exception ex) {
       Logger.getLogger(AppUserController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("No se pudo renovar el token")
+          .entity("Could not renew the token")
           .build();
     }
   }
@@ -129,26 +130,26 @@ public class AppUserController {
   @Path("/appuser/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene un usuario por ID")
+  @Operation(description = "Gets a user by ID")
   @SecurityRequirement(name = "jwt-auth")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Usuario encontrado",
+        description = "User found",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = AppUserDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Usuario no encontrado",
+        description = "User not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
-  public Response getAppUser(@Parameter(description = "ID del usuario") @PathParam("id") Long id) {
+  public Response getAppUser(@Parameter(description = "User ID") @PathParam("id") Long id) {
     try {
       Respuesta r = appUserService.getAppUser(id);
       if (!r.getEstado()) {
@@ -159,7 +160,7 @@ public class AppUserController {
     } catch (Exception ex) {
       Logger.getLogger(AppUserController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo el usuario.")
+          .entity("Error getting the user.")
           .build();
     }
   }
@@ -169,7 +170,7 @@ public class AppUserController {
   @Path("/appuser/username/{username}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene un usuario por username")
+  @Operation(description = "Gets a user by username")
   @SecurityRequirement(name = "jwt-auth")
   @ApiResponses({
     @ApiResponse(
@@ -189,7 +190,7 @@ public class AppUserController {
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getAppUserByUsername(
-      @Parameter(description = "Username del usuario") @PathParam("username") String username) {
+      @Parameter(description = "Username") @PathParam("username") String username) {
     try {
       Respuesta r = appUserService.getAppUserByUsername(username);
       if (!r.getEstado()) {
@@ -200,7 +201,7 @@ public class AppUserController {
     } catch (Exception ex) {
       Logger.getLogger(AppUserController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo el usuario.")
+          .entity("Error getting the user.")
           .build();
     }
   }
@@ -210,20 +211,20 @@ public class AppUserController {
   @Path("/appusers")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todos los usuarios")
+  @Operation(description = "Gets all users")
   @SecurityRequirement(name = "jwt-auth")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Usuarios encontrados",
+        description = "Users found",
         content = @Content(mediaType = MediaType.APPLICATION_JSON)),
     @ApiResponse(
         responseCode = "404",
-        description = "No hay usuarios registrados",
+        description = "No users registered",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getAppUsers() {
@@ -238,35 +239,32 @@ public class AppUserController {
     } catch (Exception ex) {
       Logger.getLogger(AppUserController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo los usuarios")
+          .entity("Error getting users")
           .build();
     }
   }
 
-  /**
-   * Save/update user - NO @Secure for initial user creation In production, you should add
-   * role-based security here
-   */
+  @Secure
   @POST
   @Path("/appuser")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Guarda o actualiza un usuario")
+  @Operation(description = "Creates or updates a user")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Usuario guardado exitosamente",
+        description = "User saved successfully",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = AppUserDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Usuario no encontrado",
+        description = "User not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response guardarAppUser(AppUserDTO appUser) {
@@ -280,7 +278,7 @@ public class AppUserController {
     } catch (Exception ex) {
       Logger.getLogger(AppUserController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error guardando el usuario.")
+          .entity("Error saving the user.")
           .build();
     }
   }
@@ -290,21 +288,21 @@ public class AppUserController {
   @Path("/appuser/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Elimina un usuario")
+  @Operation(description = "Deletes a user")
   @SecurityRequirement(name = "jwt-auth")
   @ApiResponses({
     @ApiResponse(responseCode = "200", description = "Usuario eliminado exitosamente"),
+    @ApiResponse(responseCode = "200", description = "User deleted successfully"),
     @ApiResponse(
         responseCode = "404",
-        description = "Usuario no encontrado",
+        description = "User not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
-  public Response eliminarAppUser(
-      @Parameter(description = "ID del usuario") @PathParam("id") Long id) {
+  public Response eliminarAppUser(@Parameter(description = "User ID") @PathParam("id") Long id) {
     try {
       Respuesta r = appUserService.eliminarAppUser(id);
       if (!r.getEstado()) {
@@ -314,7 +312,7 @@ public class AppUserController {
     } catch (Exception ex) {
       Logger.getLogger(AppUserController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error eliminando el usuario.")
+          .entity("Error deleting the user.")
           .build();
     }
   }

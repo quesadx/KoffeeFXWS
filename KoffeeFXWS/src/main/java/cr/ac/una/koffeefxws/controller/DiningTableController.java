@@ -36,36 +36,37 @@ import cr.ac.una.koffeefxws.util.Secure;
  */
 @Secure
 @Path("/DiningTableController")
-@Tag(name = "DiningTables", description = "Operaciones sobre mesas de comedor")
+@Tag(name = "DiningTables", description = "Operations on dining tables")
 @SecurityRequirement(name = "jwt-auth")
 public class DiningTableController {
 
   @EJB DiningTableService diningTableService;
 
+  @Secure
   @GET
   @Path("/diningtable/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene una mesa de comedor por ID")
+  @Operation(description = "Gets a dining table by ID")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Mesa de comedor encontrada",
+        description = "Dining table found",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = DiningTableDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Mesa de comedor no encontrada",
+        description = "Dining table not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getDiningTable(
-      @Parameter(description = "ID de la mesa de comedor") @PathParam("id") Long id) {
+      @Parameter(description = "Dining table ID") @PathParam("id") Long id) {
     try {
       Respuesta r = diningTableService.getDiningTable(id);
       if (!r.getEstado()) {
@@ -76,28 +77,29 @@ public class DiningTableController {
     } catch (Exception ex) {
       Logger.getLogger(DiningTableController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo la mesa de comedor.")
+          .entity("Error getting the dining table.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/diningtables")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todas las mesas de comedor")
+  @Operation(description = "Gets all dining tables")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Mesas de comedor encontradas",
+        description = "Dining tables found",
         content = @Content(mediaType = MediaType.APPLICATION_JSON)),
     @ApiResponse(
         responseCode = "404",
-        description = "No hay mesas de comedor registradas",
+        description = "No dining tables registered",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getDiningTables() {
@@ -113,31 +115,32 @@ public class DiningTableController {
     } catch (Exception ex) {
       Logger.getLogger(DiningTableController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo las mesas de comedor")
+          .entity("Error getting dining tables")
           .build();
     }
   }
 
+  @Secure
   @POST
   @Path("/diningtable")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Guarda o actualiza una mesa de comedor")
+  @Operation(description = "Creates or updates a dining table")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Mesa de comedor guardada exitosamente",
+        description = "Dining table saved successfully",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = DiningTableDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Mesa de comedor no encontrada",
+        description = "Dining table not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response guardarDiningTable(DiningTableDTO diningTable) {
@@ -151,29 +154,30 @@ public class DiningTableController {
     } catch (Exception ex) {
       Logger.getLogger(DiningTableController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error guardando la mesa de comedor.")
+          .entity("Error saving the dining table.")
           .build();
     }
   }
 
+  @Secure
   @DELETE
   @Path("/diningtable/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Elimina una mesa de comedor")
+  @Operation(description = "Deletes a dining table")
   @ApiResponses({
-    @ApiResponse(responseCode = "200", description = "Mesa de comedor eliminada exitosamente"),
+    @ApiResponse(responseCode = "200", description = "Dining table deleted successfully"),
     @ApiResponse(
         responseCode = "404",
-        description = "Mesa de comedor no encontrada",
+        description = "Dining table not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response eliminarDiningTable(
-      @Parameter(description = "ID de la mesa de comedor") @PathParam("id") Long id) {
+      @Parameter(description = "Dining table ID") @PathParam("id") Long id) {
     try {
       Respuesta r = diningTableService.eliminarDiningTable(id);
       if (!r.getEstado()) {
@@ -183,7 +187,7 @@ public class DiningTableController {
     } catch (Exception ex) {
       Logger.getLogger(DiningTableController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error eliminando la mesa de comedor.")
+          .entity("Error deleting the dining table.")
           .build();
     }
   }

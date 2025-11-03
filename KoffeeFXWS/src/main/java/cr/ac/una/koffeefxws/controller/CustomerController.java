@@ -36,35 +36,36 @@ import cr.ac.una.koffeefxws.util.Secure;
  */
 @Secure
 @Path("/CustomerController")
-@Tag(name = "Customers", description = "Operaciones sobre clientes")
+@Tag(name = "Customers", description = "Operations on customers")
 @SecurityRequirement(name = "jwt-auth")
 public class CustomerController {
 
   @EJB CustomerService customerService;
 
+  @Secure
   @GET
   @Path("/customer/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene un cliente por ID")
+  @Operation(description = "Gets a customer by ID")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Cliente encontrado",
+        description = "Customer found",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = CustomerDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Cliente no encontrado",
+        description = "Customer not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
-  public Response getCustomer(@Parameter(description = "ID del cliente") @PathParam("id") Long id) {
+  public Response getCustomer(@Parameter(description = "Customer ID") @PathParam("id") Long id) {
     try {
       Respuesta r = customerService.getCustomer(id);
       if (!r.getEstado()) {
@@ -75,35 +76,36 @@ public class CustomerController {
     } catch (Exception ex) {
       Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo el cliente.")
+          .entity("Error getting the customer.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/customer/email/{email}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene un cliente por email")
+  @Operation(description = "Gets a customer by email")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Cliente encontrado",
+        description = "Customer found",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = CustomerDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Cliente no encontrado",
+        description = "Customer not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getCustomerByEmail(
-      @Parameter(description = "Email del cliente") @PathParam("email") String email) {
+      @Parameter(description = "Customer email") @PathParam("email") String email) {
     try {
       Respuesta r = customerService.getCustomerByEmail(email);
       if (!r.getEstado()) {
@@ -114,28 +116,29 @@ public class CustomerController {
     } catch (Exception ex) {
       Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo el cliente.")
+          .entity("Error getting the customer.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/customers")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todos los clientes")
+  @Operation(description = "Gets all customers")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Clientes encontrados",
+        description = "Customers found",
         content = @Content(mediaType = MediaType.APPLICATION_JSON)),
     @ApiResponse(
         responseCode = "404",
-        description = "No hay clientes registrados",
+        description = "No customers registered",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getCustomers() {
@@ -151,31 +154,32 @@ public class CustomerController {
     } catch (Exception ex) {
       Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo los clientes")
+          .entity("Error getting customers")
           .build();
     }
   }
 
+  @Secure
   @POST
   @Path("/customer")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Guarda o actualiza un cliente")
+  @Operation(description = "Creates or updates a customer")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Cliente guardado exitosamente",
+        description = "Customer saved successfully",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = CustomerDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Cliente no encontrado",
+        description = "Customer not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response guardarCustomer(CustomerDTO customer) {
@@ -189,29 +193,30 @@ public class CustomerController {
     } catch (Exception ex) {
       Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error guardando el cliente.")
+          .entity("Error saving the customer.")
           .build();
     }
   }
 
+  @Secure
   @DELETE
   @Path("/customer/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Elimina un cliente")
+  @Operation(description = "Deletes a customer")
   @ApiResponses({
-    @ApiResponse(responseCode = "200", description = "Cliente eliminado exitosamente"),
+    @ApiResponse(responseCode = "200", description = "Customer deleted successfully"),
     @ApiResponse(
         responseCode = "404",
-        description = "Cliente no encontrado",
+        description = "Customer not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response eliminarCustomer(
-      @Parameter(description = "ID del cliente") @PathParam("id") Long id) {
+      @Parameter(description = "Customer ID") @PathParam("id") Long id) {
     try {
       Respuesta r = customerService.eliminarCustomer(id);
       if (!r.getEstado()) {
@@ -221,7 +226,7 @@ public class CustomerController {
     } catch (Exception ex) {
       Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error eliminando el cliente.")
+          .entity("Error deleting the customer.")
           .build();
     }
   }

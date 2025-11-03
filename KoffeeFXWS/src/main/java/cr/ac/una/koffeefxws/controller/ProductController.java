@@ -36,35 +36,36 @@ import cr.ac.una.koffeefxws.util.Secure;
  */
 @Secure
 @Path("/ProductController")
-@Tag(name = "Products", description = "Operaciones sobre productos")
+@Tag(name = "Products", description = "Operations on products")
 @SecurityRequirement(name = "jwt-auth")
 public class ProductController {
 
   @EJB ProductService productService;
 
+  @Secure
   @GET
   @Path("/product/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene un producto por ID")
+  @Operation(description = "Gets a product by ID")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Producto encontrado",
+        description = "Product found",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = ProductDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Producto no encontrado",
+        description = "Product not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
-  public Response getProduct(@Parameter(description = "ID del producto") @PathParam("id") Long id) {
+  public Response getProduct(@Parameter(description = "Product ID") @PathParam("id") Long id) {
     try {
       Respuesta r = productService.getProduct(id);
       if (!r.getEstado()) {
@@ -75,28 +76,29 @@ public class ProductController {
     } catch (Exception ex) {
       Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo el producto.")
+          .entity("Error getting the product.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/products")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todos los productos")
+  @Operation(description = "Gets all products")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Productos encontrados",
+        description = "Products found",
         content = @Content(mediaType = MediaType.APPLICATION_JSON)),
     @ApiResponse(
         responseCode = "404",
-        description = "No hay productos registrados",
+        description = "No products registered",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getProducts() {
@@ -111,28 +113,29 @@ public class ProductController {
     } catch (Exception ex) {
       Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo los productos")
+          .entity("Error getting products")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/products/active")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todos los productos activos")
+  @Operation(description = "Gets all active products")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Productos encontrados",
+        description = "Products found",
         content = @Content(mediaType = MediaType.APPLICATION_JSON)),
     @ApiResponse(
         responseCode = "404",
-        description = "No hay productos activos",
+        description = "No active products",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getActiveProducts() {
@@ -147,31 +150,32 @@ public class ProductController {
     } catch (Exception ex) {
       Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo los productos activos")
+          .entity("Error getting active products")
           .build();
     }
   }
 
+  @Secure
   @POST
   @Path("/product")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Guarda o actualiza un producto")
+  @Operation(description = "Creates or updates a product")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Producto guardado exitosamente",
+        description = "Product saved successfully",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = ProductDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Producto no encontrado",
+        description = "Product not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response guardarProduct(ProductDTO product) {
@@ -185,29 +189,29 @@ public class ProductController {
     } catch (Exception ex) {
       Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error guardando el producto.")
+          .entity("Error saving the product.")
           .build();
     }
   }
 
+  @Secure
   @DELETE
   @Path("/product/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Elimina un producto")
+  @Operation(description = "Deletes a product")
   @ApiResponses({
-    @ApiResponse(responseCode = "200", description = "Producto eliminado exitosamente"),
+    @ApiResponse(responseCode = "200", description = "Product deleted successfully"),
     @ApiResponse(
         responseCode = "404",
-        description = "Producto no encontrado",
+        description = "Product not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
-  public Response eliminarProduct(
-      @Parameter(description = "ID del producto") @PathParam("id") Long id) {
+  public Response eliminarProduct(@Parameter(description = "Product ID") @PathParam("id") Long id) {
     try {
       Respuesta r = productService.eliminarProduct(id);
       if (!r.getEstado()) {
@@ -217,7 +221,7 @@ public class ProductController {
     } catch (Exception ex) {
       Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error eliminando el producto.")
+          .entity("Error deleting the product.")
           .build();
     }
   }

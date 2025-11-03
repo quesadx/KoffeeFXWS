@@ -32,9 +32,6 @@ public class ProductSalesDTO implements Serializable {
     this.totalRevenue = calculateRevenue();
   }
 
-  // ===== MÉTODOS HELPER =====
-
-  /** Suma cantidad a las unidades ya vendidas */
   public void addQuantity(Integer quantity) {
     if (quantity != null) {
       this.totalQuantitySold =
@@ -43,21 +40,17 @@ public class ProductSalesDTO implements Serializable {
     }
   }
 
-  /** Suma ingresos (cantidad × precio) */
   public void addRevenue(Double revenue) {
     if (revenue != null) {
       this.totalRevenue = (this.totalRevenue != null ? this.totalRevenue : 0.0) + revenue;
     }
   }
 
-  /** Calcula el ingreso total basado en cantidad y precio */
   private Double calculateRevenue() {
     Integer qty = this.totalQuantitySold != null ? this.totalQuantitySold : 0;
     Double price = this.avgPrice != null ? this.avgPrice : 0.0;
     return qty * price;
   }
-
-  // ===== GETTERS Y SETTERS =====
 
   public String getProductName() {
     return productName;

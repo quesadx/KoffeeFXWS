@@ -32,18 +32,19 @@ import cr.ac.una.koffeefxws.util.Secure;
  */
 @Secure
 @Path("/OrderItemController")
-@Tag(name = "OrderItems", description = "Operaciones sobre items de pedido")
+@Tag(name = "OrderItems", description = "Operations on order items")
 @SecurityRequirement(name = "jwt-auth")
 public class OrderItemController {
 
   @EJB OrderItemService orderItemService;
 
+  @Secure
   @GET
   @Path("/orderitem/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene un item por ID")
-  public Response getOrderItem(@Parameter(description = "ID del item") @PathParam("id") Long id) {
+  @Operation(description = "Gets an order item by ID")
+  public Response getOrderItem(@Parameter(description = "Order item ID") @PathParam("id") Long id) {
     try {
       Respuesta r = orderItemService.getOrderItem(id);
       if (!r.getEstado()) {
@@ -54,16 +55,17 @@ public class OrderItemController {
     } catch (Exception ex) {
       Logger.getLogger(OrderItemController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo el item.")
+          .entity("Error getting the order item.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/orderitems")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todos los items")
+  @Operation(description = "Gets all order items")
   public Response getOrderItems() {
     try {
       Respuesta r = orderItemService.getOrderItems();
@@ -77,16 +79,17 @@ public class OrderItemController {
     } catch (Exception ex) {
       Logger.getLogger(OrderItemController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo los items")
+          .entity("Error getting the order items")
           .build();
     }
   }
 
+  @Secure
   @POST
   @Path("/orderitem")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Guarda o actualiza un item")
+  @Operation(description = "Creates or updates an order item")
   public Response guardarOrderItem(OrderItemDTO dto) {
     try {
       Respuesta r = orderItemService.guardarOrderItem(dto);
@@ -98,18 +101,19 @@ public class OrderItemController {
     } catch (Exception ex) {
       Logger.getLogger(OrderItemController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error guardando el item.")
+          .entity("Error saving the order item.")
           .build();
     }
   }
 
+  @Secure
   @DELETE
   @Path("/orderitem/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Elimina un item")
+  @Operation(description = "Deletes an order item")
   public Response eliminarOrderItem(
-      @Parameter(description = "ID del item") @PathParam("id") Long id) {
+      @Parameter(description = "Order item ID") @PathParam("id") Long id) {
     try {
       Respuesta r = orderItemService.eliminarOrderItem(id);
       if (!r.getEstado()) {
@@ -119,7 +123,7 @@ public class OrderItemController {
     } catch (Exception ex) {
       Logger.getLogger(OrderItemController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error eliminando el item.")
+          .entity("Error deleting the order item.")
           .build();
     }
   }

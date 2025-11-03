@@ -52,21 +52,21 @@ public class CashOpeningService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe una apertura de caja con el código ingresado.",
+          "No cash opening found with the provided ID.",
           "getCashOpening NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar la apertura de caja.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the cash opening.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar la apertura de caja.",
+          "An error occurred while querying the cash opening.",
           "getCashOpening NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar la apertura de caja.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the cash opening.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar la apertura de caja.",
+          "An error occurred while querying the cash opening.",
           "getCashOpening " + ex.getMessage());
     }
   }
@@ -85,14 +85,14 @@ public class CashOpeningService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen aperturas de caja registradas.",
+          "No cash openings found.",
           "getCashOpenings NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar las aperturas de caja.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying cash openings.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar las aperturas de caja.",
+          "An error occurred while querying cash openings.",
           "getCashOpenings " + ex.getMessage());
     }
   }
@@ -111,7 +111,7 @@ public class CashOpeningService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "No hay una caja abierta para este usuario.",
+            "No open cash opening found for this user.",
             "getActiveCashOpening NoResultException");
       }
 
@@ -123,11 +123,11 @@ public class CashOpeningService {
           "CashOpening",
           new CashOpeningDTO(results.get(0)));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar la caja activa.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the active cash opening.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar la caja activa.",
+          "An error occurred while querying the active cash opening.",
           "getActiveCashOpening " + ex.getMessage());
     }
   }
@@ -138,7 +138,7 @@ public class CashOpeningService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_CLIENTE,
-            "El ID del usuario es obligatorio.",
+            "User ID is required.",
             "guardarCashOpening Validation");
       }
 
@@ -147,7 +147,7 @@ public class CashOpeningService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "No existe un usuario con el ID indicado.",
+            "No user exists with the specified ID.",
             "guardarCashOpening Validation");
       }
 
@@ -158,7 +158,7 @@ public class CashOpeningService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró la apertura de caja a modificar.",
+              "No cash opening found to modify.",
               "guardarCashOpening NoResultException");
         }
         cashOpening.actualizar(cashOpeningDto);
@@ -178,11 +178,11 @@ public class CashOpeningService {
       return new Respuesta(
           true, CodigoRespuesta.CORRECTO, "", "", "CashOpening", new CashOpeningDTO(cashOpening));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al guardar la apertura de caja.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while saving the cash opening.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al guardar la apertura de caja.",
+          "An error occurred while saving the cash opening.",
           "guardarCashOpening " + ex.getMessage());
     }
   }
@@ -194,7 +194,7 @@ public class CashOpeningService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "No se encontró la apertura de caja.",
+            "No cash opening found.",
             "closeCashOpening NoResultException");
       }
 
@@ -202,7 +202,7 @@ public class CashOpeningService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_CLIENTE,
-            "Esta caja ya está cerrada.",
+            "This cash opening is already closed.",
             "closeCashOpening Validation");
       }
 
@@ -219,11 +219,11 @@ public class CashOpeningService {
       return new Respuesta(
           true, CodigoRespuesta.CORRECTO, "", "", "CashOpening", new CashOpeningDTO(cashOpening));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al cerrar la caja.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while closing the cash opening.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al cerrar la caja.",
+          "An error occurred while closing the cash opening.",
           "closeCashOpening " + ex.getMessage());
     }
   }
@@ -237,7 +237,7 @@ public class CashOpeningService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró la apertura de caja a eliminar.",
+              "No cash opening found to delete.",
               "eliminarCashOpening NoResultException");
         }
         em.remove(cashOpening);
@@ -245,17 +245,17 @@ public class CashOpeningService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "Debe cargar la apertura de caja a eliminar.",
+            "You must provide the cash opening to delete.",
             "eliminarCashOpening NoResultException");
       }
       em.flush();
       return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al eliminar la apertura de caja.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while deleting the cash opening.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al eliminar la apertura de caja.",
+          "An error occurred while deleting the cash opening.",
           "eliminarCashOpening " + ex.getMessage());
     }
   }

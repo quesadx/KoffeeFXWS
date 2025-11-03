@@ -52,21 +52,21 @@ public class DiningTableService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe una mesa con el código ingresado.",
+          "No table found with the provided ID.",
           "getDiningTable NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar la mesa.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the dining table.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar la mesa.",
+          "An error occurred while querying the dining table.",
           "getDiningTable NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar la mesa.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the dining table.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar la mesa.",
+          "An error occurred while querying the dining table.",
           "getDiningTable " + ex.getMessage());
     }
   }
@@ -85,14 +85,14 @@ public class DiningTableService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen mesas registradas.",
+          "No dining tables found.",
           "getDiningTables NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar las mesas.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying dining tables.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar las mesas.",
+          "An error occurred while querying dining tables.",
           "getDiningTables " + ex.getMessage());
     }
   }
@@ -104,7 +104,7 @@ public class DiningTableService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_CLIENTE,
-            "El ID del salón (diningAreaId) es obligatorio.",
+            "Dining area ID (diningAreaId) is required.",
             "guardarDiningTable Validation");
       }
 
@@ -113,7 +113,7 @@ public class DiningTableService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "No existe un salón con el ID indicado.",
+            "No dining area found with the specified ID.",
             "guardarDiningTable Validation");
       }
 
@@ -124,7 +124,7 @@ public class DiningTableService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró la mesa a modificar.",
+              "No table found to modify.",
               "guardarDiningTable NoResultException");
         }
         diningTable.actualizar(diningTableDto);
@@ -142,11 +142,11 @@ public class DiningTableService {
       return new Respuesta(
           true, CodigoRespuesta.CORRECTO, "", "", "DiningTable", new DiningTableDTO(diningTable));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al guardar la mesa.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while saving the dining table.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al guardar la mesa.",
+          "An error occurred while saving the dining table.",
           "guardarDiningTable " + ex.getMessage());
     }
   }
@@ -160,7 +160,7 @@ public class DiningTableService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró la mesa a eliminar.",
+              "No table found to delete.",
               "eliminarDiningTable NoResultException");
         }
         em.remove(diningTable);
@@ -168,7 +168,7 @@ public class DiningTableService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "Debe cargar la mesa a eliminar.",
+            "You must provide the table to delete.",
             "eliminarDiningTable NoResultException");
       }
       em.flush();
@@ -180,14 +180,14 @@ public class DiningTableService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_INTERNO,
-            "No se puede eliminar la mesa porque tiene relaciones con otros registros.",
+            "Cannot delete the table because it has related records.",
             "eliminarDiningTable " + ex.getMessage());
       }
-      LOG.log(Level.SEVERE, "Ocurrió un error al eliminar la mesa.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while deleting the dining table.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al eliminar la mesa.",
+          "An error occurred while deleting the dining table.",
           "eliminarDiningTable " + ex.getMessage());
     }
   }

@@ -29,19 +29,19 @@ import cr.ac.una.koffeefxws.util.Secure;
 
 @Secure
 @Path("/CustomerOrderController")
-@Tag(name = "CustomerOrders", description = "Operaciones sobre pedidos")
+@Tag(name = "CustomerOrders", description = "Operations on customer orders")
 @SecurityRequirement(name = "jwt-auth")
 public class CustomerOrderController {
 
   @EJB CustomerOrderService customerOrderService;
 
+  @Secure
   @GET
   @Path("/order/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene un pedido por ID")
-  public Response getCustomerOrder(
-      @Parameter(description = "ID del pedido") @PathParam("id") Long id) {
+  @Operation(description = "Gets an order by ID")
+  public Response getCustomerOrder(@Parameter(description = "Order ID") @PathParam("id") Long id) {
     try {
       Respuesta r = customerOrderService.getCustomerOrder(id);
       if (!r.getEstado()) {
@@ -52,16 +52,17 @@ public class CustomerOrderController {
     } catch (Exception ex) {
       Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo el pedido.")
+          .entity("Error getting the order.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/orders")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todos los pedidos")
+  @Operation(description = "Gets all orders")
   public Response getCustomerOrders() {
     try {
       Respuesta r = customerOrderService.getCustomerOrders();
@@ -75,16 +76,17 @@ public class CustomerOrderController {
     } catch (Exception ex) {
       Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo los pedidos")
+          .entity("Error getting the orders")
           .build();
     }
   }
 
+  @Secure
   @POST
   @Path("/order")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Guarda o actualiza un pedido")
+  @Operation(description = "Creates or updates an order")
   public Response guardarCustomerOrder(CustomerOrderDTO dto) {
     try {
       Respuesta r = customerOrderService.guardarCustomerOrder(dto);
@@ -96,18 +98,19 @@ public class CustomerOrderController {
     } catch (Exception ex) {
       Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error guardando el pedido.")
+          .entity("Error saving the order.")
           .build();
     }
   }
 
+  @Secure
   @DELETE
   @Path("/order/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Elimina un pedido")
+  @Operation(description = "Deletes an order")
   public Response eliminarCustomerOrder(
-      @Parameter(description = "ID del pedido") @PathParam("id") Long id) {
+      @Parameter(description = "Order ID") @PathParam("id") Long id) {
     try {
       Respuesta r = customerOrderService.eliminarCustomerOrder(id);
       if (!r.getEstado()) {
@@ -117,7 +120,7 @@ public class CustomerOrderController {
     } catch (Exception ex) {
       Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error eliminando el pedido.")
+          .entity("Error deleting the order.")
           .build();
     }
   }

@@ -93,10 +93,6 @@ public class ReportService {
         // La extracción como tal va acá
         CustomerDTO customer = (CustomerDTO) r.getResultado("Customer");
         LOG.log(Level.INFO, "Cliente asociado a la orden: {0}", customer.getEmail());
-
-        String customerEmail = customer.getEmail();
-        // Aquí se podría implementar el envío de correo en el futuro
-        // Email logic goes probably here!
       }
 
       // 2. Extraer InvoiceDTO de la orden
