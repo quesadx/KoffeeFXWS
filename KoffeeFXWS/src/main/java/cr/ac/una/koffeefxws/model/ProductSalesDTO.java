@@ -3,23 +3,19 @@ package cr.ac.una.koffeefxws.model;
 import java.io.Serializable;
 
 /**
- * ProductSalesDTO
- *
- * <p>DTO para agregar y presentar datos de ventas de productos en el reporte "Products-Report"
- *
- * <p>Contiene información de productos vendidos entre un rango de fechas, con totales agregados por
- * producto.
+ * @author quesadx
+ *     DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED
+ *     DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED
+ *     DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED/DEPRECATED
  */
 public class ProductSalesDTO implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  private String productName; // Nombre del producto
-  private String productCategory; // Categoría/Grupo del producto
-  private Integer totalQuantitySold; // Total de unidades vendidas
-  private Double avgPrice; // Precio promedio del producto
-  private Double totalRevenue; // Ingresos totales (cantidad × precio promedio)
-
-  // ===== CONSTRUCTORES =====
+  private String productName;
+  private String productCategory;
+  private Integer totalQuantitySold;
+  private Double avgPrice;
+  private Double totalRevenue;
 
   public ProductSalesDTO() {
     this.totalQuantitySold = 0;

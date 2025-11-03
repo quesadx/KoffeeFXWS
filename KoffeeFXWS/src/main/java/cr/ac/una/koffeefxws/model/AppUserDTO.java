@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Data Transfer Object for AppUser entity
- *
  * @author quesadx
  */
 public class AppUserDTO implements Serializable {

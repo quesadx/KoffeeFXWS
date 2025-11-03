@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Data Transfer Object for CustomerOrder entity
- *
  * @author quesadx
  */
 public class CustomerOrderDTO implements Serializable {
