@@ -6,6 +6,7 @@ package cr.ac.una.koffeefxws.service;
 
 import cr.ac.una.koffeefxws.model.AppUserDTO;
 import cr.ac.una.koffeefxws.model.CashOpeningDTO;
+import cr.ac.una.koffeefxws.model.CustomerDTO;
 import cr.ac.una.koffeefxws.model.CustomerOrderDTO;
 import cr.ac.una.koffeefxws.model.InvoiceDTO;
 import cr.ac.una.koffeefxws.model.OrderItemDTO;
@@ -63,6 +64,12 @@ public class ReportService {
     @EJB
     ProductService productService;
 
+    @EJB
+    CustomerService customerService;
+
+    @EJB
+    MailService mailService;
+
     /**
      * Prepara los parámetros y el datasource para generar el reporte
      *
@@ -84,6 +91,21 @@ public class ReportService {
 
             CustomerOrderDTO order =
                 (CustomerOrderDTO) orderResponse.getResultado("CustomerOrder");
+
+            // Get the user mail for later implementation
+            Respuesta r = customerService.getCustomer(order.getCustomerId());
+            if(!r.getEstado()){
+                LOG.log(Level.INFO, "No se encontró el cliente con ID: {0} en el sistema", order.getCustomerId());
+            } else {
+                // La extracción como tal va acá
+                CustomerDTO customer = (CustomerDTO) r.getResultado("Customer");
+                LOG.log(Level.INFO, "Cliente asociado a la orden: {0}", customer.getEmail());
+
+                String customerEmail = customer.getEmail();
+                // Aquí se podría implementar el envío de correo en el futuro
+                // Email logic goes probably here!
+            }
+
 
             // 2. Extraer InvoiceDTO de la orden
             InvoiceDTO invoice = order.getInvoice();
@@ -337,13 +359,20 @@ public class ReportService {
      */
     public Respuesta generarFacturaPDFBytes(Long orderId) {
         try {
-            Respuesta reporteResponse = prepararReporte(orderId);
-            if (!reporteResponse.getEstado()) {
-                return reporteResponse;
+            // Obtener la orden para extraer datos del cliente e invoice
+            Respuesta orderResponse = orderService.getCustomerOrder(orderId);
+            if (!orderResponse.getEstado()) {
+                return orderResponse;
+            }
+            CustomerOrderDTO order = (CustomerOrderDTO) orderResponse.getResultado("CustomerOrder");
+
+            Respuesta r = prepararReporte(orderId);
+            if (!r.getEstado()) {
+                return r;
             }
 
             JasperPrint jasperPrint =
-                (JasperPrint) reporteResponse.getResultado("JasperPrint");
+                (JasperPrint) r.getResultado("JasperPrint");
 
             // Exportar a bytes
             byte[] pdfBytes = JasperExportManager.exportReportToPdf(
@@ -351,6 +380,30 @@ public class ReportService {
             );
 
             LOG.log(Level.INFO, "Factura PDF generada exitosamente como bytes");
+
+            // Enviar el PDF por email al cliente (asíncrono)
+            try {
+                Respuesta customerResponse = customerService.getCustomer(order.getCustomerId());
+                if (customerResponse.getEstado()) {
+                    CustomerDTO customer = (CustomerDTO) customerResponse.getResultado("Customer");
+                    String customerEmail = customer.getEmail();
+                    String invoiceNumber = order.getInvoice() != null ? 
+                        order.getInvoice().getInvoiceNumber() : String.valueOf(orderId);
+
+                    if (customerEmail != null && !customerEmail.isBlank()) {
+                        mailService.sendInvoicePDF(customerEmail, invoiceNumber, pdfBytes);
+                        LOG.log(Level.INFO, "Email de factura enviado asincrónicamente a {0}", customerEmail);
+                    } else {
+                        LOG.log(Level.WARNING, "No se pudo enviar email: cliente sin dirección de correo");
+                    }
+                } else {
+                    LOG.log(Level.WARNING, "No se pudo obtener datos del cliente para enviar email");
+                }
+            } catch (Exception emailEx) {
+                // No propagamos el error para evitar afectar la generación del PDF
+                LOG.log(Level.WARNING, "Error al intentar enviar email de factura", emailEx);
+            }
+
             return new Respuesta(
                 true,
                 CodigoRespuesta.CORRECTO,
