@@ -34,199 +34,198 @@ import jakarta.xml.bind.annotation.XmlTransient;
 @Table(name = "CASH_OPENING")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CashOpening.findAll", query = "SELECT c FROM CashOpening c"),
-    @NamedQuery(
-            name = "CashOpening.findById",
-            query = "SELECT c FROM CashOpening c WHERE c.id = :id"),
-    @NamedQuery(
-            name = "CashOpening.findByOpeningDate",
-            query = "SELECT c FROM CashOpening c WHERE c.openingDate = :openingDate"),
-    @NamedQuery(
-            name = "CashOpening.findByInitialAmount",
-            query = "SELECT c FROM CashOpening c WHERE c.initialAmount = :initialAmount"),
-    @NamedQuery(
-            name = "CashOpening.findByIsClosed",
-            query = "SELECT c FROM CashOpening c WHERE c.isClosed = :isClosed"),
-    @NamedQuery(
-            name = "CashOpening.findByClosingDate",
-            query = "SELECT c FROM CashOpening c WHERE c.closingDate = :closingDate"),
-    @NamedQuery(
-            name = "CashOpening.findByClosingAmount",
-            query = "SELECT c FROM CashOpening c WHERE c.closingAmount = :closingAmount"),
-    @NamedQuery(
-            name = "CashOpening.findByNotes",
-            query = "SELECT c FROM CashOpening c WHERE c.notes = :notes"),
+  @NamedQuery(name = "CashOpening.findAll", query = "SELECT c FROM CashOpening c"),
+  @NamedQuery(
+      name = "CashOpening.findById",
+      query = "SELECT c FROM CashOpening c WHERE c.id = :id"),
+  @NamedQuery(
+      name = "CashOpening.findByOpeningDate",
+      query = "SELECT c FROM CashOpening c WHERE c.openingDate = :openingDate"),
+  @NamedQuery(
+      name = "CashOpening.findByInitialAmount",
+      query = "SELECT c FROM CashOpening c WHERE c.initialAmount = :initialAmount"),
+  @NamedQuery(
+      name = "CashOpening.findByIsClosed",
+      query = "SELECT c FROM CashOpening c WHERE c.isClosed = :isClosed"),
+  @NamedQuery(
+      name = "CashOpening.findByClosingDate",
+      query = "SELECT c FROM CashOpening c WHERE c.closingDate = :closingDate"),
+  @NamedQuery(
+      name = "CashOpening.findByClosingAmount",
+      query = "SELECT c FROM CashOpening c WHERE c.closingAmount = :closingAmount"),
+  @NamedQuery(
+      name = "CashOpening.findByNotes",
+      query = "SELECT c FROM CashOpening c WHERE c.notes = :notes"),
 })
 public class CashOpening implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
-    // annotations to enforce field validation
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cash_opening_seq")
-    @SequenceGenerator(
-            name = "cash_opening_seq",
-            sequenceName = "seq_cash_opening_id",
-            allocationSize = 1)
-    @Basic(optional = false)
-    @Column(name = "CASH_OPENING_ID")
-    private Long id;
+  // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+  // annotations to enforce field validation
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cash_opening_seq")
+  @SequenceGenerator(
+      name = "cash_opening_seq",
+      sequenceName = "seq_cash_opening_id",
+      allocationSize = 1)
+  @Basic(optional = false)
+  @Column(name = "CASH_OPENING_ID")
+  private Long id;
 
-    @Column(name = "OPENING_DATE")
-    private LocalDate openingDate;
+  @Column(name = "OPENING_DATE")
+  private LocalDate openingDate;
 
-    @Column(name = "INITIAL_AMOUNT")
-    private Long initialAmount;
+  @Column(name = "INITIAL_AMOUNT")
+  private Long initialAmount;
 
-    @Column(name = "IS_CLOSED")
-    private Character isClosed;
+  @Column(name = "IS_CLOSED")
+  private Character isClosed;
 
-    @Column(name = "CLOSING_DATE")
-    private LocalDate closingDate;
+  @Column(name = "CLOSING_DATE")
+  private LocalDate closingDate;
 
-    @Column(name = "CLOSING_AMOUNT")
-    private Long closingAmount;
+  @Column(name = "CLOSING_AMOUNT")
+  private Long closingAmount;
 
-    @Size(max = 2000)
-    @Column(name = "NOTES")
-    private String notes;
+  @Size(max = 2000)
+  @Column(name = "NOTES")
+  private String notes;
 
-    @Version
-    @Column(name = "VERSION")
-    private Long version;
+  @Version
+  @Column(name = "VERSION")
+  private Long version;
 
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private AppUser userId;
+  @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  private AppUser userId;
 
-    @OneToMany(mappedBy = "cashOpeningId", fetch = FetchType.LAZY)
-    private List<Invoice> invoiceList;
+  @OneToMany(mappedBy = "cashOpeningId", fetch = FetchType.LAZY)
+  private List<Invoice> invoiceList;
 
-    public CashOpening() {}
+  public CashOpening() {}
 
-    public CashOpening(Long id) {
-        this.id = id;
+  public CashOpening(Long id) {
+    this.id = id;
+  }
+
+  public CashOpening(CashOpeningDTO dto) {
+    this.id = dto.getId();
+    actualizar(dto);
+  }
+
+  public void actualizar(CashOpeningDTO dto) {
+    this.openingDate = dto.getOpeningDate();
+    this.initialAmount = dto.getInitialAmount();
+    this.isClosed = dto.getIsClosed() != null && dto.getIsClosed() ? 'Y' : 'N';
+    this.closingDate = dto.getClosingDate();
+    this.closingAmount = dto.getClosingAmount();
+    this.notes = dto.getNotes();
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public LocalDate getOpeningDate() {
+    return openingDate;
+  }
+
+  public void setOpeningDate(LocalDate openingDate) {
+    this.openingDate = openingDate;
+  }
+
+  public Long getInitialAmount() {
+    return initialAmount;
+  }
+
+  public void setInitialAmount(Long initialAmount) {
+    this.initialAmount = initialAmount;
+  }
+
+  public Character getIsClosed() {
+    return isClosed;
+  }
+
+  public void setIsClosed(Character isClosed) {
+    this.isClosed = isClosed;
+  }
+
+  public LocalDate getClosingDate() {
+    return closingDate;
+  }
+
+  public void setClosingDate(LocalDate closingDate) {
+    this.closingDate = closingDate;
+  }
+
+  public Long getClosingAmount() {
+    return closingAmount;
+  }
+
+  public void setClosingAmount(Long closingAmount) {
+    this.closingAmount = closingAmount;
+  }
+
+  public String getNotes() {
+    return notes;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
+  public Long getVersion() {
+    return version;
+  }
+
+  public void setVersion(Long version) {
+    this.version = version;
+  }
+
+  public AppUser getUserId() {
+    return userId;
+  }
+
+  public void setUserId(AppUser userId) {
+    this.userId = userId;
+  }
+
+  @XmlTransient
+  public List<Invoice> getInvoiceList() {
+    return invoiceList;
+  }
+
+  public void setInvoiceList(List<Invoice> invoiceList) {
+    this.invoiceList = invoiceList;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are not set
+    if (!(object instanceof CashOpening)) {
+      return false;
     }
-
-    public CashOpening(CashOpeningDTO dto) {
-        this.id = dto.getId();
-        actualizar(dto);
+    CashOpening other = (CashOpening) object;
+    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+      return false;
     }
+    return true;
+  }
 
-    public void actualizar(CashOpeningDTO dto) {
-        this.openingDate = dto.getOpeningDate();
-        this.initialAmount = dto.getInitialAmount();
-        this.isClosed = dto.getIsClosed() != null && dto.getIsClosed() ? 'Y' : 'N';
-        this.closingDate = dto.getClosingDate();
-        this.closingAmount = dto.getClosingAmount();
-        this.notes = dto.getNotes();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDate getOpeningDate() {
-        return openingDate;
-    }
-
-    public void setOpeningDate(LocalDate openingDate) {
-        this.openingDate = openingDate;
-    }
-
-    public Long getInitialAmount() {
-        return initialAmount;
-    }
-
-    public void setInitialAmount(Long initialAmount) {
-        this.initialAmount = initialAmount;
-    }
-
-    public Character getIsClosed() {
-        return isClosed;
-    }
-
-    public void setIsClosed(Character isClosed) {
-        this.isClosed = isClosed;
-    }
-
-    public LocalDate getClosingDate() {
-        return closingDate;
-    }
-
-    public void setClosingDate(LocalDate closingDate) {
-        this.closingDate = closingDate;
-    }
-
-    public Long getClosingAmount() {
-        return closingAmount;
-    }
-
-    public void setClosingAmount(Long closingAmount) {
-        this.closingAmount = closingAmount;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
-    public AppUser getUserId() {
-        return userId;
-    }
-
-    public void setUserId(AppUser userId) {
-        this.userId = userId;
-    }
-
-    @XmlTransient
-    public List<Invoice> getInvoiceList() {
-        return invoiceList;
-    }
-
-    public void setInvoiceList(List<Invoice> invoiceList) {
-        this.invoiceList = invoiceList;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CashOpening)) {
-            return false;
-        }
-        CashOpening other = (CashOpening) object;
-        if ((this.id == null && other.id != null)
-                || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "cr.ac.una.koffeefxws.model.CashOpening[ id=" + id + " ]";
-    }
+  @Override
+  public String toString() {
+    return "cr.ac.una.koffeefxws.model.CashOpening[ id=" + id + " ]";
+  }
 }

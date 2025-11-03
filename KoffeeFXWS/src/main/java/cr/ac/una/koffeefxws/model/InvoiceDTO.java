@@ -13,294 +13,292 @@ import java.util.Objects;
  */
 public class InvoiceDTO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    private Long id;
-    private String invoiceNumber;
-    private Double subtotal;
-    private Double taxRate;
-    private Double serviceRate;
-    private Double discountRate;
-    private Double total;
-    private Double amountReceived;
-    private Double changeAmount;
-    private LocalDate createdAt;
-    private Boolean isPrinted;
-    private Boolean isEmailSent;
-    private String paymentMethod;
-    private Long version;
-    private Long createdBy;
-    private String createdByName;
-    private Long cashOpeningId;
-    private Long customerId;
-    private String customerName;
-    private Long customerOrderId;
-    private Boolean modified;
+  private Long id;
+  private String invoiceNumber;
+  private Double subtotal;
+  private Double taxRate;
+  private Double serviceRate;
+  private Double discountRate;
+  private Double total;
+  private Double amountReceived;
+  private Double changeAmount;
+  private LocalDate createdAt;
+  private Boolean isPrinted;
+  private Boolean isEmailSent;
+  private String paymentMethod;
+  private Long version;
+  private Long createdBy;
+  private String createdByName;
+  private Long cashOpeningId;
+  private Long customerId;
+  private String customerName;
+  private Long customerOrderId;
+  private Boolean modified;
 
-    public InvoiceDTO() {
-        this.modified = false;
-        this.isPrinted = false;
-        this.isEmailSent = false;
-        this.taxRate = 0.0;
-        this.serviceRate = 0.0;
-        this.discountRate = 0.0;
-        this.paymentMethod = "CASH";
+  public InvoiceDTO() {
+    this.modified = false;
+    this.isPrinted = false;
+    this.isEmailSent = false;
+    this.taxRate = 0.0;
+    this.serviceRate = 0.0;
+    this.discountRate = 0.0;
+    this.paymentMethod = "CASH";
+  }
+
+  public InvoiceDTO(Invoice invoice) {
+    this();
+    this.id = invoice.getId();
+    this.invoiceNumber = invoice.getInvoiceNumber();
+    this.subtotal = invoice.getSubtotal();
+    this.taxRate = invoice.getTaxRate();
+    this.serviceRate = invoice.getServiceRate();
+    this.discountRate = invoice.getDiscountRate();
+    this.total = invoice.getTotal();
+    this.amountReceived = invoice.getAmountReceived();
+    this.changeAmount = invoice.getChangeAmount();
+    this.createdAt = invoice.getCreatedAt();
+    this.isPrinted = invoice.getIsPrinted() != null && invoice.getIsPrinted().equals('Y');
+    this.isEmailSent = invoice.getIsEmailSent() != null && invoice.getIsEmailSent().equals('Y');
+    this.paymentMethod = invoice.getPaymentMethod();
+    this.version = invoice.getVersion();
+
+    if (invoice.getCreatedBy() != null) {
+      this.createdBy = invoice.getCreatedBy().getId();
+      this.createdByName = invoice.getCreatedBy().getUsername();
     }
 
-    public InvoiceDTO(Invoice invoice) {
-        this();
-        this.id = invoice.getId();
-        this.invoiceNumber = invoice.getInvoiceNumber();
-        this.subtotal = invoice.getSubtotal();
-        this.taxRate = invoice.getTaxRate();
-        this.serviceRate = invoice.getServiceRate();
-        this.discountRate = invoice.getDiscountRate();
-        this.total = invoice.getTotal();
-        this.amountReceived = invoice.getAmountReceived();
-        this.changeAmount = invoice.getChangeAmount();
-        this.createdAt = invoice.getCreatedAt();
-        this.isPrinted = invoice.getIsPrinted() != null && invoice.getIsPrinted().equals('Y');
-        this.isEmailSent = invoice.getIsEmailSent() != null && invoice.getIsEmailSent().equals('Y');
-        this.paymentMethod = invoice.getPaymentMethod();
-        this.version = invoice.getVersion();
-
-        if (invoice.getCreatedBy() != null) {
-            this.createdBy = invoice.getCreatedBy().getId();
-            this.createdByName = invoice.getCreatedBy().getUsername();
-        }
-
-        if (invoice.getCashOpeningId() != null) {
-            this.cashOpeningId = invoice.getCashOpeningId().getId();
-        }
-
-        if (invoice.getCustomerId() != null) {
-            this.customerId = invoice.getCustomerId().getId();
-            this.customerName =
-                    invoice.getCustomerId().getFirstName()
-                            + " "
-                            + invoice.getCustomerId().getLastName();
-        }
-
-        if (invoice.getCustomerOrderId() != null) {
-            this.customerOrderId = invoice.getCustomerOrderId().getId();
-        }
+    if (invoice.getCashOpeningId() != null) {
+      this.cashOpeningId = invoice.getCashOpeningId().getId();
     }
 
-    public Long getId() {
-        return id;
+    if (invoice.getCustomerId() != null) {
+      this.customerId = invoice.getCustomerId().getId();
+      this.customerName =
+          invoice.getCustomerId().getFirstName() + " " + invoice.getCustomerId().getLastName();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    if (invoice.getCustomerOrderId() != null) {
+      this.customerOrderId = invoice.getCustomerOrderId().getId();
     }
+  }
 
-    public String getInvoiceNumber() {
-        return invoiceNumber;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public Double getSubtotal() {
-        return subtotal;
-    }
+  public String getInvoiceNumber() {
+    return invoiceNumber;
+  }
 
-    public void setSubtotal(Double subtotal) {
-        this.subtotal = subtotal;
-    }
+  public void setInvoiceNumber(String invoiceNumber) {
+    this.invoiceNumber = invoiceNumber;
+  }
 
-    public Double getTaxRate() {
-        return taxRate;
-    }
+  public Double getSubtotal() {
+    return subtotal;
+  }
 
-    public void setTaxRate(Double taxRate) {
-        this.taxRate = taxRate;
-    }
+  public void setSubtotal(Double subtotal) {
+    this.subtotal = subtotal;
+  }
 
-    public Double getServiceRate() {
-        return serviceRate;
-    }
+  public Double getTaxRate() {
+    return taxRate;
+  }
 
-    public void setServiceRate(Double serviceRate) {
-        this.serviceRate = serviceRate;
-    }
+  public void setTaxRate(Double taxRate) {
+    this.taxRate = taxRate;
+  }
 
-    public Double getDiscountRate() {
-        return discountRate;
-    }
+  public Double getServiceRate() {
+    return serviceRate;
+  }
 
-    public void setDiscountRate(Double discountRate) {
-        this.discountRate = discountRate;
-    }
+  public void setServiceRate(Double serviceRate) {
+    this.serviceRate = serviceRate;
+  }
 
-    public Double getTotal() {
-        return total;
-    }
+  public Double getDiscountRate() {
+    return discountRate;
+  }
 
-    public void setTotal(Double total) {
-        this.total = total;
-    }
+  public void setDiscountRate(Double discountRate) {
+    this.discountRate = discountRate;
+  }
 
-    public Double getAmountReceived() {
-        return amountReceived;
-    }
+  public Double getTotal() {
+    return total;
+  }
 
-    public void setAmountReceived(Double amountReceived) {
-        this.amountReceived = amountReceived;
-    }
+  public void setTotal(Double total) {
+    this.total = total;
+  }
 
-    public Double getChangeAmount() {
-        return changeAmount;
-    }
+  public Double getAmountReceived() {
+    return amountReceived;
+  }
 
-    public void setChangeAmount(Double changeAmount) {
-        this.changeAmount = changeAmount;
-    }
+  public void setAmountReceived(Double amountReceived) {
+    this.amountReceived = amountReceived;
+  }
 
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
+  public Double getChangeAmount() {
+    return changeAmount;
+  }
 
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
+  public void setChangeAmount(Double changeAmount) {
+    this.changeAmount = changeAmount;
+  }
 
-    public Boolean getIsPrinted() {
-        return isPrinted;
-    }
+  public LocalDate getCreatedAt() {
+    return createdAt;
+  }
 
-    public void setIsPrinted(Boolean isPrinted) {
-        this.isPrinted = isPrinted;
-    }
+  public void setCreatedAt(LocalDate createdAt) {
+    this.createdAt = createdAt;
+  }
 
-    public Boolean getIsEmailSent() {
-        return isEmailSent;
-    }
+  public Boolean getIsPrinted() {
+    return isPrinted;
+  }
 
-    public void setIsEmailSent(Boolean isEmailSent) {
-        this.isEmailSent = isEmailSent;
-    }
+  public void setIsPrinted(Boolean isPrinted) {
+    this.isPrinted = isPrinted;
+  }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
+  public Boolean getIsEmailSent() {
+    return isEmailSent;
+  }
 
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
+  public void setIsEmailSent(Boolean isEmailSent) {
+    this.isEmailSent = isEmailSent;
+  }
 
-    public Long getVersion() {
-        return version;
-    }
+  public String getPaymentMethod() {
+    return paymentMethod;
+  }
 
-    public void setVersion(Long version) {
-        this.version = version;
-    }
+  public void setPaymentMethod(String paymentMethod) {
+    this.paymentMethod = paymentMethod;
+  }
 
-    public Long getCreatedBy() {
-        return createdBy;
-    }
+  public Long getVersion() {
+    return version;
+  }
 
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
+  public void setVersion(Long version) {
+    this.version = version;
+  }
 
-    public String getCreatedByName() {
-        return createdByName;
-    }
+  public Long getCreatedBy() {
+    return createdBy;
+  }
 
-    public void setCreatedByName(String createdByName) {
-        this.createdByName = createdByName;
-    }
+  public void setCreatedBy(Long createdBy) {
+    this.createdBy = createdBy;
+  }
 
-    public Long getCashOpeningId() {
-        return cashOpeningId;
-    }
+  public String getCreatedByName() {
+    return createdByName;
+  }
 
-    public void setCashOpeningId(Long cashOpeningId) {
-        this.cashOpeningId = cashOpeningId;
-    }
+  public void setCreatedByName(String createdByName) {
+    this.createdByName = createdByName;
+  }
 
-    public Long getCustomerId() {
-        return customerId;
-    }
+  public Long getCashOpeningId() {
+    return cashOpeningId;
+  }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
+  public void setCashOpeningId(Long cashOpeningId) {
+    this.cashOpeningId = cashOpeningId;
+  }
 
-    public String getCustomerName() {
-        return customerName;
-    }
+  public Long getCustomerId() {
+    return customerId;
+  }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
+  public void setCustomerId(Long customerId) {
+    this.customerId = customerId;
+  }
 
-    public Long getCustomerOrderId() {
-        return customerOrderId;
-    }
+  public String getCustomerName() {
+    return customerName;
+  }
 
-    public void setCustomerOrderId(Long customerOrderId) {
-        this.customerOrderId = customerOrderId;
-    }
+  public void setCustomerName(String customerName) {
+    this.customerName = customerName;
+  }
 
-    public Boolean getModified() {
-        return modified;
-    }
+  public Long getCustomerOrderId() {
+    return customerOrderId;
+  }
 
-    public void setModified(Boolean modified) {
-        this.modified = modified;
-    }
+  public void setCustomerOrderId(Long customerOrderId) {
+    this.customerOrderId = customerOrderId;
+  }
 
-    public Double getTaxAmount() {
-        if (subtotal != null && taxRate != null) {
-            return subtotal * (taxRate / 100.0);
-        }
-        return 0.0;
-    }
+  public Boolean getModified() {
+    return modified;
+  }
 
-    public Double getServiceAmount() {
-        if (subtotal != null && serviceRate != null) {
-            return subtotal * (serviceRate / 100.0);
-        }
-        return 0.0;
-    }
+  public void setModified(Boolean modified) {
+    this.modified = modified;
+  }
 
-    public Double getDiscountAmount() {
-        if (subtotal != null && discountRate != null) {
-            return subtotal * (discountRate / 100.0);
-        }
-        return 0.0;
+  public Double getTaxAmount() {
+    if (subtotal != null && taxRate != null) {
+      return subtotal * (taxRate / 100.0);
     }
+    return 0.0;
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+  public Double getServiceAmount() {
+    if (subtotal != null && serviceRate != null) {
+      return subtotal * (serviceRate / 100.0);
     }
+    return 0.0;
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        final InvoiceDTO other = (InvoiceDTO) obj;
-        return Objects.equals(this.id, other.id);
+  public Double getDiscountAmount() {
+    if (subtotal != null && discountRate != null) {
+      return subtotal * (discountRate / 100.0);
     }
+    return 0.0;
+  }
 
-    @Override
-    public String toString() {
-        return ("InvoiceDTO{"
-                + "invoiceNumber="
-                + invoiceNumber
-                + ", total="
-                + total
-                + ", paymentMethod="
-                + paymentMethod
-                + '}');
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    final InvoiceDTO other = (InvoiceDTO) obj;
+    return Objects.equals(this.id, other.id);
+  }
+
+  @Override
+  public String toString() {
+    return ("InvoiceDTO{"
+        + "invoiceNumber="
+        + invoiceNumber
+        + ", total="
+        + total
+        + ", paymentMethod="
+        + paymentMethod
+        + '}');
+  }
 }

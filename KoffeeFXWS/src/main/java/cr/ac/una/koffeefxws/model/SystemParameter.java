@@ -28,140 +28,139 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @Table(name = "SYSTEM_PARAMETER")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SystemParameter.findAll", query = "SELECT s FROM SystemParameter s"),
-    @NamedQuery(
-            name = "SystemParameter.findById",
-            query = "SELECT s FROM SystemParameter s WHERE s.id = :id"),
-    @NamedQuery(
-            name = "SystemParameter.findByParamName",
-            query = "SELECT s FROM SystemParameter s WHERE s.paramName = :paramName"),
-    @NamedQuery(
-            name = "SystemParameter.findByParamValue",
-            query = "SELECT s FROM SystemParameter s WHERE s.paramValue = :paramValue"),
-    @NamedQuery(
-            name = "SystemParameter.findByDescription",
-            query = "SELECT s FROM SystemParameter s WHERE s.description = :description"),
+  @NamedQuery(name = "SystemParameter.findAll", query = "SELECT s FROM SystemParameter s"),
+  @NamedQuery(
+      name = "SystemParameter.findById",
+      query = "SELECT s FROM SystemParameter s WHERE s.id = :id"),
+  @NamedQuery(
+      name = "SystemParameter.findByParamName",
+      query = "SELECT s FROM SystemParameter s WHERE s.paramName = :paramName"),
+  @NamedQuery(
+      name = "SystemParameter.findByParamValue",
+      query = "SELECT s FROM SystemParameter s WHERE s.paramValue = :paramValue"),
+  @NamedQuery(
+      name = "SystemParameter.findByDescription",
+      query = "SELECT s FROM SystemParameter s WHERE s.description = :description"),
 })
 public class SystemParameter implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
-    // annotations to enforce field validation
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "system_parameter_seq")
-    @SequenceGenerator(
-            name = "system_parameter_seq",
-            sequenceName = "seq_system_parameter_id",
-            allocationSize = 1)
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "PARAM_ID")
-    private Long id;
+  // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+  // annotations to enforce field validation
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "system_parameter_seq")
+  @SequenceGenerator(
+      name = "system_parameter_seq",
+      sequenceName = "seq_system_parameter_id",
+      allocationSize = 1)
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "PARAM_ID")
+  private Long id;
 
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "PARAM_NAME")
-    private String paramName;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "PARAM_NAME")
+  private String paramName;
 
-    @Size(max = 1000)
-    @Column(name = "PARAM_VALUE")
-    private String paramValue;
+  @Size(max = 1000)
+  @Column(name = "PARAM_VALUE")
+  private String paramValue;
 
-    @Size(max = 1000)
-    @Column(name = "DESCRIPTION")
-    private String description;
+  @Size(max = 1000)
+  @Column(name = "DESCRIPTION")
+  private String description;
 
-    @Version
-    @Column(name = "VERSION")
-    private Long version;
+  @Version
+  @Column(name = "VERSION")
+  private Long version;
 
-    public SystemParameter() {}
+  public SystemParameter() {}
 
-    public SystemParameter(Long paramId) {
-        this.id = paramId;
+  public SystemParameter(Long paramId) {
+    this.id = paramId;
+  }
+
+  public SystemParameter(Long paramId, String paramName) {
+    this.id = paramId;
+    this.paramName = paramName;
+  }
+
+  public SystemParameter(SystemParameterDTO dto) {
+    this.id = dto.getId();
+    actualizar(dto);
+  }
+
+  public void actualizar(SystemParameterDTO dto) {
+    this.paramName = dto.getParamName();
+    this.paramValue = dto.getParamValue();
+    this.description = dto.getDescription();
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long paramId) {
+    this.id = paramId;
+  }
+
+  public String getParamName() {
+    return paramName;
+  }
+
+  public void setParamName(String paramName) {
+    this.paramName = paramName;
+  }
+
+  public String getParamValue() {
+    return paramValue;
+  }
+
+  public void setParamValue(String paramValue) {
+    this.paramValue = paramValue;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Long getVersion() {
+    return version;
+  }
+
+  public void setVersion(Long version) {
+    this.version = version;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are not set
+    if (!(object instanceof SystemParameter)) {
+      return false;
     }
-
-    public SystemParameter(Long paramId, String paramName) {
-        this.id = paramId;
-        this.paramName = paramName;
+    SystemParameter other = (SystemParameter) object;
+    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+      return false;
     }
+    return true;
+  }
 
-    public SystemParameter(SystemParameterDTO dto) {
-        this.id = dto.getId();
-        actualizar(dto);
-    }
-
-    public void actualizar(SystemParameterDTO dto) {
-        this.paramName = dto.getParamName();
-        this.paramValue = dto.getParamValue();
-        this.description = dto.getDescription();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long paramId) {
-        this.id = paramId;
-    }
-
-    public String getParamName() {
-        return paramName;
-    }
-
-    public void setParamName(String paramName) {
-        this.paramName = paramName;
-    }
-
-    public String getParamValue() {
-        return paramValue;
-    }
-
-    public void setParamValue(String paramValue) {
-        this.paramValue = paramValue;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SystemParameter)) {
-            return false;
-        }
-        SystemParameter other = (SystemParameter) object;
-        if ((this.id == null && other.id != null)
-                || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return ("cr.ac.una.koffeefxws.model.SystemParameter[ paramId=" + id + " ]");
-    }
+  @Override
+  public String toString() {
+    return ("cr.ac.una.koffeefxws.model.SystemParameter[ paramId=" + id + " ]");
+  }
 }

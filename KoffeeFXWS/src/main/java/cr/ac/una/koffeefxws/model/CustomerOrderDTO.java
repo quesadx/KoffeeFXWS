@@ -18,237 +18,237 @@ import java.util.Objects;
  */
 public class CustomerOrderDTO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    private Long id;
-    private String status;
-    private LocalDate createdAt;
-    private Date updatedAt;
-    private Long totalAmount;
-    private Long version;
-    private Long createdBy;
-    private String createdByName;
-    private Long customerId;
-    private String customerName;
-    private Long diningAreaId;
-    private String diningAreaName;
-    private Long diningTableId;
-    private String diningTableName;
-    private Boolean modified;
-    private List<OrderItemDTO> orderItems;
-    private List<OrderItemDTO> deletedOrderItems;
-    private InvoiceDTO invoice;
+  private Long id;
+  private String status;
+  private LocalDate createdAt;
+  private Date updatedAt;
+  private Long totalAmount;
+  private Long version;
+  private Long createdBy;
+  private String createdByName;
+  private Long customerId;
+  private String customerName;
+  private Long diningAreaId;
+  private String diningAreaName;
+  private Long diningTableId;
+  private String diningTableName;
+  private Boolean modified;
+  private List<OrderItemDTO> orderItems;
+  private List<OrderItemDTO> deletedOrderItems;
+  private InvoiceDTO invoice;
 
-    public CustomerOrderDTO() {
-        this.orderItems = new ArrayList<>();
-        this.deletedOrderItems = new ArrayList<>();
-        this.modified = false;
-        this.status = "PENDING";
+  public CustomerOrderDTO() {
+    this.orderItems = new ArrayList<>();
+    this.deletedOrderItems = new ArrayList<>();
+    this.modified = false;
+    this.status = "PENDING";
+  }
+
+  public CustomerOrderDTO(CustomerOrder customerOrder) {
+    this();
+    this.id = customerOrder.getId();
+    this.status = customerOrder.getStatus();
+    this.createdAt = customerOrder.getCreatedAt();
+    this.updatedAt = customerOrder.getUpdatedAt();
+    this.totalAmount = customerOrder.getTotalAmount();
+    this.version = customerOrder.getVersion();
+
+    if (customerOrder.getCreatedBy() != null) {
+      this.createdBy = customerOrder.getCreatedBy().getId();
+      this.createdByName = customerOrder.getCreatedBy().getUsername();
     }
 
-    public CustomerOrderDTO(CustomerOrder customerOrder) {
-        this();
-        this.id = customerOrder.getId();
-        this.status = customerOrder.getStatus();
-        this.createdAt = customerOrder.getCreatedAt();
-        this.updatedAt = customerOrder.getUpdatedAt();
-        this.totalAmount = customerOrder.getTotalAmount();
-        this.version = customerOrder.getVersion();
-
-        if (customerOrder.getCreatedBy() != null) {
-            this.createdBy = customerOrder.getCreatedBy().getId();
-            this.createdByName = customerOrder.getCreatedBy().getUsername();
-        }
-
-        if (customerOrder.getCustomerId() != null) {
-            this.customerId = customerOrder.getCustomerId().getId();
-            this.customerName =
-                    customerOrder.getCustomerId().getFirstName()
-                            + " "
-                            + customerOrder.getCustomerId().getLastName();
-        }
-
-        if (customerOrder.getDiningAreaId() != null) {
-            this.diningAreaId = customerOrder.getDiningAreaId().getId();
-            this.diningAreaName = customerOrder.getDiningAreaId().getName();
-        }
-
-        if (customerOrder.getDiningTableId() != null) {
-            this.diningTableId = customerOrder.getDiningTableId().getId();
-            this.diningTableName = customerOrder.getDiningTableId().getName();
-        }
+    if (customerOrder.getCustomerId() != null) {
+      this.customerId = customerOrder.getCustomerId().getId();
+      this.customerName =
+          customerOrder.getCustomerId().getFirstName()
+              + " "
+              + customerOrder.getCustomerId().getLastName();
     }
 
-    public Long getId() {
-        return id;
+    if (customerOrder.getDiningAreaId() != null) {
+      this.diningAreaId = customerOrder.getDiningAreaId().getId();
+      this.diningAreaName = customerOrder.getDiningAreaId().getName();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    if (customerOrder.getDiningTableId() != null) {
+      this.diningTableId = customerOrder.getDiningTableId().getId();
+      this.diningTableName = customerOrder.getDiningTableId().getName();
     }
+  }
 
-    public String getStatus() {
-        return status;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
+  public String getStatus() {
+    return status;
+  }
 
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
+  public LocalDate getCreatedAt() {
+    return createdAt;
+  }
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+  public void setCreatedAt(LocalDate createdAt) {
+    this.createdAt = createdAt;
+  }
 
-    public Long getTotalAmount() {
-        return totalAmount;
-    }
+  public Date getUpdatedAt() {
+    return updatedAt;
+  }
 
-    public void setTotalAmount(Long totalAmount) {
-        this.totalAmount = totalAmount;
-    }
+  public void setUpdatedAt(Date updatedAt) {
+    this.updatedAt = updatedAt;
+  }
 
-    public Long getVersion() {
-        return version;
-    }
+  public Long getTotalAmount() {
+    return totalAmount;
+  }
 
-    public void setVersion(Long version) {
-        this.version = version;
-    }
+  public void setTotalAmount(Long totalAmount) {
+    this.totalAmount = totalAmount;
+  }
 
-    public Long getCreatedBy() {
-        return createdBy;
-    }
+  public Long getVersion() {
+    return version;
+  }
 
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
+  public void setVersion(Long version) {
+    this.version = version;
+  }
 
-    public String getCreatedByName() {
-        return createdByName;
-    }
+  public Long getCreatedBy() {
+    return createdBy;
+  }
 
-    public void setCreatedByName(String createdByName) {
-        this.createdByName = createdByName;
-    }
+  public void setCreatedBy(Long createdBy) {
+    this.createdBy = createdBy;
+  }
 
-    public Long getCustomerId() {
-        return customerId;
-    }
+  public String getCreatedByName() {
+    return createdByName;
+  }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
+  public void setCreatedByName(String createdByName) {
+    this.createdByName = createdByName;
+  }
 
-    public String getCustomerName() {
-        return customerName;
-    }
+  public Long getCustomerId() {
+    return customerId;
+  }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
+  public void setCustomerId(Long customerId) {
+    this.customerId = customerId;
+  }
 
-    public Long getDiningAreaId() {
-        return diningAreaId;
-    }
+  public String getCustomerName() {
+    return customerName;
+  }
 
-    public void setDiningAreaId(Long diningAreaId) {
-        this.diningAreaId = diningAreaId;
-    }
+  public void setCustomerName(String customerName) {
+    this.customerName = customerName;
+  }
 
-    public String getDiningAreaName() {
-        return diningAreaName;
-    }
+  public Long getDiningAreaId() {
+    return diningAreaId;
+  }
 
-    public void setDiningAreaName(String diningAreaName) {
-        this.diningAreaName = diningAreaName;
-    }
+  public void setDiningAreaId(Long diningAreaId) {
+    this.diningAreaId = diningAreaId;
+  }
 
-    public Long getDiningTableId() {
-        return diningTableId;
-    }
+  public String getDiningAreaName() {
+    return diningAreaName;
+  }
 
-    public void setDiningTableId(Long diningTableId) {
-        this.diningTableId = diningTableId;
-    }
+  public void setDiningAreaName(String diningAreaName) {
+    this.diningAreaName = diningAreaName;
+  }
 
-    public String getDiningTableName() {
-        return diningTableName;
-    }
+  public Long getDiningTableId() {
+    return diningTableId;
+  }
 
-    public void setDiningTableName(String diningTableName) {
-        this.diningTableName = diningTableName;
-    }
+  public void setDiningTableId(Long diningTableId) {
+    this.diningTableId = diningTableId;
+  }
 
-    public Boolean getModified() {
-        return modified;
-    }
+  public String getDiningTableName() {
+    return diningTableName;
+  }
 
-    public void setModified(Boolean modified) {
-        this.modified = modified;
-    }
+  public void setDiningTableName(String diningTableName) {
+    this.diningTableName = diningTableName;
+  }
 
-    public List<OrderItemDTO> getOrderItems() {
-        return orderItems;
-    }
+  public Boolean getModified() {
+    return modified;
+  }
 
-    public void setOrderItems(List<OrderItemDTO> orderItems) {
-        this.orderItems = orderItems;
-    }
+  public void setModified(Boolean modified) {
+    this.modified = modified;
+  }
 
-    public List<OrderItemDTO> getDeletedOrderItems() {
-        return deletedOrderItems;
-    }
+  public List<OrderItemDTO> getOrderItems() {
+    return orderItems;
+  }
 
-    public void setDeletedOrderItems(List<OrderItemDTO> deletedOrderItems) {
-        this.deletedOrderItems = deletedOrderItems;
-    }
+  public void setOrderItems(List<OrderItemDTO> orderItems) {
+    this.orderItems = orderItems;
+  }
 
-    public InvoiceDTO getInvoice() {
-        return invoice;
-    }
+  public List<OrderItemDTO> getDeletedOrderItems() {
+    return deletedOrderItems;
+  }
 
-    public void setInvoice(InvoiceDTO invoice) {
-        this.invoice = invoice;
-    }
+  public void setDeletedOrderItems(List<OrderItemDTO> deletedOrderItems) {
+    this.deletedOrderItems = deletedOrderItems;
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+  public InvoiceDTO getInvoice() {
+    return invoice;
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        final CustomerOrderDTO other = (CustomerOrderDTO) obj;
-        return Objects.equals(this.id, other.id);
-    }
+  public void setInvoice(InvoiceDTO invoice) {
+    this.invoice = invoice;
+  }
 
-    @Override
-    public String toString() {
-        return ("CustomerOrderDTO{"
-                + "id="
-                + id
-                + ", status="
-                + status
-                + ", totalAmount="
-                + totalAmount
-                + '}');
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    final CustomerOrderDTO other = (CustomerOrderDTO) obj;
+    return Objects.equals(this.id, other.id);
+  }
+
+  @Override
+  public String toString() {
+    return ("CustomerOrderDTO{"
+        + "id="
+        + id
+        + ", status="
+        + status
+        + ", totalAmount="
+        + totalAmount
+        + '}');
+  }
 }

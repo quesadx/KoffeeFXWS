@@ -31,160 +31,159 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @Table(name = "ORDER_ITEM")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "OrderItem.findAll", query = "SELECT o FROM OrderItem o"),
-    @NamedQuery(name = "OrderItem.findById", query = "SELECT o FROM OrderItem o WHERE o.id = :id"),
-    @NamedQuery(
-            name = "OrderItem.findByQuantity",
-            query = "SELECT o FROM OrderItem o WHERE o.quantity = :quantity"),
-    @NamedQuery(
-            name = "OrderItem.findByUnitPrice",
-            query = "SELECT o FROM OrderItem o WHERE o.unitPrice = :unitPrice"),
-    @NamedQuery(
-            name = "OrderItem.findByStatus",
-            query = "SELECT o FROM OrderItem o WHERE o.status = :status"),
+  @NamedQuery(name = "OrderItem.findAll", query = "SELECT o FROM OrderItem o"),
+  @NamedQuery(name = "OrderItem.findById", query = "SELECT o FROM OrderItem o WHERE o.id = :id"),
+  @NamedQuery(
+      name = "OrderItem.findByQuantity",
+      query = "SELECT o FROM OrderItem o WHERE o.quantity = :quantity"),
+  @NamedQuery(
+      name = "OrderItem.findByUnitPrice",
+      query = "SELECT o FROM OrderItem o WHERE o.unitPrice = :unitPrice"),
+  @NamedQuery(
+      name = "OrderItem.findByStatus",
+      query = "SELECT o FROM OrderItem o WHERE o.status = :status"),
 })
 public class OrderItem implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
-    // annotations to enforce field validation
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_seq")
-    @SequenceGenerator(
-            name = "order_item_seq",
-            sequenceName = "seq_order_item_id",
-            allocationSize = 1)
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ITEM_ID")
-    private Long id;
+  // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+  // annotations to enforce field validation
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_seq")
+  @SequenceGenerator(
+      name = "order_item_seq",
+      sequenceName = "seq_order_item_id",
+      allocationSize = 1)
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "ITEM_ID")
+  private Long id;
 
-    @Column(name = "QUANTITY")
-    private Integer quantity;
+  @Column(name = "QUANTITY")
+  private Integer quantity;
 
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "UNIT_PRICE")
-    private Double unitPrice;
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "UNIT_PRICE")
+  private Double unitPrice;
 
-    @Size(max = 20)
-    @Column(name = "STATUS")
-    private String status;
+  @Size(max = 20)
+  @Column(name = "STATUS")
+  private String status;
 
-    @Version
-    @Column(name = "VERSION")
-    private Long version;
+  @Version
+  @Column(name = "VERSION")
+  private Long version;
 
-    @JoinColumn(name = "CUSTOMER_ORDER_ID", referencedColumnName = "CUSTOMER_ORDER_ID")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private CustomerOrder customerOrderId;
+  @JoinColumn(name = "CUSTOMER_ORDER_ID", referencedColumnName = "CUSTOMER_ORDER_ID")
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  private CustomerOrder customerOrderId;
 
-    @JoinColumn(name = "PRODUCT_ID", referencedColumnName = "PRODUCT_ID")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Product productId;
+  @JoinColumn(name = "PRODUCT_ID", referencedColumnName = "PRODUCT_ID")
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  private Product productId;
 
-    public OrderItem() {}
+  public OrderItem() {}
 
-    public OrderItem(Long itemId) {
-        this.id = itemId;
+  public OrderItem(Long itemId) {
+    this.id = itemId;
+  }
+
+  public OrderItem(Long itemId, Double unitPrice) {
+    this.id = itemId;
+    this.unitPrice = unitPrice;
+  }
+
+  public OrderItem(OrderItemDTO dto) {
+    this.id = dto.getId();
+    actualizar(dto);
+  }
+
+  public void actualizar(OrderItemDTO dto) {
+    this.quantity = dto.getQuantity();
+    this.unitPrice = dto.getUnitPrice();
+    this.status = dto.getStatus();
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long itemId) {
+    this.id = itemId;
+  }
+
+  public Integer getQuantity() {
+    return quantity;
+  }
+
+  public void setQuantity(Integer quantity) {
+    this.quantity = quantity;
+  }
+
+  public Double getUnitPrice() {
+    return unitPrice;
+  }
+
+  public void setUnitPrice(Double unitPrice) {
+    this.unitPrice = unitPrice;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public Long getVersion() {
+    return version;
+  }
+
+  public void setVersion(Long version) {
+    this.version = version;
+  }
+
+  public CustomerOrder getCustomerOrderId() {
+    return customerOrderId;
+  }
+
+  public void setCustomerOrderId(CustomerOrder customerOrderId) {
+    this.customerOrderId = customerOrderId;
+  }
+
+  public Product getProductId() {
+    return productId;
+  }
+
+  public void setProductId(Product productId) {
+    this.productId = productId;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are not set
+    if (!(object instanceof OrderItem)) {
+      return false;
     }
-
-    public OrderItem(Long itemId, Double unitPrice) {
-        this.id = itemId;
-        this.unitPrice = unitPrice;
+    OrderItem other = (OrderItem) object;
+    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+      return false;
     }
+    return true;
+  }
 
-    public OrderItem(OrderItemDTO dto) {
-        this.id = dto.getId();
-        actualizar(dto);
-    }
-
-    public void actualizar(OrderItemDTO dto) {
-        this.quantity = dto.getQuantity();
-        this.unitPrice = dto.getUnitPrice();
-        this.status = dto.getStatus();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long itemId) {
-        this.id = itemId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Double getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(Double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
-    public CustomerOrder getCustomerOrderId() {
-        return customerOrderId;
-    }
-
-    public void setCustomerOrderId(CustomerOrder customerOrderId) {
-        this.customerOrderId = customerOrderId;
-    }
-
-    public Product getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Product productId) {
-        this.productId = productId;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof OrderItem)) {
-            return false;
-        }
-        OrderItem other = (OrderItem) object;
-        if ((this.id == null && other.id != null)
-                || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "cr.ac.una.koffeefxws.model.OrderItem[ itemId=" + id + " ]";
-    }
+  @Override
+  public String toString() {
+    return "cr.ac.una.koffeefxws.model.OrderItem[ itemId=" + id + " ]";
+  }
 }

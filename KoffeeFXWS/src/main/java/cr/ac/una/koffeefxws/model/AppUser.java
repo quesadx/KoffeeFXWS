@@ -35,267 +35,266 @@ import jakarta.xml.bind.annotation.XmlTransient;
 @Table(name = "APP_USER")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AppUser.findAll", query = "SELECT a FROM AppUser a"),
-    @NamedQuery(name = "AppUser.findById", query = "SELECT a FROM AppUser a WHERE a.id = :id"),
-    @NamedQuery(
-            name = "AppUser.findByFirstName",
-            query = "SELECT a FROM AppUser a WHERE a.firstName = :firstName"),
-    @NamedQuery(
-            name = "AppUser.findByLastName",
-            query = "SELECT a FROM AppUser a WHERE a.lastName = :lastName"),
-    @NamedQuery(
-            name = "AppUser.findByUsername",
-            query = "SELECT a FROM AppUser a WHERE a.username = :username"),
-    @NamedQuery(
-            name = "AppUser.findByPassword",
-            query = "SELECT a FROM AppUser a WHERE a.password = :password"),
-    @NamedQuery(
-            name = "AppUser.findByEmail",
-            query = "SELECT a FROM AppUser a WHERE a.email = :email"),
-    @NamedQuery(
-            name = "AppUser.findByIsActive",
-            query = "SELECT a FROM AppUser a WHERE a.isActive = :isActive"),
-    @NamedQuery(
-            name = "AppUser.findByCreationDate",
-            query = "SELECT a FROM AppUser a WHERE a.creationDate = :creationDate"),
+  @NamedQuery(name = "AppUser.findAll", query = "SELECT a FROM AppUser a"),
+  @NamedQuery(name = "AppUser.findById", query = "SELECT a FROM AppUser a WHERE a.id = :id"),
+  @NamedQuery(
+      name = "AppUser.findByFirstName",
+      query = "SELECT a FROM AppUser a WHERE a.firstName = :firstName"),
+  @NamedQuery(
+      name = "AppUser.findByLastName",
+      query = "SELECT a FROM AppUser a WHERE a.lastName = :lastName"),
+  @NamedQuery(
+      name = "AppUser.findByUsername",
+      query = "SELECT a FROM AppUser a WHERE a.username = :username"),
+  @NamedQuery(
+      name = "AppUser.findByPassword",
+      query = "SELECT a FROM AppUser a WHERE a.password = :password"),
+  @NamedQuery(
+      name = "AppUser.findByEmail",
+      query = "SELECT a FROM AppUser a WHERE a.email = :email"),
+  @NamedQuery(
+      name = "AppUser.findByIsActive",
+      query = "SELECT a FROM AppUser a WHERE a.isActive = :isActive"),
+  @NamedQuery(
+      name = "AppUser.findByCreationDate",
+      query = "SELECT a FROM AppUser a WHERE a.creationDate = :creationDate"),
 })
 public class AppUser implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
-    // annotations to enforce field validation
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_seq")
-    @SequenceGenerator(name = "app_user_seq", sequenceName = "seq_app_user_id", allocationSize = 1)
-    @Basic(optional = false)
-    @Column(name = "USER_ID")
-    private Long id;
+  // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these
+  // annotations to enforce field validation
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_seq")
+  @SequenceGenerator(name = "app_user_seq", sequenceName = "seq_app_user_id", allocationSize = 1)
+  @Basic(optional = false)
+  @Column(name = "USER_ID")
+  private Long id;
 
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "FIRST_NAME")
-    private String firstName;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "FIRST_NAME")
+  private String firstName;
 
-    @Size(max = 100)
-    @Column(name = "LAST_NAME")
-    private String lastName;
+  @Size(max = 100)
+  @Column(name = "LAST_NAME")
+  private String lastName;
 
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "USERNAME")
-    private String username;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "USERNAME")
+  private String username;
 
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 512)
-    @Column(name = "PASSWORD")
-    private String password;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 512)
+  @Column(name = "PASSWORD")
+  private String password;
 
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 200)
-    @Column(name = "EMAIL")
-    private String email;
+  // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+  @Size(max = 200)
+  @Column(name = "EMAIL")
+  private String email;
 
-    @Column(name = "IS_ACTIVE")
-    private Character isActive;
+  @Column(name = "IS_ACTIVE")
+  private Character isActive;
 
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CREATION_DATE")
-    private LocalDate creationDate;
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "CREATION_DATE")
+  private LocalDate creationDate;
 
-    @Version
-    @Column(name = "VERSION")
-    private Long version;
+  @Version
+  @Column(name = "VERSION")
+  private Long version;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
-    private List<CashOpening> cashOpeningList;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
+  private List<CashOpening> cashOpeningList;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
-    private List<CustomerOrder> customerOrderList;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
+  private List<CustomerOrder> customerOrderList;
 
-    @Column(name = "USER_ROLE")
-    private Character userRole;
+  @Column(name = "USER_ROLE")
+  private Character userRole;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
-    private List<Invoice> invoiceList;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy", fetch = FetchType.LAZY)
+  private List<Invoice> invoiceList;
 
-    public AppUser() {}
+  public AppUser() {}
 
-    public AppUser(Long id) {
-        this.id = id;
+  public AppUser(Long id) {
+    this.id = id;
+  }
+
+  public AppUser(
+      Long id, String firstName, String username, String password, LocalDate creationDate) {
+    this.id = id;
+    this.firstName = firstName;
+    this.username = username;
+    this.password = password;
+    this.creationDate = creationDate;
+  }
+
+  public AppUser(AppUserDTO dto) {
+    this.id = dto.getId();
+    actualizar(dto);
+  }
+
+  public void actualizar(AppUserDTO dto) {
+    this.firstName = dto.getFirstName();
+    this.lastName = dto.getLastName();
+    this.username = dto.getUsername();
+    if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+      this.password = dto.getPassword();
     }
+    this.email = dto.getEmail();
+    this.isActive = dto.getIsActive() != null && dto.getIsActive() ? 'Y' : 'N';
+    this.userRole = dto.getUserRole();
+  }
 
-    public AppUser(
-            Long id, String firstName, String username, String password, LocalDate creationDate) {
-        this.id = id;
-        this.firstName = firstName;
-        this.username = username;
-        this.password = password;
-        this.creationDate = creationDate;
+  /** Lifecycle hook: Automatically sets creation date before persisting */
+  @PrePersist
+  protected void onCreate() {
+    if (creationDate == null) {
+      creationDate = LocalDate.now();
     }
+    if (isActive == null) {
+      isActive = 'Y';
+    }
+  }
 
-    public AppUser(AppUserDTO dto) {
-        this.id = dto.getId();
-        actualizar(dto);
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void actualizar(AppUserDTO dto) {
-        this.firstName = dto.getFirstName();
-        this.lastName = dto.getLastName();
-        this.username = dto.getUsername();
-        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
-            this.password = dto.getPassword();
-        }
-        this.email = dto.getEmail();
-        this.isActive = dto.getIsActive() != null && dto.getIsActive() ? 'Y' : 'N';
-        this.userRole = dto.getUserRole();
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    /** Lifecycle hook: Automatically sets creation date before persisting */
-    @PrePersist
-    protected void onCreate() {
-        if (creationDate == null) {
-            creationDate = LocalDate.now();
-        }
-        if (isActive == null) {
-            isActive = 'Y';
-        }
-    }
+  public String getFirstName() {
+    return firstName;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public String getLastName() {
+    return lastName;
+  }
 
-    public String getFirstName() {
-        return firstName;
-    }
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String getLastName() {
-        return lastName;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public Character getIsActive() {
+    return isActive;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public void setIsActive(Character isActive) {
+    this.isActive = isActive;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public LocalDate getCreationDate() {
+    return creationDate;
+  }
 
-    public Character getIsActive() {
-        return isActive;
-    }
+  public void setCreationDate(LocalDate creationDate) {
+    this.creationDate = creationDate;
+  }
 
-    public void setIsActive(Character isActive) {
-        this.isActive = isActive;
-    }
+  public Long getVersion() {
+    return version;
+  }
 
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
+  public void setVersion(Long version) {
+    this.version = version;
+  }
 
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
-    }
+  public Character getUserRole() {
+    return userRole;
+  }
 
-    public Long getVersion() {
-        return version;
-    }
+  public void setUserRole(Character userRole) {
+    this.userRole = userRole;
+  }
 
-    public void setVersion(Long version) {
-        this.version = version;
-    }
+  @XmlTransient
+  public List<CashOpening> getCashOpeningList() {
+    return cashOpeningList;
+  }
 
-    public Character getUserRole() {
-        return userRole;
-    }
+  public void setCashOpeningList(List<CashOpening> cashOpeningList) {
+    this.cashOpeningList = cashOpeningList;
+  }
 
-    public void setUserRole(Character userRole) {
-        this.userRole = userRole;
-    }
+  @XmlTransient
+  public List<CustomerOrder> getCustomerOrderList() {
+    return customerOrderList;
+  }
 
-    @XmlTransient
-    public List<CashOpening> getCashOpeningList() {
-        return cashOpeningList;
-    }
+  public void setCustomerOrderList(List<CustomerOrder> customerOrderList) {
+    this.customerOrderList = customerOrderList;
+  }
 
-    public void setCashOpeningList(List<CashOpening> cashOpeningList) {
-        this.cashOpeningList = cashOpeningList;
-    }
+  @XmlTransient
+  public List<Invoice> getInvoiceList() {
+    return invoiceList;
+  }
 
-    @XmlTransient
-    public List<CustomerOrder> getCustomerOrderList() {
-        return customerOrderList;
-    }
+  public void setInvoiceList(List<Invoice> invoiceList) {
+    this.invoiceList = invoiceList;
+  }
 
-    public void setCustomerOrderList(List<CustomerOrder> customerOrderList) {
-        this.customerOrderList = customerOrderList;
-    }
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
 
-    @XmlTransient
-    public List<Invoice> getInvoiceList() {
-        return invoiceList;
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are not set
+    if (!(object instanceof AppUser)) {
+      return false;
     }
+    AppUser other = (AppUser) object;
+    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+      return false;
+    }
+    return true;
+  }
 
-    public void setInvoiceList(List<Invoice> invoiceList) {
-        this.invoiceList = invoiceList;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof AppUser)) {
-            return false;
-        }
-        AppUser other = (AppUser) object;
-        if ((this.id == null && other.id != null)
-                || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "cr.ac.una.koffeefxws.model.AppUser[ id=" + id + " ]";
-    }
+  @Override
+  public String toString() {
+    return "cr.ac.una.koffeefxws.model.AppUser[ id=" + id + " ]";
+  }
 }

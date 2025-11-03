@@ -19,51 +19,51 @@ import io.jsonwebtoken.security.Keys;
  * @author quesadx
  */
 public class JwTokenHelper {
-    private static JwTokenHelper jwTokenHelper = null;
-    private static final long EXPIRATION_LIMIT = 1;
-    private static final long EXPIRATION_RENEWAL_LIMIT = 2;
-    private static final String AUTHENTICATION_SCHEME = "Bearer ";
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+  private static JwTokenHelper jwTokenHelper = null;
+  private static final long EXPIRATION_LIMIT = 1;
+  private static final long EXPIRATION_RENEWAL_LIMIT = 2;
+  private static final String AUTHENTICATION_SCHEME = "Bearer ";
+  private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    private JwTokenHelper() {}
+  private JwTokenHelper() {}
 
-    public static JwTokenHelper getInstance() {
-        if (jwTokenHelper == null) {
-            jwTokenHelper = new JwTokenHelper();
-        }
-        return jwTokenHelper;
+  public static JwTokenHelper getInstance() {
+    if (jwTokenHelper == null) {
+      jwTokenHelper = new JwTokenHelper();
     }
+    return jwTokenHelper;
+  }
 
-    public String generatePrivateKey(String username) {
-        return AUTHENTICATION_SCHEME
-                + Jwts.builder()
+  public String generatePrivateKey(String username) {
+    return AUTHENTICATION_SCHEME
+        + Jwts.builder()
+            .setSubject(username)
+            .setIssuedAt(new Date())
+            .setExpiration(getExpirationDate(false))
+            .claim(
+                "rnt",
+                AUTHENTICATION_SCHEME
+                    + Jwts.builder()
                         .setSubject(username)
                         .setIssuedAt(new Date())
-                        .setExpiration(getExpirationDate(false))
-                        .claim(
-                                "rnt",
-                                AUTHENTICATION_SCHEME
-                                        + Jwts.builder()
-                                                .setSubject(username)
-                                                .setIssuedAt(new Date())
-                                                .setExpiration(getExpirationDate(true))
-                                                .claim("rnw", true)
-                                                .signWith(key)
-                                                .compact())
+                        .setExpiration(getExpirationDate(true))
+                        .claim("rnw", true)
                         .signWith(key)
-                        .compact();
-    }
+                        .compact())
+            .signWith(key)
+            .compact();
+  }
 
-    private Date getExpirationDate(boolean isRenewal) {
-        long currentTimeInMillis = System.currentTimeMillis();
-        long expMilliseconds = TimeUnit.MINUTES.toMillis(EXPIRATION_LIMIT);
-        if (isRenewal) {
-            expMilliseconds = TimeUnit.MINUTES.toMillis(EXPIRATION_RENEWAL_LIMIT);
-        }
-        return new Date(currentTimeInMillis + expMilliseconds);
+  private Date getExpirationDate(boolean isRenewal) {
+    long currentTimeInMillis = System.currentTimeMillis();
+    long expMilliseconds = TimeUnit.MINUTES.toMillis(EXPIRATION_LIMIT);
+    if (isRenewal) {
+      expMilliseconds = TimeUnit.MINUTES.toMillis(EXPIRATION_RENEWAL_LIMIT);
     }
+    return new Date(currentTimeInMillis + expMilliseconds);
+  }
 
-    public Claims claimKey(String privateKey) throws ExpiredJwtException, MalformedJwtException {
-        return Jwts.parser().setSigningKey(key).parseClaimsJws(privateKey).getBody();
-    }
+  public Claims claimKey(String privateKey) throws ExpiredJwtException, MalformedJwtException {
+    return Jwts.parser().setSigningKey(key).parseClaimsJws(privateKey).getBody();
+  }
 }

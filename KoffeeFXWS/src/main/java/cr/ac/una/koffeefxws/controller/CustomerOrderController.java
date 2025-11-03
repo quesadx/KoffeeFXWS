@@ -33,100 +33,92 @@ import cr.ac.una.koffeefxws.util.Secure;
 @SecurityRequirement(name = "jwt-auth")
 public class CustomerOrderController {
 
-    @EJB CustomerOrderService customerOrderService;
+  @EJB CustomerOrderService customerOrderService;
 
-    @GET
-    @Path("/order/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(description = "Obtiene un pedido por ID")
-    public Response getCustomerOrder(
-            @Parameter(description = "ID del pedido") @PathParam("id") Long id) {
-        try {
-            Respuesta r = customerOrderService.getCustomerOrder(id);
-            if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue())
-                        .entity(r.getMensaje())
-                        .build();
-            }
-            CustomerOrderDTO dto = (CustomerOrderDTO) r.getResultado("CustomerOrder");
-            return Response.ok(dto).build();
-        } catch (Exception ex) {
-            Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-                    .entity("Error obteniendo el pedido.")
-                    .build();
-        }
+  @GET
+  @Path("/order/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Operation(description = "Obtiene un pedido por ID")
+  public Response getCustomerOrder(
+      @Parameter(description = "ID del pedido") @PathParam("id") Long id) {
+    try {
+      Respuesta r = customerOrderService.getCustomerOrder(id);
+      if (!r.getEstado()) {
+        return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+      }
+      CustomerOrderDTO dto = (CustomerOrderDTO) r.getResultado("CustomerOrder");
+      return Response.ok(dto).build();
+    } catch (Exception ex) {
+      Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
+      return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+          .entity("Error obteniendo el pedido.")
+          .build();
     }
+  }
 
-    @GET
-    @Path("/orders")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(description = "Obtiene todos los pedidos")
-    public Response getCustomerOrders() {
-        try {
-            Respuesta r = customerOrderService.getCustomerOrders();
-            if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue())
-                        .entity(r.getMensaje())
-                        .build();
-            }
-            return Response.ok(
-                            new GenericEntity<List<CustomerOrderDTO>>(
-                                    (List<CustomerOrderDTO>) r.getResultado("CustomerOrders")) {})
-                    .build();
-        } catch (Exception ex) {
-            Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-                    .entity("Error obteniendo los pedidos")
-                    .build();
-        }
+  @GET
+  @Path("/orders")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Operation(description = "Obtiene todos los pedidos")
+  public Response getCustomerOrders() {
+    try {
+      Respuesta r = customerOrderService.getCustomerOrders();
+      if (!r.getEstado()) {
+        return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+      }
+      return Response.ok(
+              new GenericEntity<List<CustomerOrderDTO>>(
+                  (List<CustomerOrderDTO>) r.getResultado("CustomerOrders")) {})
+          .build();
+    } catch (Exception ex) {
+      Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
+      return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+          .entity("Error obteniendo los pedidos")
+          .build();
     }
+  }
 
-    @POST
-    @Path("/order")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(description = "Guarda o actualiza un pedido")
-    public Response guardarCustomerOrder(CustomerOrderDTO dto) {
-        try {
-            Respuesta r = customerOrderService.guardarCustomerOrder(dto);
-            if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue())
-                        .entity(r.getMensaje())
-                        .build();
-            }
-            CustomerOrderDTO saved = (CustomerOrderDTO) r.getResultado("CustomerOrder");
-            return Response.ok(saved).build();
-        } catch (Exception ex) {
-            Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-                    .entity("Error guardando el pedido.")
-                    .build();
-        }
+  @POST
+  @Path("/order")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Operation(description = "Guarda o actualiza un pedido")
+  public Response guardarCustomerOrder(CustomerOrderDTO dto) {
+    try {
+      Respuesta r = customerOrderService.guardarCustomerOrder(dto);
+      if (!r.getEstado()) {
+        return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+      }
+      CustomerOrderDTO saved = (CustomerOrderDTO) r.getResultado("CustomerOrder");
+      return Response.ok(saved).build();
+    } catch (Exception ex) {
+      Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
+      return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+          .entity("Error guardando el pedido.")
+          .build();
     }
+  }
 
-    @DELETE
-    @Path("/order/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(description = "Elimina un pedido")
-    public Response eliminarCustomerOrder(
-            @Parameter(description = "ID del pedido") @PathParam("id") Long id) {
-        try {
-            Respuesta r = customerOrderService.eliminarCustomerOrder(id);
-            if (!r.getEstado()) {
-                return Response.status(r.getCodigoRespuesta().getValue())
-                        .entity(r.getMensaje())
-                        .build();
-            }
-            return Response.ok().build();
-        } catch (Exception ex) {
-            Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-                    .entity("Error eliminando el pedido.")
-                    .build();
-        }
+  @DELETE
+  @Path("/order/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Operation(description = "Elimina un pedido")
+  public Response eliminarCustomerOrder(
+      @Parameter(description = "ID del pedido") @PathParam("id") Long id) {
+    try {
+      Respuesta r = customerOrderService.eliminarCustomerOrder(id);
+      if (!r.getEstado()) {
+        return Response.status(r.getCodigoRespuesta().getValue()).entity(r.getMensaje()).build();
+      }
+      return Response.ok().build();
+    } catch (Exception ex) {
+      Logger.getLogger(CustomerOrderController.class.getName()).log(Level.SEVERE, null, ex);
+      return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
+          .entity("Error eliminando el pedido.")
+          .build();
     }
+  }
 }
