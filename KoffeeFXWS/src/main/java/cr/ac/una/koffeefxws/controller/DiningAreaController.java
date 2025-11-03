@@ -36,36 +36,37 @@ import cr.ac.una.koffeefxws.util.Secure;
  */
 @Secure
 @Path("/DiningAreaController")
-@Tag(name = "DiningAreas", description = "Operaciones sobre áreas de comedor")
+@Tag(name = "DiningAreas", description = "Operations on dining areas")
 @SecurityRequirement(name = "jwt-auth")
 public class DiningAreaController {
 
   @EJB DiningAreaService diningAreaService;
 
+  @Secure
   @GET
   @Path("/diningarea/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene un área de comedor por ID")
+  @Operation(description = "Gets a dining area by ID")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Área de comedor encontrada",
+        description = "Dining area found",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = DiningAreaDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Área de comedor no encontrada",
+        description = "Dining area not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getDiningArea(
-      @Parameter(description = "ID del área de comedor") @PathParam("id") Long id) {
+      @Parameter(description = "Dining area ID") @PathParam("id") Long id) {
     try {
       Respuesta r = diningAreaService.getDiningArea(id);
       if (!r.getEstado()) {
@@ -76,28 +77,29 @@ public class DiningAreaController {
     } catch (Exception ex) {
       Logger.getLogger(DiningAreaController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo el área de comedor.")
+          .entity("Error getting the dining area.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/diningareas")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todas las áreas de comedor")
+  @Operation(description = "Gets all dining areas")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Áreas de comedor encontradas",
+        description = "Dining areas found",
         content = @Content(mediaType = MediaType.APPLICATION_JSON)),
     @ApiResponse(
         responseCode = "404",
-        description = "No hay áreas de comedor registradas",
+        description = "No dining areas registered",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getDiningAreas() {
@@ -113,28 +115,29 @@ public class DiningAreaController {
     } catch (Exception ex) {
       Logger.getLogger(DiningAreaController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo las áreas de comedor")
+          .entity("Error getting dining areas")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/diningareas/active")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todas las áreas de comedor activas")
+  @Operation(description = "Gets all active dining areas")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Áreas de comedor activas encontradas",
+        description = "Active dining areas found",
         content = @Content(mediaType = MediaType.APPLICATION_JSON)),
     @ApiResponse(
         responseCode = "404",
-        description = "No hay áreas de comedor activas",
+        description = "No active dining areas",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getActiveDiningAreas() {
@@ -150,31 +153,32 @@ public class DiningAreaController {
     } catch (Exception ex) {
       Logger.getLogger(DiningAreaController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo las áreas de comedor activas")
+          .entity("Error getting active dining areas")
           .build();
     }
   }
 
+  @Secure
   @POST
   @Path("/diningarea")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Guarda o actualiza un área de comedor")
+  @Operation(description = "Creates or updates a dining area")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Área de comedor guardada exitosamente",
+        description = "Dining area saved successfully",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = DiningAreaDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Área de comedor no encontrada",
+        description = "Dining area not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response guardarDiningArea(DiningAreaDTO diningArea) {
@@ -188,29 +192,30 @@ public class DiningAreaController {
     } catch (Exception ex) {
       Logger.getLogger(DiningAreaController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error guardando el área de comedor.")
+          .entity("Error saving the dining area.")
           .build();
     }
   }
 
+  @Secure
   @DELETE
   @Path("/diningarea/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Elimina un área de comedor")
+  @Operation(description = "Deletes a dining area")
   @ApiResponses({
-    @ApiResponse(responseCode = "200", description = "Área de comedor eliminada exitosamente"),
+    @ApiResponse(responseCode = "200", description = "Dining area deleted successfully"),
     @ApiResponse(
         responseCode = "404",
-        description = "Área de comedor no encontrada",
+        description = "Dining area not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response eliminarDiningArea(
-      @Parameter(description = "ID del área de comedor") @PathParam("id") Long id) {
+      @Parameter(description = "Dining area ID") @PathParam("id") Long id) {
     try {
       Respuesta r = diningAreaService.eliminarDiningArea(id);
       if (!r.getEstado()) {
@@ -220,7 +225,7 @@ public class DiningAreaController {
     } catch (Exception ex) {
       Logger.getLogger(DiningAreaController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error eliminando el área de comedor.")
+          .entity("Error deleting the dining area.")
           .build();
     }
   }

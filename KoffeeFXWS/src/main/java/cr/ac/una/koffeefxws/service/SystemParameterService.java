@@ -50,21 +50,21 @@ public class SystemParameterService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un parámetro con el código ingresado.",
+          "No system parameter found with the provided ID.",
           "getSystemParameter NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el parámetro del sistema.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the system parameter.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el parámetro del sistema.",
+          "An error occurred while querying the system parameter.",
           "getSystemParameter NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el parámetro del sistema.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the system parameter.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el parámetro del sistema.",
+          "An error occurred while querying the system parameter.",
           "getSystemParameter " + ex.getMessage());
     }
   }
@@ -86,21 +86,21 @@ public class SystemParameterService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un parámetro con el nombre ingresado.",
+          "No system parameter found with the provided name.",
           "getSystemParameterByName NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el parámetro del sistema.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the system parameter.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el parámetro del sistema.",
+          "An error occurred while querying the system parameter.",
           "getSystemParameterByName NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el parámetro del sistema.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the system parameter.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el parámetro del sistema.",
+          "An error occurred while querying the system parameter.",
           "getSystemParameterByName " + ex.getMessage());
     }
   }
@@ -120,14 +120,14 @@ public class SystemParameterService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen parámetros del sistema registrados.",
+          "No system parameters found.",
           "getSystemParameters NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar los parámetros del sistema.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying system parameters.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar los parámetros del sistema.",
+          "An error occurred while querying system parameters.",
           "getSystemParameters " + ex.getMessage());
     }
   }
@@ -141,7 +141,7 @@ public class SystemParameterService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el parámetro del sistema a modificar.",
+              "No system parameter found to modify.",
               "guardarSystemParameter NoResultException");
         }
         parameter.actualizar(parameterDto);
@@ -159,11 +159,11 @@ public class SystemParameterService {
           "SystemParameter",
           new SystemParameterDTO(parameter));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al guardar el parámetro del sistema.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while saving the system parameter.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al guardar el parámetro del sistema.",
+          "An error occurred while saving the system parameter.",
           "guardarSystemParameter " + ex.getMessage());
     }
   }
@@ -177,7 +177,7 @@ public class SystemParameterService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el parámetro del sistema a eliminar.",
+              "No system parameter found to delete.",
               "eliminarSystemParameter NoResultException");
         }
         em.remove(parameter);
@@ -185,17 +185,17 @@ public class SystemParameterService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "Debe cargar el parámetro del sistema a eliminar.",
+            "You must provide the system parameter to delete.",
             "eliminarSystemParameter NoResultException");
       }
       em.flush();
       return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el parámetro del sistema.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while deleting the system parameter.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al eliminar el parámetro del sistema.",
+          "An error occurred while deleting the system parameter.",
           "eliminarSystemParameter " + ex.getMessage());
     }
   }

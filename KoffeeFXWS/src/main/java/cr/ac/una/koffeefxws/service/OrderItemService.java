@@ -48,21 +48,21 @@ public class OrderItemService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un item con el código ingresado.",
+          "No order item found with the provided ID.",
           "getOrderItem NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el item.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the order item.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el item.",
+          "An error occurred while querying the order item.",
           "getOrderItem NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el item.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the order item.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el item.",
+          "An error occurred while querying the order item.",
           "getOrderItem " + ex.getMessage());
     }
   }
@@ -80,14 +80,14 @@ public class OrderItemService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen items con los criterios ingresados.",
+          "No order items found with the provided criteria.",
           "getOrderItems NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar los items.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying order items.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar los items.",
+          "An error occurred while querying order items.",
           "getOrderItems " + ex.getMessage());
     }
   }
@@ -101,7 +101,7 @@ public class OrderItemService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el item a modificar.",
+              "No order item found to modify.",
               "guardarOrderItem NoResultException");
         }
         item.actualizar(itemDto);
@@ -146,11 +146,11 @@ public class OrderItemService {
       return new Respuesta(
           true, CodigoRespuesta.CORRECTO, "", "", "OrderItem", new OrderItemDTO(item));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al guardar el item.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while saving the order item.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al guardar el item.",
+          "An error occurred while saving the order item.",
           "guardarOrderItem " + ex.getMessage());
     }
   }
@@ -164,7 +164,7 @@ public class OrderItemService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el item a eliminar.",
+              "No order item found to delete.",
               "eliminarOrderItem NoResultException");
         }
         em.remove(item);
@@ -172,17 +172,17 @@ public class OrderItemService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "Debe cargar el item a eliminar.",
+            "You must provide the order item to delete.",
             "eliminarOrderItem NoResultException");
       }
       em.flush();
       return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el item.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while deleting the order item.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al eliminar el item.",
+          "An error occurred while deleting the order item.",
           "eliminarOrderItem " + ex.getMessage());
     }
   }

@@ -47,21 +47,21 @@ public class InvoiceService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe una factura con el código ingresado.",
+          "No invoice found with the provided ID.",
           "getInvoice NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar la factura.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the invoice.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar la factura.",
+          "An error occurred while querying the invoice.",
           "getInvoice NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar la factura.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the invoice.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar la factura.",
+          "An error occurred while querying the invoice.",
           "getInvoice " + ex.getMessage());
     }
   }
@@ -82,21 +82,21 @@ public class InvoiceService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe una factura con el número ingresado.",
+          "No invoice found with the provided number.",
           "getInvoiceByNumber NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar la factura.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the invoice.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar la factura.",
+          "An error occurred while querying the invoice.",
           "getInvoiceByNumber NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar la factura.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the invoice.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar la factura.",
+          "An error occurred while querying the invoice.",
           "getInvoiceByNumber " + ex.getMessage());
     }
   }
@@ -114,14 +114,14 @@ public class InvoiceService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen facturas con los criterios ingresados.",
+          "No invoices found with the provided criteria.",
           "getInvoices NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar las facturas.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying invoices.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar las facturas.",
+          "An error occurred while querying invoices.",
           "getInvoices " + ex.getMessage());
     }
   }
@@ -137,21 +137,21 @@ public class InvoiceService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe una factura asociada a la orden indicada.",
+          "No invoice associated with the specified order.",
           "getInvoiceByOrderId NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar la factura por orden.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the invoice by order.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar la factura por orden.",
+          "An error occurred while querying the invoice by order.",
           "getInvoiceByOrderId NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar la factura por orden.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the invoice by order.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar la factura por orden.",
+          "An error occurred while querying the invoice by order.",
           "getInvoiceByOrderId " + ex.getMessage());
     }
   }
@@ -165,12 +165,11 @@ public class InvoiceService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró la factura a modificar.",
+              "No invoice found to modify.",
               "guardarInvoice NoResultException");
         }
         invoice.actualizar(invoiceDto);
 
-        // Handle FK relationships
         if (invoiceDto.getCustomerId() != null) {
           Customer customer = em.find(Customer.class, invoiceDto.getCustomerId());
           if (customer != null) {
@@ -201,7 +200,6 @@ public class InvoiceService {
 
         invoice = em.merge(invoice);
       } else {
-        // Idempotencia por orden: si existe factura para la orden indicada, actualizarla
         Invoice existing = null;
         if (invoiceDto.getCustomerOrderId() != null) {
           try {
@@ -220,7 +218,6 @@ public class InvoiceService {
           invoice = new Invoice(invoiceDto);
         }
 
-        // Handle FK relationships
         if (invoiceDto.getCustomerId() != null) {
           Customer customer = em.find(Customer.class, invoiceDto.getCustomerId());
           if (customer != null) {
@@ -239,7 +236,6 @@ public class InvoiceService {
           CustomerOrder order = em.find(CustomerOrder.class, invoiceDto.getCustomerOrderId());
           if (order != null) {
             invoice.setCustomerOrderId(order);
-            // Mantener relación bidireccional
             order.setInvoice(invoice);
             em.merge(order);
           }
@@ -262,11 +258,11 @@ public class InvoiceService {
       return new Respuesta(
           true, CodigoRespuesta.CORRECTO, "", "", "Invoice", new InvoiceDTO(invoice));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al guardar la factura.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while saving the invoice.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al guardar la factura.",
+          "An error occurred while saving the invoice.",
           "guardarInvoice " + ex.getMessage());
     }
   }
@@ -280,7 +276,7 @@ public class InvoiceService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró la factura a eliminar.",
+              "No invoice found to delete.",
               "eliminarInvoice NoResultException");
         }
         em.remove(invoice);
@@ -288,17 +284,17 @@ public class InvoiceService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "Debe cargar la factura a eliminar.",
+            "You must provide the invoice to delete.",
             "eliminarInvoice NoResultException");
       }
       em.flush();
       return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al eliminar la factura.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while deleting the invoice.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al eliminar la factura.",
+          "An error occurred while deleting the invoice.",
           "eliminarInvoice " + ex.getMessage());
     }
   }

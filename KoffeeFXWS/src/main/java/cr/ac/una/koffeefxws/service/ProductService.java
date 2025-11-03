@@ -53,21 +53,21 @@ public class ProductService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un producto con el código ingresado.",
+          "No product found with the provided ID.",
           "getProduct NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el producto.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the product.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el producto.",
+          "An error occurred while querying the product.",
           "getProduct NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el producto.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the product.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el producto.",
+          "An error occurred while querying the product.",
           "getProduct " + ex.getMessage());
     }
   }
@@ -86,14 +86,14 @@ public class ProductService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen productos registrados.",
+          "No products found.",
           "getProducts NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar los productos.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying products.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar los productos.",
+          "An error occurred while querying products.",
           "getProducts " + ex.getMessage());
     }
   }
@@ -113,14 +113,14 @@ public class ProductService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen productos activos.",
+          "No active products found.",
           "getActiveProducts NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar los productos activos.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying active products.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar los productos activos.",
+          "An error occurred while querying active products.",
           "getActiveProducts " + ex.getMessage());
     }
   }
@@ -134,7 +134,7 @@ public class ProductService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el producto a modificar.",
+              "No product found to modify.",
               "guardarProduct NoResultException");
         }
         product.actualizar(productDto);
@@ -164,11 +164,11 @@ public class ProductService {
       return new Respuesta(
           true, CodigoRespuesta.CORRECTO, "", "", "Product", new ProductDTO(product));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al guardar el producto.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while saving the product.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al guardar el producto.",
+          "An error occurred while saving the product.",
           "guardarProduct " + ex.getMessage());
     }
   }
@@ -182,7 +182,7 @@ public class ProductService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el producto a eliminar.",
+              "No product found to delete.",
               "eliminarProduct NoResultException");
         }
         em.remove(product);
@@ -190,7 +190,7 @@ public class ProductService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "Debe cargar el producto a eliminar.",
+            "You must provide the product to delete.",
             "eliminarProduct NoResultException");
       }
       em.flush();
@@ -202,14 +202,14 @@ public class ProductService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_INTERNO,
-            "No se puede eliminar el producto porque tiene relaciones con otros registros.",
+            "Cannot delete the product because it has related records.",
             "eliminarProduct " + ex.getMessage());
       }
-      LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el producto.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while deleting the product.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al eliminar el producto.",
+          "An error occurred while deleting the product.",
           "eliminarProduct " + ex.getMessage());
     }
   }

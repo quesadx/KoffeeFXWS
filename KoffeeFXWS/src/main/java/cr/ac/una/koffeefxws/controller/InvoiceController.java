@@ -32,19 +32,19 @@ import cr.ac.una.koffeefxws.util.Secure;
  */
 @Secure
 @Path("/InvoiceController")
-@Tag(name = "Invoices", description = "Operaciones sobre facturas")
+@Tag(name = "Invoices", description = "Operations on invoices")
 @SecurityRequirement(name = "jwt-auth")
 public class InvoiceController {
 
   @EJB InvoiceService invoiceService;
 
+  @Secure
   @GET
   @Path("/invoice/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene una factura por ID")
-  public Response getInvoice(
-      @Parameter(description = "ID de la factura") @PathParam("id") Long id) {
+  @Operation(description = "Gets an invoice by ID")
+  public Response getInvoice(@Parameter(description = "Invoice ID") @PathParam("id") Long id) {
     try {
       Respuesta r = invoiceService.getInvoice(id);
       if (!r.getEstado()) {
@@ -55,18 +55,19 @@ public class InvoiceController {
     } catch (Exception ex) {
       Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo la factura.")
+          .entity("Error getting the invoice.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/invoice/number/{num}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene una factura por número")
+  @Operation(description = "Gets an invoice by number")
   public Response getInvoiceByNumber(
-      @Parameter(description = "Número de factura") @PathParam("num") String num) {
+      @Parameter(description = "Invoice number") @PathParam("num") String num) {
     try {
       Respuesta r = invoiceService.getInvoiceByNumber(num);
       if (!r.getEstado()) {
@@ -77,18 +78,19 @@ public class InvoiceController {
     } catch (Exception ex) {
       Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo la factura.")
+          .entity("Error getting the invoice.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/invoice/order/{orderId}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene una factura por ID de orden")
+  @Operation(description = "Gets an invoice by order ID")
   public Response getInvoiceByOrder(
-      @Parameter(description = "ID de la orden") @PathParam("orderId") Long orderId) {
+      @Parameter(description = "Order ID") @PathParam("orderId") Long orderId) {
     try {
       Respuesta r = invoiceService.getInvoiceByOrderId(orderId);
       if (!r.getEstado()) {
@@ -99,16 +101,17 @@ public class InvoiceController {
     } catch (Exception ex) {
       Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo la factura por orden.")
+          .entity("Error getting the invoice by order.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/invoices")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todas las facturas")
+  @Operation(description = "Gets all invoices")
   public Response getInvoices() {
     try {
       Respuesta r = invoiceService.getInvoices();
@@ -121,16 +124,17 @@ public class InvoiceController {
     } catch (Exception ex) {
       Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo las facturas")
+          .entity("Error getting invoices")
           .build();
     }
   }
 
+  @Secure
   @POST
   @Path("/invoice")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Guarda o actualiza una factura")
+  @Operation(description = "Creates or updates an invoice")
   public Response guardarInvoice(InvoiceDTO dto) {
     try {
       Respuesta r = invoiceService.guardarInvoice(dto);
@@ -142,18 +146,18 @@ public class InvoiceController {
     } catch (Exception ex) {
       Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error guardando la factura.")
+          .entity("Error saving the invoice.")
           .build();
     }
   }
 
+  @Secure
   @DELETE
   @Path("/invoice/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Elimina una factura")
-  public Response eliminarInvoice(
-      @Parameter(description = "ID de la factura") @PathParam("id") Long id) {
+  @Operation(description = "Deletes an invoice")
+  public Response eliminarInvoice(@Parameter(description = "Invoice ID") @PathParam("id") Long id) {
     try {
       Respuesta r = invoiceService.eliminarInvoice(id);
       if (!r.getEstado()) {
@@ -163,7 +167,7 @@ public class InvoiceController {
     } catch (Exception ex) {
       Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error eliminando la factura.")
+          .entity("Error deleting the invoice.")
           .build();
     }
   }

@@ -32,32 +32,18 @@ public class MailService {
 
   private static final Logger LOG = Logger.getLogger(MailService.class.getName());
 
-  // The mail session is configured in Payara with JNDI name: mail/RestUNASession
   @Resource(lookup = "mail/RestUNASession")
   private Session mailSession;
 
   @EJB private SystemParameterService systemParameterService;
 
-  // This is my personal email (Matteo here!) - please don't steal it, prof :)
+  // This is my personal email (Matteoo) no me lo robe carri :)
   private static final String DEFAULT_FROM = "flowfxws@gmail.com";
 
-  // ========================================================================
-  // Public methods for sending emails
-  // ========================================================================
-
-  /**
-   * Sends an invoice PDF to the customer via email. This runs asynchronously so it won't block the
-   * main thread.
-   *
-   * @param customer the customer receiving the invoice
-   * @param invoiceNumber the invoice number (used in subject and filename)
-   * @param pdfBytes the actual PDF file as bytes
-   */
   @Asynchronous
   public void sendInvoicePDF(CustomerDTO customer, String invoiceNumber, byte[] pdfBytes) {
     LOG.log(Level.INFO, "MAIL: sendInvoicePDF called for invoice: {0}", invoiceNumber);
 
-    // Basic validation - need customer info
     if (customer == null || customer.getEmail() == null || customer.getEmail().isBlank()) {
       LOG.warning("Cannot send invoice email: customer or customer email is null or empty");
       return;
@@ -65,7 +51,6 @@ public class MailService {
 
     LOG.log(Level.INFO, "MAIL: Customer email: {0}", customer.getEmail());
 
-    // Also need the actual PDF content
     if (pdfBytes == null || pdfBytes.length == 0) {
       LOG.warning("Cannot send invoice email: PDF bytes are null or empty");
       return;
@@ -74,7 +59,6 @@ public class MailService {
     LOG.log(Level.INFO, "MAIL: PDF bytes length: {0}", pdfBytes.length);
 
     try {
-      // Fetch the language from database (default to "es" if not found)
       String languageCode = "es";
       LOG.log(Level.INFO, "MAIL: Fetching language parameter from database");
       try {
@@ -97,7 +81,6 @@ public class MailService {
         LOG.log(Level.WARNING, "Failed to fetch language parameter, using default 'es'", langEx);
       }
 
-      // Build the email subject and body based on language
       LOG.log(Level.INFO, "MAIL: Building email subject and body");
       String subject = buildSubject(languageCode, invoiceNumber);
       String htmlBody = buildInvoiceHtml(languageCode, invoiceNumber, customer);
@@ -105,7 +88,7 @@ public class MailService {
           "factura_" + (invoiceNumber != null ? invoiceNumber : "invoice") + ".pdf";
 
       LOG.log(Level.INFO, "MAIL: Attempting to send email to: {0}", customer.getEmail());
-      // Send it off!
+      // Y se enviaaa
       sendEmailWithAttachment(customer.getEmail(), subject, htmlBody, pdfBytes, attachmentName);
       LOG.log(Level.INFO, "Invoice PDF email sent successfully to {0}", customer.getEmail());
     } catch (Exception ex) {
@@ -113,11 +96,6 @@ public class MailService {
     }
   }
 
-  // ========================================================================
-  // Core email sending logic
-  // ========================================================================
-
-  /** Does the heavy lifting of actually sending an email with a PDF attachment. */
   private void sendEmailWithAttachment(
       String toEmail,
       String subject,
@@ -126,13 +104,11 @@ public class MailService {
       String attachmentName)
       throws MessagingException {
 
-    // Can't send email without a mail session
     if (mailSession == null) {
       LOG.warning("Mail session 'mail/RestUNASession' is not available; skipping email send.");
       return;
     }
 
-    // Make sure SMTP is configured properly
     configureSMTP();
 
     LOG.log(Level.INFO, () -> "MAIL: Preparing email to " + toEmail + ", subject: " + subject);
@@ -140,7 +116,6 @@ public class MailService {
     long startTime = System.currentTimeMillis();
     MimeMessage msg = new MimeMessage(mailSession);
 
-    // If there's no sender configured, use our default
     if (msg.getFrom() == null || msg.getFrom().length == 0) {
       msg.setFrom(new InternetAddress(DEFAULT_FROM, false));
     }
@@ -148,15 +123,12 @@ public class MailService {
     msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
     msg.setSubject(subject, StandardCharsets.UTF_8.name());
 
-    // Build the email in parts: HTML body + PDF attachment
     Multipart multipart = new MimeMultipart();
 
-    // First part: the HTML email body
     MimeBodyPart htmlPart = new MimeBodyPart();
     htmlPart.setContent(htmlBody, "text/html; charset=UTF-8");
     multipart.addBodyPart(htmlPart);
 
-    // Second part: the PDF file
     MimeBodyPart attachmentPart = new MimeBodyPart();
     DataSource pdfSource = new ByteArrayDataSource(attachmentBytes, "application/pdf");
     attachmentPart.setDataHandler(new DataHandler(pdfSource));
@@ -165,7 +137,6 @@ public class MailService {
 
     msg.setContent(multipart);
 
-    // Finally, send it!
     LOG.log(Level.INFO, () -> "MAIL: Sending message to " + toEmail);
     Transport.send(msg);
 
@@ -175,20 +146,14 @@ public class MailService {
         () -> "MAIL: Sent successfully to " + toEmail + " in " + (endTime - startTime) + " ms");
   }
 
-  /**
-   * Sets up SMTP configuration with reasonable timeouts and TLS settings. Only adds properties if
-   * they're not already set.
-   */
   private void configureSMTP() {
     try {
       var props = mailSession.getProperties();
 
-      // Set timeouts (in milliseconds) - don't want to hang forever
       props.putIfAbsent("mail.smtp.connectiontimeout", "10000"); // 10 seconds to connect
       props.putIfAbsent("mail.smtp.timeout", "15000"); // 15 seconds for responses
       props.putIfAbsent("mail.smtp.writetimeout", "15000"); // 15 seconds to write
 
-      // Security settings - we want TLS
       props.putIfAbsent("mail.smtp.auth", "true");
       props.putIfAbsent("mail.smtp.starttls.enable", "true");
       props.putIfAbsent("mail.smtp.starttls.required", "true");
@@ -198,7 +163,6 @@ public class MailService {
       String port = String.valueOf(props.getProperty("mail.smtp.port"));
       LOG.log(Level.INFO, () -> "MAIL: Configured SMTP host=" + host + ", port=" + port);
 
-      // Warn if the host isn't configured properly
       if (host == null || host.isBlank() || "null".equalsIgnoreCase(host)) {
         LOG.warning(
             "MAIL: No SMTP host configured. Configure Payara JavaMail Session 'mail/RestUNASession'.");
@@ -211,8 +175,6 @@ public class MailService {
   // ========================================================================
   // HTML email template (full disclosure: made with ChatGPT, honesty first!)
   // ========================================================================
-
-  /** Builds the email subject based on the language. */
   private String buildSubject(String languageCode, String invoiceNumber) {
     if ("en".equals(languageCode)) {
       return "RestUNA System - Invoice " + (invoiceNumber != null ? invoiceNumber : "");
@@ -221,10 +183,6 @@ public class MailService {
     }
   }
 
-  /**
-   * Builds a nice-looking HTML email for the invoice with bilingual support. Supports English (en)
-   * and Spanish (es) based on display.lang parameter.
-   */
   private String buildInvoiceHtml(String languageCode, String invoiceNumber, CustomerDTO customer) {
     String lang = "en".equals(languageCode) ? "en" : "es";
     String greeting = "en".equals(languageCode) ? "Dear" : "Estimado/a";

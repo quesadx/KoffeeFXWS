@@ -51,21 +51,21 @@ public class CustomerService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un cliente con el código ingresado.",
+          "No customer found with the provided ID.",
           "getCustomer NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el cliente.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the customer.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el cliente.",
+          "An error occurred while querying the customer.",
           "getCustomer NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el cliente.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the customer.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el cliente.",
+          "An error occurred while querying the customer.",
           "getCustomer " + ex.getMessage());
     }
   }
@@ -86,21 +86,21 @@ public class CustomerService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un cliente con el email ingresado.",
+          "No customer found with the provided email.",
           "getCustomerByEmail NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el cliente.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the customer.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el cliente.",
+          "An error occurred while querying the customer.",
           "getCustomerByEmail NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el cliente.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the customer.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el cliente.",
+          "An error occurred while querying the customer.",
           "getCustomerByEmail " + ex.getMessage());
     }
   }
@@ -119,14 +119,14 @@ public class CustomerService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen clientes registrados.",
+          "No customers found.",
           "getCustomers NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar los clientes.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying customers.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar los clientes.",
+          "An error occurred while querying customers.",
           "getCustomers " + ex.getMessage());
     }
   }
@@ -143,7 +143,7 @@ public class CustomerService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el cliente a modificar.",
+              "No customer found to modify.",
               "guardarCustomer NoResultException");
         }
         customer.actualizar(customerDto);
@@ -152,11 +152,11 @@ public class CustomerService {
       return new Respuesta(
           true, CodigoRespuesta.CORRECTO, "", "", "Customer", new CustomerDTO(customer));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al guardar el cliente.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while saving the customer.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al guardar el cliente.",
+          "An error occurred while saving the customer.",
           "guardarCustomer " + ex.getMessage());
     }
   }
@@ -170,7 +170,7 @@ public class CustomerService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el cliente a eliminar.",
+              "No customer found to delete.",
               "eliminarCustomer NoResultException");
         }
         em.remove(customer);
@@ -178,7 +178,7 @@ public class CustomerService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "Debe cargar el cliente a eliminar.",
+            "You must provide the customer to delete.",
             "eliminarCustomer NoResultException");
       }
       em.flush();
@@ -190,14 +190,14 @@ public class CustomerService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_INTERNO,
-            "No se puede eliminar el cliente porque tiene relaciones con otros registros.",
+            "Cannot delete the customer because it has related records.",
             "eliminarCustomer " + ex.getMessage());
       }
-      LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el cliente.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while deleting the customer.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al eliminar el cliente.",
+          "An error occurred while deleting the customer.",
           "eliminarCustomer " + ex.getMessage());
     }
   }

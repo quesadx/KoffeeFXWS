@@ -31,38 +31,42 @@ import cr.ac.una.koffeefxws.util.CodigoRespuesta;
 import cr.ac.una.koffeefxws.util.Respuesta;
 import cr.ac.una.koffeefxws.util.Secure;
 
+/**
+ * @author quesadx
+ */
 @Secure
 @Path("/CashOpeningController")
-@Tag(name = "CashOpenings", description = "Operaciones sobre aperturas de caja")
+@Tag(name = "CashOpenings", description = "Operations on cash openings")
 @SecurityRequirement(name = "jwt-auth")
 public class CashOpeningController {
 
   @EJB CashOpeningService cashOpeningService;
 
+  @Secure
   @GET
   @Path("/cashOpening/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene una apertura de caja por ID")
+  @Operation(description = "Gets a cash opening by ID")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Apertura de caja encontrada",
+        description = "Cash opening found",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = CashOpeningDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Apertura de caja no encontrada",
+        description = "Cash opening not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getCashOpening(
-      @Parameter(description = "ID de la apertura") @PathParam("id") Long id) {
+      @Parameter(description = "Cash opening ID") @PathParam("id") Long id) {
     try {
       Respuesta r = cashOpeningService.getCashOpening(id);
       if (!r.getEstado()) {
@@ -73,16 +77,17 @@ public class CashOpeningController {
     } catch (Exception ex) {
       Logger.getLogger(CashOpeningController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo la apertura de caja.")
+          .entity("Error getting the cash opening.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/cashOpenings")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todas las aperturas de caja")
+  @Operation(description = "Gets all cash openings")
   public Response getCashOpenings() {
     try {
       Respuesta r = cashOpeningService.getCashOpenings();
@@ -96,18 +101,19 @@ public class CashOpeningController {
     } catch (Exception ex) {
       Logger.getLogger(CashOpeningController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo las aperturas de caja")
+          .entity("Error getting cash openings")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/cashOpening/active/{userId}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene la apertura de caja activa de un usuario")
+  @Operation(description = "Gets a user's active cash opening")
   public Response getActiveCashOpening(
-      @Parameter(description = "ID del usuario") @PathParam("userId") Long userId) {
+      @Parameter(description = "User ID") @PathParam("userId") Long userId) {
     try {
       Respuesta r = cashOpeningService.getActiveCashOpening(userId);
       if (!r.getEstado()) {
@@ -118,16 +124,17 @@ public class CashOpeningController {
     } catch (Exception ex) {
       Logger.getLogger(CashOpeningController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo la caja activa")
+          .entity("Error getting the active cash opening")
           .build();
     }
   }
 
+  @Secure
   @POST
   @Path("/cashOpening")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Guarda o actualiza una apertura de caja")
+  @Operation(description = "Creates or updates a cash opening")
   public Response guardarCashOpening(CashOpeningDTO dto) {
     try {
       Respuesta r = cashOpeningService.guardarCashOpening(dto);
@@ -139,18 +146,19 @@ public class CashOpeningController {
     } catch (Exception ex) {
       Logger.getLogger(CashOpeningController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error guardando la apertura de caja.")
+          .entity("Error saving the cash opening.")
           .build();
     }
   }
 
+  @Secure
   @PUT
   @Path("/cashOpening/close/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Cierra una apertura de caja")
+  @Operation(description = "Closes a cash opening")
   public Response closeCashOpening(
-      @Parameter(description = "ID de la apertura") @PathParam("id") Long id, CashOpeningDTO dto) {
+      @Parameter(description = "Cash opening ID") @PathParam("id") Long id, CashOpeningDTO dto) {
     try {
       Long closingAmount =
           dto.getClosingAmount() != null ? dto.getClosingAmount().longValue() : null;
@@ -164,7 +172,7 @@ public class CashOpeningController {
     } catch (Exception ex) {
       Logger.getLogger(CashOpeningController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error cerrando la apertura de caja.")
+          .entity("Error closing the cash opening.")
           .build();
     }
   }

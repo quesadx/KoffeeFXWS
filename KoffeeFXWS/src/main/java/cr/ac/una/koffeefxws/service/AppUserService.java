@@ -39,7 +39,6 @@ public class AppUserService {
 
       AppUser user = (AppUser) qryUser.getSingleResult();
 
-      // TODO: Implement proper password hashing verification
       if (user.getPassword().equals(password)) {
         return new Respuesta(
             true, CodigoRespuesta.CORRECTO, "", "", "AppUser", new AppUserDTO(user));
@@ -47,28 +46,28 @@ public class AppUserService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_ACCESO,
-            "Credenciales incorrectas.",
+            "Incorrect credentials.",
             "validateUser password mismatch");
       }
     } catch (NoResultException ex) {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un usuario con las credenciales ingresadas.",
+          "No user exists with the provided credentials.",
           "validateUser NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el usuario.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the user.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el usuario.",
+          "An error occurred while querying the user.",
           "validateUser NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el usuario.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the user.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el usuario.",
+          "An error occurred while querying the user.",
           "validateUser " + ex.getMessage());
     }
   }
@@ -89,21 +88,21 @@ public class AppUserService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un usuario con el código ingresado.",
+          "No user exists with the provided ID.",
           "getAppUser NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el usuario.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the user.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el usuario.",
+          "An error occurred while querying the user.",
           "getAppUser NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el usuario.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the user.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el usuario.",
+          "An error occurred while querying the user.",
           "getAppUser " + ex.getMessage());
     }
   }
@@ -124,21 +123,21 @@ public class AppUserService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un usuario con el username ingresado.",
+          "No user exists with the provided username.",
           "getAppUserByUsername NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el usuario.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the user.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el usuario.",
+          "An error occurred while querying the user.",
           "getAppUserByUsername NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el usuario.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the user.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el usuario.",
+          "An error occurred while querying the user.",
           "getAppUserByUsername " + ex.getMessage());
     }
   }
@@ -157,14 +156,14 @@ public class AppUserService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen usuarios registrados.",
+          "No users registered.",
           "getAppUsers NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar los usuarios.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying users.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar los usuarios.",
+          "An error occurred while querying users.",
           "getAppUsers " + ex.getMessage());
     }
   }
@@ -178,7 +177,7 @@ public class AppUserService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el usuario a modificar.",
+              "User to modify was not found.",
               "guardarAppUser NoResultException");
         }
         user.actualizar(userDto);
@@ -194,11 +193,11 @@ public class AppUserService {
       em.flush();
       return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "AppUser", new AppUserDTO(user));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al guardar el usuario.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while saving the user.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al guardar el usuario.",
+          "An error occurred while saving the user.",
           "guardarAppUser " + ex.getMessage());
     }
   }
@@ -212,7 +211,7 @@ public class AppUserService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el usuario a eliminar.",
+              "User to delete was not found.",
               "eliminarAppUser NoResultException");
         }
         em.remove(user);
@@ -220,7 +219,7 @@ public class AppUserService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "Debe cargar el usuario a eliminar.",
+            "You must provide the user to delete.",
             "eliminarAppUser NoResultException");
       }
       em.flush();
@@ -232,14 +231,14 @@ public class AppUserService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_INTERNO,
-            "No se puede eliminar el usuario porque tiene relaciones con otros registros.",
+            "Cannot delete the user because it has relations with other records.",
             "eliminarAppUser " + ex.getMessage());
       }
-      LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el usuario.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while deleting the user.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al eliminar el usuario.",
+          "An error occurred while deleting the user.",
           "eliminarAppUser " + ex.getMessage());
     }
   }

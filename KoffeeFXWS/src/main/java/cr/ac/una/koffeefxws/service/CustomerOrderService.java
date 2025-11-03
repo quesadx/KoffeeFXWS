@@ -69,21 +69,21 @@ public class CustomerOrderService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un pedido con el código ingresado.",
+          "No order found with the provided ID.",
           "getCustomerOrder NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el pedido.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the order.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el pedido.",
+          "An error occurred while querying the order.",
           "getCustomerOrder NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el pedido.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the order.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el pedido.",
+          "An error occurred while querying the order.",
           "getCustomerOrder " + ex.getMessage());
     }
   }
@@ -102,14 +102,14 @@ public class CustomerOrderService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen pedidos registrados.",
+          "No orders found.",
           "getCustomerOrders NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar los pedidos.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying orders.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar los pedidos.",
+          "An error occurred while querying orders.",
           "getCustomerOrders " + ex.getMessage());
     }
   }
@@ -120,7 +120,7 @@ public class CustomerOrderService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_CLIENTE,
-            "El ID del usuario creador es obligatorio.",
+            "Creator user ID is required.",
             "guardarCustomerOrder Validation");
       }
 
@@ -129,7 +129,7 @@ public class CustomerOrderService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "No existe un usuario con el ID indicado.",
+            "No user exists with the specified ID.",
             "guardarCustomerOrder Validation");
       }
 
@@ -155,7 +155,7 @@ public class CustomerOrderService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el pedido a modificar.",
+              "No order found to modify.",
               "guardarCustomerOrder NoResultException");
         }
         order.actualizar(orderDto);
@@ -181,7 +181,7 @@ public class CustomerOrderService {
           order.setInvoice(invoice);
           LOG.log(
               Level.INFO,
-              "Asociada factura {0} a orden {1}",
+              "Associated invoice {0} with order {1}",
               new Object[] {invoice.getId(), order.getId()});
         }
       }
@@ -227,11 +227,11 @@ public class CustomerOrderService {
       return new Respuesta(
           true, CodigoRespuesta.CORRECTO, "", "", "CustomerOrder", new CustomerOrderDTO(order));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al guardar el pedido.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while saving the order.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al guardar el pedido.",
+          "An error occurred while saving the order.",
           "guardarCustomerOrder " + ex.getMessage());
     }
   }
@@ -245,7 +245,7 @@ public class CustomerOrderService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el pedido a eliminar.",
+              "No order found to delete.",
               "eliminarCustomerOrder NoResultException");
         }
         em.remove(order);
@@ -253,17 +253,17 @@ public class CustomerOrderService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "Debe cargar el pedido a eliminar.",
+            "You must provide the order to delete.",
             "eliminarCustomerOrder NoResultException");
       }
       em.flush();
       return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el pedido.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while deleting the order.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al eliminar el pedido.",
+          "An error occurred while deleting the order.",
           "eliminarCustomerOrder " + ex.getMessage());
     }
   }

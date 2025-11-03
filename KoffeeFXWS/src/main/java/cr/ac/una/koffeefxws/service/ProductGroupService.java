@@ -51,21 +51,21 @@ public class ProductGroupService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un grupo de productos con el código ingresado.",
+          "No product group found with the provided ID.",
           "getProductGroup NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el grupo de productos.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the product group.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el grupo de productos.",
+          "An error occurred while querying the product group.",
           "getProductGroup NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el grupo de productos.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the product group.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el grupo de productos.",
+          "An error occurred while querying the product group.",
           "getProductGroup " + ex.getMessage());
     }
   }
@@ -85,14 +85,14 @@ public class ProductGroupService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen grupos de productos registrados.",
+          "No product groups found.",
           "getProductGroups NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar los grupos de productos.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying product groups.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar los grupos de productos.",
+          "An error occurred while querying product groups.",
           "getProductGroups " + ex.getMessage());
     }
   }
@@ -106,7 +106,7 @@ public class ProductGroupService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el grupo de productos a modificar.",
+              "No product group found to modify.",
               "guardarProductGroup NoResultException");
         }
         productGroup.actualizar(productGroupDto);
@@ -124,11 +124,11 @@ public class ProductGroupService {
           "ProductGroup",
           new ProductGroupDTO(productGroup));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al guardar el grupo de productos.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while saving the product group.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al guardar el grupo de productos.",
+          "An error occurred while saving the product group.",
           "guardarProductGroup " + ex.getMessage());
     }
   }
@@ -142,7 +142,7 @@ public class ProductGroupService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el grupo de productos a eliminar.",
+              "No product group found to delete.",
               "eliminarProductGroup NoResultException");
         }
         em.remove(productGroup);
@@ -150,7 +150,7 @@ public class ProductGroupService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "Debe cargar el grupo de productos a eliminar.",
+            "You must provide the product group to delete.",
             "eliminarProductGroup NoResultException");
       }
       em.flush();
@@ -162,14 +162,14 @@ public class ProductGroupService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_INTERNO,
-            "No se puede eliminar el grupo de productos porque tiene relaciones con otros registros.",
+            "Cannot delete the product group because it has related records.",
             "eliminarProductGroup " + ex.getMessage());
       }
-      LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el grupo de productos.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while deleting the product group.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al eliminar el grupo de productos.",
+          "An error occurred while deleting the product group.",
           "eliminarProductGroup " + ex.getMessage());
     }
   }

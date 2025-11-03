@@ -57,8 +57,6 @@ public class Role implements Serializable {
   @Column(name = "NAME")
   private String name;
 
-  // Relationship to AppUser was removed; APP_USER now stores role as a char code (USER_ROLE)
-
   public Role() {}
 
   public Role(Long roleId) {
@@ -104,8 +102,6 @@ public class Role implements Serializable {
   public void setName(String name) {
     this.name = name;
   }
-
-  // No AppUser relationship mapping; users reference roles via USER_ROLE code
 
   @Override
   public int hashCode() {

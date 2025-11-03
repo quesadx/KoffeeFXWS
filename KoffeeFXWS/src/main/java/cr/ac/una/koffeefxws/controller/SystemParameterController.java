@@ -36,36 +36,37 @@ import cr.ac.una.koffeefxws.util.Secure;
  */
 @Secure
 @Path("/SystemParameterController")
-@Tag(name = "SystemParameters", description = "Operaciones sobre parámetros del sistema")
+@Tag(name = "SystemParameters", description = "Operations on system parameters")
 @SecurityRequirement(name = "jwt-auth")
 public class SystemParameterController {
 
   @EJB SystemParameterService systemParameterService;
 
+  @Secure
   @GET
   @Path("/systemparameter/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene un parámetro del sistema por ID")
+  @Operation(description = "Gets a system parameter by ID")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Parámetro del sistema encontrado",
+        description = "System parameter found",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = SystemParameterDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Parámetro del sistema no encontrado",
+        description = "System parameter not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getSystemParameter(
-      @Parameter(description = "ID del parámetro del sistema") @PathParam("id") Long id) {
+      @Parameter(description = "System parameter ID") @PathParam("id") Long id) {
     try {
       Respuesta r = systemParameterService.getSystemParameter(id);
       if (!r.getEstado()) {
@@ -76,35 +77,36 @@ public class SystemParameterController {
     } catch (Exception ex) {
       Logger.getLogger(SystemParameterController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo el parámetro del sistema.")
+          .entity("Error getting the system parameter.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/systemparameter/name/{paramName}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene un parámetro del sistema por nombre")
+  @Operation(description = "Gets a system parameter by name")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Parámetro del sistema encontrado",
+        description = "System parameter found",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = SystemParameterDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Parámetro del sistema no encontrado",
+        description = "System parameter not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getSystemParameterByName(
-      @Parameter(description = "Nombre del parámetro") @PathParam("paramName") String paramName) {
+      @Parameter(description = "Parameter name") @PathParam("paramName") String paramName) {
     try {
       Respuesta r = systemParameterService.getSystemParameterByName(paramName);
       if (!r.getEstado()) {
@@ -115,28 +117,29 @@ public class SystemParameterController {
     } catch (Exception ex) {
       Logger.getLogger(SystemParameterController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo el parámetro del sistema.")
+          .entity("Error getting the system parameter.")
           .build();
     }
   }
 
+  @Secure
   @GET
   @Path("/systemparameters")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Obtiene todos los parámetros del sistema")
+  @Operation(description = "Gets all system parameters")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Parámetros del sistema encontrados",
+        description = "System parameters found",
         content = @Content(mediaType = MediaType.APPLICATION_JSON)),
     @ApiResponse(
         responseCode = "404",
-        description = "No hay parámetros del sistema registrados",
+        description = "No system parameters registered",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response getSystemParameters() {
@@ -152,31 +155,32 @@ public class SystemParameterController {
     } catch (Exception ex) {
       Logger.getLogger(SystemParameterController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error obteniendo los parámetros del sistema")
+          .entity("Error getting system parameters")
           .build();
     }
   }
 
+  @Secure
   @POST
   @Path("/systemparameter")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Guarda o actualiza un parámetro del sistema")
+  @Operation(description = "Creates or updates a system parameter")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Parámetro del sistema guardado exitosamente",
+        description = "System parameter saved successfully",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON,
                 schema = @Schema(implementation = SystemParameterDTO.class))),
     @ApiResponse(
         responseCode = "404",
-        description = "Parámetro del sistema no encontrado",
+        description = "System parameter not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response guardarSystemParameter(SystemParameterDTO systemParameter) {
@@ -191,31 +195,30 @@ public class SystemParameterController {
     } catch (Exception ex) {
       Logger.getLogger(SystemParameterController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error guardando el parámetro del sistema.")
+          .entity("Error saving the system parameter.")
           .build();
     }
   }
 
+  @Secure
   @DELETE
   @Path("/systemparameter/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  @Operation(description = "Elimina un parámetro del sistema")
+  @Operation(description = "Deletes a system parameter")
   @ApiResponses({
-    @ApiResponse(
-        responseCode = "200",
-        description = "Parámetro del sistema eliminado exitosamente"),
+    @ApiResponse(responseCode = "200", description = "System parameter deleted successfully"),
     @ApiResponse(
         responseCode = "404",
-        description = "Parámetro del sistema no encontrado",
+        description = "System parameter not found",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     @ApiResponse(
         responseCode = "500",
-        description = "Error interno",
+        description = "Internal error",
         content = @Content(mediaType = MediaType.TEXT_PLAIN)),
   })
   public Response eliminarSystemParameter(
-      @Parameter(description = "ID del parámetro del sistema") @PathParam("id") Long id) {
+      @Parameter(description = "System parameter ID") @PathParam("id") Long id) {
     try {
       Respuesta r = systemParameterService.eliminarSystemParameter(id);
       if (!r.getEstado()) {
@@ -225,7 +228,7 @@ public class SystemParameterController {
     } catch (Exception ex) {
       Logger.getLogger(SystemParameterController.class.getName()).log(Level.SEVERE, null, ex);
       return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue())
-          .entity("Error eliminando el parámetro del sistema.")
+          .entity("Error deleting the system parameter.")
           .build();
     }
   }

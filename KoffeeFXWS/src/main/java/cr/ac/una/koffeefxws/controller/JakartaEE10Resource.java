@@ -5,7 +5,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 
 /**
- * @author nadie
+ * @author papicarranza easter egg
  */
 @Path("jakartaee10")
 public class JakartaEE10Resource {

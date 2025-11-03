@@ -51,21 +51,21 @@ public class DiningAreaService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existe un área de comedor con el código ingresado.",
+          "No dining area found with the provided ID.",
           "getDiningArea NoResultException");
     } catch (NonUniqueResultException ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el área de comedor.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the dining area.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el área de comedor.",
+          "An error occurred while querying the dining area.",
           "getDiningArea NonUniqueResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar el área de comedor.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying the dining area.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar el área de comedor.",
+          "An error occurred while querying the dining area.",
           "getDiningArea " + ex.getMessage());
     }
   }
@@ -84,14 +84,14 @@ public class DiningAreaService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen áreas de comedor registradas.",
+          "No dining areas found.",
           "getDiningAreas NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar las áreas de comedor.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying dining areas.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar las áreas de comedor.",
+          "An error occurred while querying dining areas.",
           "getDiningAreas " + ex.getMessage());
     }
   }
@@ -111,14 +111,14 @@ public class DiningAreaService {
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_NOENCONTRADO,
-          "No existen áreas de comedor activas.",
+          "No active dining areas found.",
           "getActiveDiningAreas NoResultException");
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al consultar las áreas de comedor activas.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while querying active dining areas.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al consultar las áreas de comedor activas.",
+          "An error occurred while querying active dining areas.",
           "getActiveDiningAreas " + ex.getMessage());
     }
   }
@@ -132,7 +132,7 @@ public class DiningAreaService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el área de comedor a modificar.",
+              "No dining area found to modify.",
               "guardarDiningArea NoResultException");
         }
         diningArea.actualizar(diningAreaDto);
@@ -145,11 +145,11 @@ public class DiningAreaService {
       return new Respuesta(
           true, CodigoRespuesta.CORRECTO, "", "", "DiningArea", new DiningAreaDTO(diningArea));
     } catch (Exception ex) {
-      LOG.log(Level.SEVERE, "Ocurrió un error al guardar el área de comedor.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while saving the dining area.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al guardar el área de comedor.",
+          "An error occurred while saving the dining area.",
           "guardarDiningArea " + ex.getMessage());
     }
   }
@@ -163,7 +163,7 @@ public class DiningAreaService {
           return new Respuesta(
               false,
               CodigoRespuesta.ERROR_NOENCONTRADO,
-              "No se encontró el área de comedor a eliminar.",
+              "No dining area found to delete.",
               "eliminarDiningArea NoResultException");
         }
         em.remove(diningArea);
@@ -171,7 +171,7 @@ public class DiningAreaService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_NOENCONTRADO,
-            "Debe cargar el área de comedor a eliminar.",
+            "You must provide the dining area to delete.",
             "eliminarDiningArea NoResultException");
       }
       em.flush();
@@ -183,14 +183,14 @@ public class DiningAreaService {
         return new Respuesta(
             false,
             CodigoRespuesta.ERROR_INTERNO,
-            "No se puede eliminar el área de comedor porque tiene relaciones con otros registros.",
+            "Cannot delete the dining area because it has related records.",
             "eliminarDiningArea " + ex.getMessage());
       }
-      LOG.log(Level.SEVERE, "Ocurrió un error al eliminar el área de comedor.", ex);
+      LOG.log(Level.SEVERE, "An error occurred while deleting the dining area.", ex);
       return new Respuesta(
           false,
           CodigoRespuesta.ERROR_INTERNO,
-          "Ocurrió un error al eliminar el área de comedor.",
+          "An error occurred while deleting the dining area.",
           "eliminarDiningArea " + ex.getMessage());
     }
   }

@@ -155,8 +155,7 @@ public class AppUser implements Serializable {
     this.userRole = dto.getUserRole();
   }
 
-  /** Lifecycle hook: Automatically sets creation date before persisting */
-  @PrePersist
+  @PrePersist // Para establecer valores antes de crear el registro
   protected void onCreate() {
     if (creationDate == null) {
       creationDate = LocalDate.now();

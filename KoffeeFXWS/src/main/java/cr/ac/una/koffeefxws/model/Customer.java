@@ -78,8 +78,7 @@ public class Customer implements Serializable {
   private String email;
 
   // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax
-  // format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using
-  // this annotation to enforce field validation
+  // format, should be as xxx-xxx-xxxx")
   @Size(max = 50)
   @Column(name = "PHONE")
   private String phone;
@@ -116,7 +115,6 @@ public class Customer implements Serializable {
     this.phone = dto.getPhone();
   }
 
-  /** Lifecycle hook: Automatically sets creation date before persisting */
   @PrePersist
   protected void onCreate() {
     if (creationDate == null) {
